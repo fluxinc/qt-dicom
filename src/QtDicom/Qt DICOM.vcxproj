@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E235C439-F271-4251-A9F8-33BE2322BC77}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>QDicom</RootNamespace>
+    <ProjectName>QtDicom</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\..\misc\Build Customizations\qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)lib\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)tmp\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>QtDicomd4</TargetName>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)lib\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)tmp\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>QtDicomd4</TargetName>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)lib\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)tmp\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</IntDir>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <TargetName>QtDicom4</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)lib\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)tmp\$(PlatformShortName)\$(Configuration)\$(ProjectName)\</IntDir>
+    <CustomBuildAfterTargets>Build</CustomBuildAfterTargets>
+    <TargetName>QtDicom4</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstdd.lib;oflogd.lib;dcmdatad.lib;dcmnetd.lib;dcmimgled.lib;dcmimaged.lib;dcmjpegd.lib;dcmjplsd.lib;charlsd.lib;ijg8d.lib;ijg12d.lib;ijg16d.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
+copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
+      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Message>Copying DLL to bin directory</Message>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstdd.lib;oflogd.lib;dcmdatad.lib;dcmnetd.lib;dcmimgled.lib;dcmimaged.lib;dcmjpegd.lib;dcmjplsd.lib;charlsd.lib;ijg8d.lib;ijg12d.lib;ijg16d.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
+copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
+      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Message>Copying DLL to bin directory</Message>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>QtCore4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
+copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
+      <Message>Copying DLL to bin directory</Message>
+      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>powershell -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(SolutionDir)misc\Scripts\Stamp-BuildNumber.ps1" -Path "$(ProjectDir)Version.hpp" -Source "FILE:$(ProjectDir)Resources\Texts\Build Number.txt"</Command>
+      <Message>Stamping Version Info</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>QtCore4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
+copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
+      <Message>Copying DLL to bin directory</Message>
+      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Inputs>$(TargetPath)</Inputs>
+    </CustomBuildStep>
+    <PreBuildEvent>
+      <Command>powershell -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(SolutionDir)misc\Scripts\Stamp-BuildNumber.ps1" -Path "$(ProjectDir)Version.hpp" -Source "FILE:$(ProjectDir)Resources\Texts\Build Number.txt"</Command>
+      <Message>Stamping Version Info</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AbstractService.cpp" />
+    <ClCompile Include="AcceptorAssociation.cpp" />
+    <ClCompile Include="Association.cpp" />
+    <ClCompile Include="AssociationServer.cpp" />
+    <ClCompile Include="ConnectionParameters.cpp" />
+    <ClCompile Include="ConnectionParameters_priv.cpp" />
+    <ClCompile Include="Dataset.cpp" />
+    <ClCompile Include="DatasetConstIterator.cpp" />
+    <ClCompile Include="Dataset_priv.cpp" />
+    <ClCompile Include="DataSource.cpp" />
+    <ClCompile Include="DataSourceCreatorBase.cpp" />
+    <ClCompile Include="DataSourceFactory.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
+    <ClCompile Include="FileSystemDataSource.cpp" />
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ModalityPerformedProcedureStepScu.cpp" />
+    <ClCompile Include="MoveScu.cpp" />
+    <ClCompile Include="QDicomImageCodec.cpp" />
+    <ClCompile Include="QPresentationContext.cpp" />
+    <ClCompile Include="QPresentationContextData.cpp" />
+    <ClCompile Include="QStorageScu.cpp" />
+    <ClCompile Include="QTransferSyntax.cpp" />
+    <ClCompile Include="QueryScp.cpp" />
+    <ClCompile Include="QueryScpReceiverThread.cpp" />
+    <ClCompile Include="QueryScu.cpp" />
+    <ClCompile Include="QUid.cpp" />
+    <ClCompile Include="RequestorAssociation.cpp" />
+    <ClCompile Include="ServerAssociation.cpp" />
+    <ClCompile Include="ServiceProvider.cpp" />
+    <ClCompile Include="ServiceUser.cpp" />
+    <ClCompile Include="StorageScp.cpp" />
+    <ClCompile Include="StorageScpReceiverThread.cpp" />
+    <ClCompile Include="UidList.cpp" />
+    <ClCompile Include="VerificationScu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AbstractService.hpp" />
+    <ClInclude Include="Globals.hpp" />
+    <MocSource Include="AcceptorAssociation.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <MocSource Include="Association.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <MocSource Include="AssociationServer.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="ConnectionParameters.hpp" />
+    <ClInclude Include="ConnectionParameters_priv.hpp" />
+    <ClInclude Include="Dataset.hpp" />
+    <ClInclude Include="DatasetConstIterator.hpp" />
+    <ClInclude Include="Dataset_priv.hpp" />
+    <MocSource Include="DataSource.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="DataSourceCreator.hpp" />
+    <ClInclude Include="DataSourceCreatorBase.hpp" />
+    <ClInclude Include="DataSourceFactory.hpp" />
+    <ClInclude Include="Exceptions.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <MocSource Include="FileSystemDataSource.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="ModalityPerformedProcedureStepScu.hpp" />
+    <ClInclude Include="MoveScu.hpp" />
+    <ClInclude Include="QDicomImageCodec" />
+    <ClInclude Include="QPresentationContext.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="QStorageScu" />
+    <ClInclude Include="QTransferSyntax.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="QDicomImageCodec.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="QPresentationContextData.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <MocSource Include="QStorageScu.hpp" />
+    <MocSource Include="QueryScp.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <MocSource Include="QueryScpReceiverThread.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="QPresentationContext" />
+    <ClInclude Include="QTransferSyntax" />
+    <ClInclude Include="QueryScu.hpp" />
+    <ClInclude Include="QUid.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <MocSource Include="RequestorAssociation.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <MocSource Include="ServerAssociation.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="QUid" />
+    <ClInclude Include="ServiceProvider.hpp" />
+    <ClInclude Include="ServiceUser.hpp" />
+    <MocSource Include="StorageScp.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <MocSource Include="StorageScpReceiverThread.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="UidList.hpp" />
+    <ClInclude Include="VerificationScu.hpp" />
+    <ClInclude Include="Version.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataSourceCreator.inl" />
+    <None Include="Resources\Texts\Build Number.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Version.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\misc\Build Customizations\qt.targets" />
+  </ImportGroup>
+</Project>

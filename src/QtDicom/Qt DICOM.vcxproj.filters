@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Data Objects">
+      <UniqueIdentifier>{b450c8d1-da24-4b43-8880-7c02b5ee3cd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network Objects">
+      <UniqueIdentifier>{fd91216a-7f4b-4456-bc0b-1f054949882b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service Class Providers">
+      <UniqueIdentifier>{3233b2c5-8b58-4541-958e-0612280cdb83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service Class Users">
+      <UniqueIdentifier>{f566cc82-3655-4a92-979c-0cc650bd1af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{57a5683d-ee06-4007-9f48-ed54973b2a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Texts">
+      <UniqueIdentifier>{7bdfee73-0c5c-44ec-abc7-33f6d7780242}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Dataset.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Dataset_priv.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DatasetConstIterator.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSource.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSourceCreatorBase.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="DataSourceFactory.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystemDataSource.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractService.cpp" />
+    <ClCompile Include="AcceptorAssociation.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Association.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="AssociationServer.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="RequestorAssociation.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerAssociation.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionParameters.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectionParameters_priv.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageScpReceiverThread.cpp">
+      <Filter>Service Class Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="StorageScp.cpp">
+      <Filter>Service Class Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryScp.cpp">
+      <Filter>Service Class Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryScpReceiverThread.cpp">
+      <Filter>Service Class Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="ModalityPerformedProcedureStepScu.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveScu.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryScu.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="VerificationScu.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceProvider.cpp">
+      <Filter>Service Class Providers</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceUser.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="UidList.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
+    <ClCompile Include="QUid.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QTransferSyntax.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="QDicomImageCodec.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QPresentationContext.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QStorageScu.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QPresentationContextData.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dataset.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Dataset_priv.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DatasetConstIterator.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSourceCreator.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSourceCreatorBase.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DataSourceFactory.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractService.hpp" />
+    <ClInclude Include="ConnectionParameters.hpp">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectionParameters_priv.hpp">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ModalityPerformedProcedureStepScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QueryScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="VerificationScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceProvider.hpp">
+      <Filter>Service Class Providers</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceUser.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="UidList.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.hpp" />
+    <ClInclude Include="Exceptions.hpp" />
+    <ClInclude Include="Version.hpp" />
+    <ClInclude Include="QPresentationContext">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QUid">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QUid.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QPresentationContext.hpp">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QTransferSyntax">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QTransferSyntax.hpp">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomImageCodec">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomImageCodec.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QStorageScu">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QPresentationContextData.hpp">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DataSourceCreator.inl">
+      <Filter>Data Objects</Filter>
+    </None>
+    <None Include="Resources\Texts\Build Number.txt">
+      <Filter>Resources\Texts</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <MocSource Include="AssociationServer.hpp">
+      <Filter>Network Objects</Filter>
+    </MocSource>
+    <MocSource Include="Association.hpp">
+      <Filter>Network Objects</Filter>
+    </MocSource>
+    <MocSource Include="AcceptorAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </MocSource>
+    <MocSource Include="ServerAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </MocSource>
+    <MocSource Include="RequestorAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </MocSource>
+    <MocSource Include="FileSystemDataSource.hpp">
+      <Filter>Data Objects</Filter>
+    </MocSource>
+    <MocSource Include="DataSource.hpp">
+      <Filter>Data Objects</Filter>
+    </MocSource>
+    <MocSource Include="StorageScpReceiverThread.hpp">
+      <Filter>Service Class Providers</Filter>
+    </MocSource>
+    <MocSource Include="StorageScp.hpp">
+      <Filter>Service Class Providers</Filter>
+    </MocSource>
+    <MocSource Include="QueryScpReceiverThread.hpp">
+      <Filter>Service Class Providers</Filter>
+    </MocSource>
+    <MocSource Include="QueryScp.hpp">
+      <Filter>Service Class Providers</Filter>
+    </MocSource>
+    <MocSource Include="QStorageScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </MocSource>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Version.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

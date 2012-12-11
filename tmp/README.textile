@@ -1,0 +1,1 @@
+This is the place where Visual Studio puts its temporary files. All contents of this folder should be ignored.

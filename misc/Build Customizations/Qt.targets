@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema
+      Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml" />
+    <AvailableItemName
+      Include="MocSource">
+      <Targets>Qt's Meta Object Compiler</Targets>
+    </AvailableItemName>
+    <AvailableItemName
+      Include="RccSource">
+      <Targets>Qt's Resource Compiler</Targets>
+    </AvailableItemName>
+    <AvailableItemName
+      Include="UicSource">
+      <Targets>Qt's User Interface Compiler</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask
+    TaskName="MocTask"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target
+    Name="Qt's Meta Object Compiler"
+    Inputs="@(MocSource);$(MSBuildProjectFile)"
+    Outputs="@(MocSource->'%(OutputPath)')"
+    AfterTargets="Midl"
+    BeforeTargets="ClCompile"
+  >
+    <MocTask
+      Condition="'@(MocSource)' != '' and '%(MocSource.ExcludedFromBuild)' != 'true'"
+      NoWarningsFlag="%(MocSource.NoWarningsFlag)"
+      NoIncludeFlag="%(MocSource.NoIncludeFlag)"
+      Definitions="%(MocSource.Definitions)"
+      InputPath="%(MocSource.FullPath)"
+      OutputPath="%(MocSource.OutputPath)"
+      CommandLineTemplate="%(MocSource.CommandLineTemplate)"
+    />
+    <Message
+      Importance="High"
+      Text="MOC @(MocSource)"
+    />
+  </Target>
+  
+  <UsingTask
+    TaskName="RccTask"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target
+    Name="Qt's Resource Compiler"
+    Inputs="@(RccSource);$(MSBuildProjectFile)"
+    Outputs="@(RccSource->'%(OutputPath)')"
+    AfterTargets="Midl"
+    BeforeTargets="ClCompile"
+  >
+    <RccTask
+      Condition="'@(RccSource)' != '' and '%(RccSource.ExcludedFromBuild)' != 'true'"
+      BinaryModeFlag="%(RccSource.BinaryModeFlag)"
+      Compression="%(RccSource.Compression)"
+      Threshold="%(RccSource.Threshold)"
+      InputPath="%(RccSource.FullPath)"
+      OutputPath="%(RccSource.OutputPath)"
+      CommandLineTemplate="%(RccSource.CommandLineTemplate)"
+    />
+    <Message
+      Importance="High"
+      Text="RCC @(RccSource)"
+    />
+  </Target>
+
+  <UsingTask
+    TaskName="UicTask"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target
+    Name="Qt's User Interface Compiler"
+    Inputs="@(UicSource);$(MSBuildProjectFile)"
+    Outputs="@(UicSource->'%(OutputPath)')"
+    AfterTargets="Midl"
+    BeforeTargets="ClCompile"
+  >
+    <UicTask
+      Condition="'@(UicSource)' != '' and '%(UicSource.ExcludedFromBuild)' != 'true'"
+      NoHeaderProtectionFlag="%(UicSource.NoHeaderProtectionFlag)"
+      InputPath="%(UicSource.FullPath)"
+      OutputPath="%(UicSource.OutputPath)"
+      CommandLineTemplate="%(UicSource.CommandLineTemplate)"
+    />
+    <Message
+      Importance="High"
+      Text="UIC @(UicSource)"
+    />
+  </Target>
+</Project>
