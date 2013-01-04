@@ -88,6 +88,21 @@ Dataset & Dataset::operator = ( const Dataset & Other ) {
 }
 
 
+bool Dataset::canConvertToTransferSyntax( 
+	const QTransferSyntax & DstTs
+) const {
+	static const QList< QTransferSyntax > SupportedTs = 
+		QDicomImageCodec::supported()
+	;
+
+	const QTransferSyntax SrcTs = syntax();
+	return 
+		( ( ! SrcTs.isCompressed() ) || SupportedTs.contains( SrcTs ) ) &&
+		( ( ! DstTs.isCompressed() ) || SupportedTs.contains( DstTs ) )
+	;
+}
+
+
 Dataset::const_iterator Dataset::constBegin() const {
 	return Dataset::ConstIterator( *this );
 }
@@ -114,44 +129,43 @@ Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs ) cons
 	if ( DstTs != SrcTs ) {
 		Dataset result;
 
-		const QList< QTransferSyntax > SupportedTs = 
-			QDicomImageCodec::supported()
-		;
-
-		const bool CanConvert = 
-			( ( ! SrcTs.isCompressed() ) || SupportedTs.contains( SrcTs ) ) &&
-			( ( ! DstTs.isCompressed() ) || SupportedTs.contains( DstTs ) )
-		;
-
-		if ( CanConvert ) {
+		if ( canConvertToTransferSyntax( DstTs ) ) {
 			DcmDataset newDset = dcmDataset();
-			DcmRepresentationParameter * newTsParameters = NULL;
 
-			const OFCondition Converted = newDset.chooseRepresentation( 
-				DcmXfer( DstTs.uid().constData() ).getXfer(), newTsParameters
-			);
+			QDicomImageCodec * codec = 
+				QDicomImageCodec::codecForTransferSyntax( DstTs )
+			;
+			if ( codec != NULL ) {
+				const OFCondition Converted = newDset.chooseRepresentation( 
+					DcmXfer( DstTs.uid().constData() ).getXfer(),
+					codec->dcmParameters()
+				);
 
-			if ( Converted.good() ) {
-				newDset.removeAllButCurrentRepresentations();
-				result.setDcmDataset( newDset );
+				if ( Converted.good() ) {
+					newDset.removeAllButCurrentRepresentations();
+					result.setDcmDataset( newDset );
 
-				Q_ASSERT( result.syntax() == DstTs );
-				return result;
+					Q_ASSERT( result.syntax() == DstTs );
+					return result;
+				}
+				else {
+					qCritical( __FUNCTION__": "
+						"failed to convert from %s to %s; %s",
+						SrcTs.name(), DstTs.name(), Converted.text()
+					);
+				}
 			}
 			else {
 				qCritical( __FUNCTION__": "
-					"failed to convert from %s to %s; %s",
-					qPrintable( SrcTs.toString() ),
-					qPrintable( DstTs.toString() ),
-					Converted.text()
+					"no codec for %s transfer syntax",
+					DstTs.name()
 				);
 			}
 		}
 		else {
 			qCritical( __FUNCTION__": "
 				"conversion from %s to %s is unsupported",
-				qPrintable( SrcTs.toString() ),
-				qPrintable( DstTs.toString() )
+				SrcTs.name(), DstTs.name()
 			);
 		}
 

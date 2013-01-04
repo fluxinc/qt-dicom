@@ -264,9 +264,7 @@ void AbstractService::sendCommand(
 	);
 	if ( result.bad() ) {
 		throw OperationFailedException(
-			QString( 
-				"Failed to send a %1. %2."
-			)
+			QString( "Failed to send a %1. %2." )
 			.arg( CommandName )
 			.arg( result.text() )
 		);

@@ -35,6 +35,7 @@ class QDICOM_DLLSPEC Dataset {
 		~Dataset();
 		Dataset & operator = ( const Dataset & other );
 
+		bool canConvertToTransferSyntax( const QTransferSyntax & ts ) const;
 		const_iterator constBegin() const;
 		const_iterator constEnd() const;
 
