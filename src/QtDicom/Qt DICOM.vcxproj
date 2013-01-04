@@ -22,7 +22,7 @@
     <ProjectGuid>{E235C439-F271-4251-A9F8-33BE2322BC77}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>QDicom</RootNamespace>
-    <ProjectName>QtDicom</ProjectName>
+    <ProjectName>Qt DICOM</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
