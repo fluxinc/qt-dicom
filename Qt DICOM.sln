@@ -1,7 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtDicom", "src\QtDicom\Qt DICOM.vcxproj", "{E235C439-F271-4251-A9F8-33BE2322BC77}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Qt DICOM", "src\QtDicom\Qt DICOM.vcxproj", "{E235C439-F271-4251-A9F8-33BE2322BC77}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Qt DICOM Test", "src\QtDicomTest\Qt DICOM Test.vcxproj", "{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E235C439-F271-4251-A9F8-33BE2322BC77} = {E235C439-F271-4251-A9F8-33BE2322BC77}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +24,14 @@ Global
 		{E235C439-F271-4251-A9F8-33BE2322BC77}.Release|Win32.Build.0 = Release|Win32
 		{E235C439-F271-4251-A9F8-33BE2322BC77}.Release|x64.ActiveCfg = Release|x64
 		{E235C439-F271-4251-A9F8-33BE2322BC77}.Release|x64.Build.0 = Release|x64
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Debug|Win32.Build.0 = Debug|Win32
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Debug|x64.ActiveCfg = Debug|x64
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Debug|x64.Build.0 = Debug|x64
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Release|Win32.ActiveCfg = Release|Win32
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Release|Win32.Build.0 = Release|Win32
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Release|x64.ActiveCfg = Release|x64
+		{A5B75648-1411-4ABC-AA08-8A5ED2E48F2A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
