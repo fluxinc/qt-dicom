@@ -54,4 +54,7 @@ class QDICOM_DLLSPEC QPresentationContext {
 		
 };
 
+
+typedef QPresentationContextList QList< QPresentationContext >;
+
 #endif
