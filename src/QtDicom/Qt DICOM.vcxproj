@@ -217,7 +217,6 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
   <ItemGroup>
     <ClCompile Include="AbstractService.cpp" />
     <ClCompile Include="AcceptorAssociation.cpp" />
-    <ClCompile Include="Association.cpp" />
     <ClCompile Include="AssociationServer.cpp" />
     <ClCompile Include="ConnectionParameters.cpp" />
     <ClCompile Include="ConnectionParameters_priv.cpp" />
@@ -233,6 +232,10 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModalityPerformedProcedureStepScu.cpp" />
     <ClCompile Include="MoveScu.cpp" />
+    <ClCompile Include="QAssociationBase.cpp" />
+    <ClCompile Include="QDcmtkResult.inl" />
+    <ClCompile Include="QDcmtkResultData.cpp" />
+    <ClCompile Include="QDcmtkTask.cpp" />
     <ClCompile Include="QDicomImageCodec.cpp" />
     <ClCompile Include="QPresentationContext.cpp" />
     <ClCompile Include="QPresentationContextData.cpp" />
@@ -257,9 +260,6 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <MocSource Include="AcceptorAssociation.hpp">
       <FileType>CppHeader</FileType>
     </MocSource>
-    <MocSource Include="Association.hpp">
-      <FileType>CppHeader</FileType>
-    </MocSource>
     <MocSource Include="AssociationServer.hpp">
       <FileType>CppHeader</FileType>
     </MocSource>
@@ -282,6 +282,14 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     </MocSource>
     <ClInclude Include="ModalityPerformedProcedureStepScu.hpp" />
     <ClInclude Include="MoveScu.hpp" />
+    <ClInclude Include="QDcmtkResult" />
+    <ClInclude Include="QDcmtkResult.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <MocSource Include="QDcmtkTask.hpp">
+      <FileType>CppHeader</FileType>
+    </MocSource>
+    <ClInclude Include="QDcmtkTask" />
     <ClInclude Include="QDicomImageCodec" />
     <ClInclude Include="QPresentationContext.hpp">
       <FileType>Document</FileType>
@@ -296,6 +304,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClInclude Include="QPresentationContextData.hpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <MocSource Include="QAssociationBase.hpp" />
     <MocSource Include="QStorageScu.hpp" />
     <MocSource Include="QueryScp.hpp">
       <FileType>CppHeader</FileType>
@@ -332,6 +341,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="DataSourceCreator.inl" />
+    <None Include="QDcmtkTask.inl" />
     <None Include="Resources\Texts\Build Number.txt" />
   </ItemGroup>
   <ItemGroup>
