@@ -92,6 +92,16 @@ class QDICOM_DLLSPEC QDcmtkTask : public QObject, public QRunnable {
 			QObject * parent = NULL
 		);
 
+		/**
+		 * Creates a task, launching DCMTK function \a f with four parameters:
+		 * \a p1, \a p2, \a p3 and \a p4.
+		 */
+		template< typename P1, typename P2, typename P3, typename P4 >
+		inline static QDcmtkTask * create( 
+			OFCondition ( *f )( P1, P2, P3, P4 ), P1 p1, P2 p2, P3 p3, P4 p4,
+			QObject * parent = NULL
+		);
+
 	public :
 		/**
 		 * Destroys the task, releasing thread back to the pool.
@@ -126,6 +136,7 @@ class QDICOM_DLLSPEC QDcmtkTask : public QObject, public QRunnable {
 	private :		
 		template < typename P > class Functor1;
 		template < typename P1, typename P2 > class Functor2;
+		template < typename P1, typename P2, typename P3, typename P4 > class Functor4;
 
 	private :
 		inline QDcmtkTask( const Functor * f, QObject * parent );
@@ -167,6 +178,21 @@ class QDcmtkTask::Functor2 : public QDcmtkTask::Functor {
 		OFCondition ( * const F_ )( P1, P2 );
 		const P1 P1_;
 		const P2 P2_;
+};
+
+
+template < typename P1, typename P2, typename P3, typename P4 >
+class QDcmtkTask::Functor4 : public QDcmtkTask::Functor {
+	public :
+		Functor4( OFCondition ( *f )( P1, P2, P3, P4 ), P1 p1, P2 p2, P3 p3, P4 p4 );
+		QDcmtkResult execute() const;
+
+	private :
+		OFCondition ( * const F_ )( P1, P2, P3, P4 );
+		const P1 P1_;
+		const P2 P2_;
+		const P3 P3_;
+		const P4 P4_;
 };
 
 

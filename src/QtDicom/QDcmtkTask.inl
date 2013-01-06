@@ -42,6 +42,13 @@ QDcmtkTask * QDcmtkTask::create(
 	return new QDcmtkTask( new Functor2< P1, P2 >( f, p1, p2 ), parent );
 }
 
+template< typename P1, typename P2, typename P3, typename P4 >
+QDcmtkTask * QDcmtkTask::create(
+	OFCondition ( *f )( P1, P2, P3, P4 ), P1 p1, P2 p2, P3 p3, P4 p4, QObject * parent
+) {
+	return new QDcmtkTask( new Functor4< P1, P2, P3, P4 >( f, p1, p2, p3, p4 ), parent );
+}
+
 
 const QDcmtkResult & QDcmtkTask::result() const {
 	return result_;
@@ -78,4 +85,21 @@ QDcmtkTask::Functor2< P1, P2 >::Functor2( OFCondition ( *f )( P1, P2 ), P1 p1, P
 template < typename P1, typename P2 >
 QDcmtkResult QDcmtkTask::Functor2< P1, P2 >::execute() const {
 	return F_( P1_, P2_ );
+}
+
+
+template < typename P1, typename P2, typename P3, typename P4 >
+QDcmtkTask::Functor4< P1, P2, P3, P4 >::Functor4( OFCondition ( *f )( P1, P2, P3, P4 ), P1 p1, P2 p2, P3 p3, P4 p4 ) :
+	F_( f ),
+	P1_( p1 ),
+	P2_( p2 ),
+	P3_( p3 ),
+	P4_( p4 )
+{
+	Q_ASSERT( F_ != NULL );
+}
+
+template < typename P1, typename P2, typename P3, typename P4 >
+QDcmtkResult QDcmtkTask::Functor4< P1, P2, P3, P4 >::execute() const {
+	return F_( P1_, P2_, P3_, P4_ );
 }
