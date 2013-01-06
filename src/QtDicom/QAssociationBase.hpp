@@ -1,16 +1,19 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Flux Inc.                                       *
+ *   Copyright © 2012-2013 by Flux Inc.                                    *
  *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
  **************************************************************************/
 
-#ifndef	DICOM_ASSOCIATION_HPP
-#define DICOM_ASSOCIATION_HPP
+#ifndef	QTDICOM_QASSOCIATIONBASE_HPP
+#define QTDICOM_QASSOCIATIONBASE_HPP
 
 #include <QtCore/QObject>
+#include <QtCore/QRunnable>
 
-#include "QtDicom/ConnectionParameters.hpp"
-#include "QtDicom/Globals.hpp"
-#include "QtDicom/UidList.hpp"
+#include <QtDicom/ConnectionParameters.hpp>
+#include <QtDicom/Globals.hpp>
+#include <QtDicom/UidList.hpp>
+#include <QtDicom/QDcmtkResult>
+
 
 class QHostAddress;
 
@@ -18,19 +21,24 @@ struct T_ASC_Association;
 struct T_ASC_Network;
 struct T_ASC_Parameters;
 
-namespace Dicom {
-
 /**
- * \em Association class proivdes a DICOM association object.
+ * The \em QAssociationBase class proivdes the base functionality common to all
+ * association types.
+ *
+ * \author Paweł Żak <pawel.zak@fluxinc.ca>
  */
-class QDICOM_DLLSPEC Association : public QObject {
+class QDICOM_DLLSPEC QAssociationBase : public QObject {
 	Q_OBJECT;
 
 	public :
 		enum State {
-			Disconnected,
+			Unconnected,
+			Requesting,
 			Established,
-			Error
+			Releasing,
+			Aborting,
+			Error,
+			Listening
 		};
 
 	public :
@@ -38,41 +46,24 @@ class QDICOM_DLLSPEC Association : public QObject {
 		 * Default contructor, creates an association and sets its \a parent 
 		 * Qt object, if provided.
 		 */
-		Association( QObject * parent = 0 );
+		QAssociationBase( QObject * parent = 0 );
 
 		/**
 		 * Overloaded constructor, allows to pre-set connection \a parameters.
 		 */
-		Association( const ConnectionParameters & parameters, QObject * parent = 0 );
+		QAssociationBase(
+			const Dicom::ConnectionParameters & parameters, QObject * parent = 0
+		);
 
 		/**
 		 * Destroys the association.
 		 */
-		virtual ~Association();
-
-		/**
-		 * Aborts the association, i.e. sends the A-ABORT message, and changes
-		 * \ref state() to \em Disconnected.
-		 */
-		void abort();
-
-		/**
-		 * Returns ID of an accepted presentation context that is using
-		 * \a abstract and \a transfer syntaxes.
-		 *
-		 * If such a presentation context wasn't accepted during association, 
-		 * a value of \c 0 is returned.
-		 *
-		 * In case of an error method returns with \c -1.
-		 */
-		int acceptedPresentationContextId( 
-			const char * abstract, const char * transfer = 0
-		) const;
+		virtual ~QAssociationBase();
 
 		/**
 		 * Returns the connection parameters used during last \a request().
 		 */
-		const ConnectionParameters & connectionParameters() const;
+		const Dicom::ConnectionParameters & connectionParameters() const;
 
 		/**
 		 * Returns the error message.
@@ -119,7 +110,7 @@ class QDICOM_DLLSPEC Association : public QObject {
 		 * settings, method aborts current association (if present) and drops
 		 */
 		void setConnectionParameters(
-			const ConnectionParameters & parameters
+			const Dicom::ConnectionParameters & parameters
 		);
 
 		/**
@@ -137,11 +128,37 @@ class QDICOM_DLLSPEC Association : public QObject {
 		 */
 		T_ASC_Association *& tAscAssociation() const;
 
+	public slots :
+		/**
+		 * Aborts the association, i.e. sends the A-ABORT message.
+		 *
+		 * This method merely schedules the abort task and sets object state to
+		 * \em Aborting, almost immediately returning to the caller.
+		 * 
+		 * The actuall business of aborting association is done in the 
+		 * background. Association users are notified about the fact that the 
+		 * task finished by the \ref disconnected() signal.
+		 *
+		 * Note, that even unsuccessfull, the abort operation does not give
+		 * any error indication, except for logging a warning message.
+		 */
+		void abort();
+
+	signals :
+		/**
+		 * This signal is emitted whenever an established association is 
+		 * released or aborted -- from client's perspective -- or when its 
+		 * release has been acknowledged by the server.
+		 *
+		 * \sa abort(), 
+		 */
+		void disconnected();
+
 	protected :
 		/**
 		 * Drops an association.
 		 */
-		virtual void dropTAscAssociation();
+		void dropTAscAssociation();
 
 		/**
 		 * The DCMTK's network structure.
@@ -171,7 +188,11 @@ class QDICOM_DLLSPEC Association : public QObject {
 		/**
 		 * Returns DCMTK's network structure.
 		 */
-		T_ASC_Network *& tAscNetwork() const;		
+		T_ASC_Network *& tAscNetwork() const;
+
+	private slots :
+		void startAbortTask();
+		void finishAbortTask( QDcmtkResult result );
 
 	private :		
 		/**
@@ -182,7 +203,7 @@ class QDICOM_DLLSPEC Association : public QObject {
 		/**
 		 * Connection parameters used by the association.
 		 */
-		ConnectionParameters connectionParameters_;
+		Dicom::ConnectionParameters connectionParameters_;
 
 		/**
 		 * The error message.
@@ -199,8 +220,5 @@ class QDICOM_DLLSPEC Association : public QObject {
 		 */
 		State state_;
 };
-
-}; // Namespace DICOM ends here.
-
 
 #endif

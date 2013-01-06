@@ -1,41 +1,44 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Flux Inc.                                       *
+ *   Copyright © 2012-2013 by Flux Inc.                                    *
  *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
  **************************************************************************/
 
-#include "Association.hpp"
-#include "Association.moc.inl"
 #include "ConnectionParameters.hpp"
 
+#include "QAssociationBase.hpp"
+#include "QAssociationBase.moc.inl"
+#include "QDcmtkTask.hpp"
+
 #include <QtCore/QString>
+#include <QtCore/QtConcurrentRun>
 
 #include <dcmtk/dcmnet/assoc.h>
 #include <dcmtk/dcmnet/dimse.h>
 
+typedef Dicom::ConnectionParameters QConnectionParameters;
 
-namespace Dicom {
 
-Association::Association( QObject * parent ) :
+QAssociationBase::QAssociationBase( QObject * parent ) :
 	QObject( parent ),
 	association_( 0 ),
 	network_( 0 ),
-	state_( Disconnected )
+	state_( Unconnected )
 {
 }
 
-Association::Association( 
-	const ConnectionParameters & Parameters, QObject * parent
+QAssociationBase::QAssociationBase( 
+	const QConnectionParameters & Parameters, QObject * parent
 ) :
 	QObject( parent ),
 	association_( 0 ),
 	connectionParameters_( Parameters ),
 	network_( 0 ),
-	state_( Disconnected )
+	state_( Unconnected )
 {
 }
 
 
-Association::~Association() {
+QAssociationBase::~QAssociationBase() {
 	if ( isEstablished() ) {
 		qWarning( "Destroying an established association forces abort." );
 
@@ -46,54 +49,28 @@ Association::~Association() {
 }
 
 
-void Association::abort() {
-	if ( tAscAssociation() ) {
-		const OFCondition Result = ASC_abortAssociation( tAscAssociation() );
-		if ( Result.bad() ) {
-			qWarning( "Failed to abort association; %s", Result.text() );
-		}
-		setState( Disconnected );
-		dropTAscAssociation();
+void QAssociationBase::abort() {
+	if ( isEstablished() ) {
+		Q_ASSERT( tAscAssociation() );
+
+		setState( Aborting );
+		QMetaObject::invokeMethod( this, "startAbortTask", Qt::QueuedConnection );
 	}
 }
 
 
-int Association::acceptedPresentationContextId(
-	const char * AbstractSyntax, const char * TransferSyntax
-) const {
-	if ( tAscAssociation() ) {
-		if ( ! TransferSyntax ) {
-			return ASC_findAcceptedPresentationContextID( 
-				tAscAssociation(), AbstractSyntax
-			);
-		}
-		else {
-			return ASC_findAcceptedPresentationContextID( 
-				tAscAssociation(), AbstractSyntax, TransferSyntax
-			);
-		}
-	}
-	else {
-		return -1;
-	}
-}
-
-
-const ConnectionParameters & Association::connectionParameters() const {
+const QConnectionParameters & QAssociationBase::connectionParameters() const {
 	return connectionParameters_;
 }
 
 
-void Association::dropTAscAssociation() {
+void QAssociationBase::dropTAscAssociation() {
 	Q_ASSERT( ! isEstablished() );
-	if ( isEstablished() ) {
-		qWarning( "Dropping established association." );
-	}
 
-	if ( tAscAssociation() ) {
+	if ( ! isEstablished() && tAscAssociation() ) {
 		const OFCondition Result = ASC_destroyAssociation( &tAscAssociation() );
 		if ( Result.bad() ) {
-			qWarning(
+			qWarning( __FUNCTION__
 				"Error occured when destroying an association; %s",
 				Result.text()
 			);
@@ -104,14 +81,14 @@ void Association::dropTAscAssociation() {
 }
 
 
-void Association::dropTAscNetwork() {
+void QAssociationBase::dropTAscNetwork() {
 	dropTAscAssociation();
 
 	if ( tAscNetwork() ) {
 		const OFCondition Result = ASC_dropNetwork( & network_ );
 		if ( Result.bad() ) {
-			qWarning(
-				"Error occured when dropping network; %s", Result.text()
+			qWarning( __FUNCTION__": "
+				"error occured when dropping network; %s", Result.text()
 			);
 		}
 
@@ -120,17 +97,36 @@ void Association::dropTAscNetwork() {
 }
 
 
-const QString & Association::errorMessage() const {
+const QString & QAssociationBase::errorMessage() const {
 	return errorMessage_;
 }
 
 
-bool Association::hasError() const {
+void QAssociationBase::finishAbortTask( QDcmtkResult result ) {
+	Q_ASSERT( state_ == Aborting );
+
+	if ( result.ofCondition().good() ) {
+		qDebug( __FUNCTION__": association aborted successfully" );
+	}
+	else {
+		qWarning( __FUNCTION__": "
+			"failed to abort association; %s", result.ofCondition().text()
+		);
+	}
+
+	dropTAscAssociation();
+
+	setState( Unconnected );
+	emit disconnected();
+}
+
+
+bool QAssociationBase::hasError() const {
 	return state() == Error;
 }
 
 
-bool Association::initializeTAscNetwork( int role ) {
+bool QAssociationBase::initializeTAscNetwork( int role ) {
 	if ( port() == 0 ) {
 		raiseError( "Invliad port number." );
 		return false;
@@ -144,9 +140,8 @@ bool Association::initializeTAscNetwork( int role ) {
 
 
 	const OFCondition Result = ASC_initializeNetwork(
-		role == 1 ? NET_ACCEPTOR : NET_REQUESTOR,
+		role == 1 ? NET_ACCEPTOR : ( role == -1 ? NET_REQUESTOR : NET_ACCEPTORREQUESTOR ),
 		role == 1 ? static_cast< int >( port() ) : 0,
-		// port(),
 		timeout(),
 		&tAscNetwork()
 	);
@@ -167,22 +162,22 @@ bool Association::initializeTAscNetwork( int role ) {
 }
 
 
-bool Association::isEstablished() const {
+bool QAssociationBase::isEstablished() const {
 	return state() == Established;
 }
 
 
-unsigned Association::maxPdu() const {
+unsigned QAssociationBase::maxPdu() const {
 	return connectionParameters().maxPdu();
 }
 
 
-const QString & Association::myAeTitle() const {
+const QString & QAssociationBase::myAeTitle() const {
 	return connectionParameters().myAeTitle();
 }
 
 
-quint16 Association::nextMessageId() {
+quint16 QAssociationBase::nextMessageId() {
 	if ( tAscAssociation() ) {
 		return tAscAssociation()->nextMsgID++;
 	}
@@ -194,19 +189,19 @@ quint16 Association::nextMessageId() {
 }
 
 
-quint16 Association::port() const {
+quint16 QAssociationBase::port() const {
 	return connectionParameters().port();
 }
 
 
-void Association::raiseError( const QString & Message ) {
+void QAssociationBase::raiseError( const QString & Message ) {
 	setState( Error );
 	errorMessage_ = Message;
 }
 
 
-void Association::setConnectionParameters(
-	const ConnectionParameters & Parameters
+void QAssociationBase::setConnectionParameters(
+	const QConnectionParameters & Parameters
 ) {
 	if (
 		connectionParameters().port()    != Parameters.port() ||
@@ -221,29 +216,45 @@ void Association::setConnectionParameters(
 }
 
 
-void Association::setState( State s ) {
+void QAssociationBase::setState( State s ) {
 	state_ = s;
 }
 
 
-const Association::State & Association::state() const {
+void QAssociationBase::startAbortTask() {
+	QDcmtkTask * task = QDcmtkTask::create( 
+		::ASC_abortAssociation, tAscAssociation()
+	);
+
+	connect( 
+		task, SIGNAL( finished( QDcmtkResult ) ),
+		SLOT( finishAbortTask( QDcmtkResult ) )
+	);
+	connect(
+		task, SIGNAL( finished( QDcmtkResult ) ),
+		task, SLOT( deleteLater() )
+	);
+
+	task->start();
+}
+
+
+const QAssociationBase::State & QAssociationBase::state() const {
 	return state_;
 }
 
 
-T_ASC_Association *& Association::tAscAssociation() const {
+T_ASC_Association *& QAssociationBase::tAscAssociation() const {
 	return association_;
 }
 
 
-T_ASC_Network *& Association::tAscNetwork() const {
+T_ASC_Network *& QAssociationBase::tAscNetwork() const {
 	return network_;
 }
 
 
-int Association::timeout() const {
+int QAssociationBase::timeout() const {
 	return connectionParameters().timeout();
 }
 
-
-}; // Namespace DICOM ends here.
