@@ -353,14 +353,14 @@ class QDICOM_DLLSPEC QAssociation : public QObject {
 		void fillPresentationContexts( T_ASC_Parameters *& parameters ) const;		
 
 	private slots :
-		void startAbortTask();
-		void finishAbortTask( QDcmtkResult result );
+		void startAborting();
+		void finishAborting( QDcmtkResult result );
 
-		void startReleaseTask();
-		void finishReleaseTask( QDcmtkResult result );
+		void startReleasing();
+		void finishReleasing( QDcmtkResult result );
 
-		void startRequestTask();
-		void finishRequestTask( QDcmtkResult result );
+		void startRequesting();
+		void finishRequesting( QDcmtkResult result );
 
 	private :		
 		const Mode Mode_;

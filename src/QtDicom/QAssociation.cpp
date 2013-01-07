@@ -54,7 +54,7 @@ void QAssociation::abort() {
 		Q_ASSERT( tAscAssociation() );
 
 		setState( Aborting );
-		QMetaObject::invokeMethod( this, "startAbortTask", Qt::QueuedConnection );
+		QMetaObject::invokeMethod( this, "startAborting", Qt::QueuedConnection );
 	}
 	else {
 		qDebug( __FUNCTION__": "
@@ -260,7 +260,7 @@ void QAssociation::fillPresentationContexts(
 }
 
 
-void QAssociation::finishAbortTask( QDcmtkResult result ) {
+void QAssociation::finishAborting( QDcmtkResult result ) {
 	Q_ASSERT( state_ == Aborting );
 
 	if ( result.ofCondition().good() ) {
@@ -279,7 +279,7 @@ void QAssociation::finishAbortTask( QDcmtkResult result ) {
 }
 
 
-void QAssociation::finishReleaseTask( QDcmtkResult result ) {
+void QAssociation::finishReleasing( QDcmtkResult result ) {
 	if ( result.ofCondition().good() ) {
 		qDebug( __FUNCTION__": association released successfully" );
 
@@ -299,7 +299,7 @@ void QAssociation::finishReleaseTask( QDcmtkResult result ) {
 }
 
 
-void QAssociation::finishRequestTask( QDcmtkResult result ) {
+void QAssociation::finishRequesting( QDcmtkResult result ) {
 	Q_ASSERT( state_ == Requesting );
 
 	OFCondition status = result.ofCondition();
@@ -459,7 +459,7 @@ void QAssociation::release() {
 
 		setState( Releasing );
 		QMetaObject::invokeMethod( 
-			this, "startReleaseTask", Qt::QueuedConnection
+			this, "startReleasing", Qt::QueuedConnection
 		);		
 	}
 	else {
@@ -499,7 +499,7 @@ void QAssociation::request() {
 		if ( tAscNetwork() || initializeTAscNetwork() ) {
 			setState( Requesting );
 
-			QMetaObject::invokeMethod( this, "startRequestTask", Qt::QueuedConnection );
+			QMetaObject::invokeMethod( this, "startRequesting", Qt::QueuedConnection );
 		}		
 	}
 	else {
@@ -532,14 +532,14 @@ void QAssociation::setState( State s ) {
 }
 
 
-void QAssociation::startAbortTask() {
+void QAssociation::startAborting() {
 	QDcmtkTask * task = QDcmtkTask::create( 
 		::ASC_abortAssociation, tAscAssociation()
 	);
 
 	connect( 
 		task, SIGNAL( finished( QDcmtkResult ) ),
-		SLOT( finishAbortTask( QDcmtkResult ) )
+		SLOT( finishAborting( QDcmtkResult ) )
 	);
 	connect(
 		task, SIGNAL( finished( QDcmtkResult ) ),
@@ -550,14 +550,14 @@ void QAssociation::startAbortTask() {
 }
 
 
-void QAssociation::startReleaseTask() {
+void QAssociation::startReleasing() {
 	QDcmtkTask * task = QDcmtkTask::create( 
 		::ASC_abortAssociation, tAscAssociation()
 	);
 
 	connect( 
 		task, SIGNAL( finished( QDcmtkResult ) ),
-		SLOT( finishReleaseTask( QDcmtkResult ) )
+		SLOT( finishReleasing( QDcmtkResult ) )
 	);
 	connect(
 		task, SIGNAL( finished( QDcmtkResult ) ),
@@ -568,7 +568,7 @@ void QAssociation::startReleaseTask() {
 }
 
 
-void QAssociation::startRequestTask() {
+void QAssociation::startRequesting() {
 	T_ASC_Parameters * parameters = 0;
 
 	try {
@@ -611,7 +611,7 @@ void QAssociation::startRequestTask() {
 
 	connect( 
 		task, SIGNAL( finished( QDcmtkResult ) ),
-		SLOT( finishRequestTask( QDcmtkResult ) )
+		SLOT( finishRequesting( QDcmtkResult ) )
 	);
 	connect(
 		task, SIGNAL( finished( QDcmtkResult ) ),
