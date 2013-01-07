@@ -3,4 +3,4 @@
  *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
  **************************************************************************/
 
-#include "QAssociationBase.hpp"
+#include "QAssociation.hpp"

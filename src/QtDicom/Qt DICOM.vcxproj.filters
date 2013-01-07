@@ -49,9 +49,6 @@
     <ClCompile Include="AssociationServer.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
-    <ClCompile Include="RequestorAssociation.cpp">
-      <Filter>Network Objects</Filter>
-    </ClCompile>
     <ClCompile Include="ServerAssociation.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
@@ -115,12 +112,12 @@
     <ClCompile Include="QPresentationContextData.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
-    <ClCompile Include="QAssociationBase.cpp">
-      <Filter>Network Objects</Filter>
-    </ClCompile>
     <ClCompile Include="QDcmtkResultData.cpp" />
     <ClCompile Include="QDcmtkResult.inl" />
     <ClCompile Include="QDcmtkTask.cpp" />
+    <ClCompile Include="QAssociation.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dataset.hpp">
@@ -205,6 +202,9 @@
     <ClInclude Include="QDcmtkTask" />
     <ClInclude Include="QDcmtkResult.hpp" />
     <ClInclude Include="QDcmtkResult" />
+    <ClInclude Include="QPresentationContextList">
+      <Filter>Network Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DataSourceCreator.inl">
@@ -214,6 +214,9 @@
       <Filter>Resources\Texts</Filter>
     </None>
     <None Include="QDcmtkTask.inl" />
+    <None Include="QAssociation">
+      <Filter>Network Objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <MocSource Include="AssociationServer.hpp">
@@ -223,9 +226,6 @@
       <Filter>Network Objects</Filter>
     </MocSource>
     <MocSource Include="ServerAssociation.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
-    <MocSource Include="RequestorAssociation.hpp">
       <Filter>Network Objects</Filter>
     </MocSource>
     <MocSource Include="FileSystemDataSource.hpp">
@@ -249,10 +249,10 @@
     <MocSource Include="QStorageScu.hpp">
       <Filter>Service Class Users</Filter>
     </MocSource>
-    <MocSource Include="QAssociationBase.hpp">
+    <MocSource Include="QDcmtkTask.hpp" />
+    <MocSource Include="QAssociation.hpp">
       <Filter>Network Objects</Filter>
     </MocSource>
-    <MocSource Include="QDcmtkTask.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Version.rc">
