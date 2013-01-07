@@ -62,11 +62,11 @@ struct T_ASC_Parameters;
  *
  * Once the list of presentation contexts is populated and connection 
  * parameters are valid, the \ref request() slot can be safely called. It 
- * immediately changes object's state to \em Requesting and starts the 
- * association process in the background. When the association is established,
- * object emits the \ref connected() signal and changes its state to \em
- * Established. In the event of an error, the \ref error() signal is emitted
- * instead and association goes back to the \em Unconnected state.
+ * immediately changes object's state to \em Requesting or \em AcquringNetwork
+ * and starts the association process in the background. When the association 
+ * is established, object emits the \ref connected() signal and changes its 
+ * state to \em Established. In the event of an error, the \ref error() signal 
+ * is emitted instead and association goes back to the \em Unconnected state.
  *
  * After the \em connected() signal is received, association user can obtain
  * SOP Classe and Transfer Syntaxe pairs accepted by the DICOM server with the 
@@ -84,8 +84,6 @@ struct T_ASC_Parameters;
  * After user finishes exchanging messages, associations should be released 
  * with the \ref release() slot, which sginals association state changing back 
  * to \em Unconnected by the \ref disconnected() signal.
- * 
- * 
  *
  * \author Paweł Żak <pawel.zak@fluxinc.ca>
  */
@@ -95,6 +93,7 @@ class QDICOM_DLLSPEC QAssociation : public QObject {
 	public :
 		enum State {
 			Unconnected,
+			AcquiringNetwork,
 			Requesting,
 			Established,
 			Releasing,
@@ -293,10 +292,10 @@ class QDICOM_DLLSPEC QAssociation : public QObject {
 		 * 
 		 * This slot can be called only when the association is in the \em 
 		 * Unconnected state. The state is immediately changed to \em Requesting
-		 * and control returns back to the caller. The process of requesting 
-		 * association takes place in the background and is signalled by the
-		 * \ref connected() signal, followed by another state change to \em
-		 * Established.
+		 * or \em AcquiringNetwork and control returns back to the caller. The 
+		 * process of requesting association takes place in the background and 
+		 * its finish is signalled by the \ref connected() signal, followed by 
+		 * another state change to \em Established.
 		 *
 		 * In case of any error, the \ref error() signal is used to report a
 		 * problem. When it happens, the error flag is raised as well (\ref
@@ -355,6 +354,9 @@ class QDICOM_DLLSPEC QAssociation : public QObject {
 	private slots :
 		void startAborting();
 		void finishAborting( QDcmtkResult result );
+
+		void startAcquiringNetwork();
+		void finishAcquiringNetwork( QDcmtkResult result );
 
 		void startReleasing();
 		void finishReleasing( QDcmtkResult result );

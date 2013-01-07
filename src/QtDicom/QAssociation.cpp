@@ -20,9 +20,15 @@
 typedef Dicom::ConnectionParameters QConnectionParameters;
 
 
-// This wrapper is used to invoke ASC_requestAssociation -- it was created in
-// order to minimize the amount of parameters being passed by \ref QDcmtkTask
+// These wrappers are used to invoke similar ASC_* method -- they were created 
+// in order to minimize the amount of parameters being passed by \ref QDcmtkTask
 // functor
+inline static OFCondition ASC_initializeNetworkWrapper(
+	T_ASC_NetworkRole role,
+	int acceptorPort,
+	int timeout,
+	T_ASC_Network ** network
+);
 inline static OFCondition ASC_requestAssociationWrapper(
 	T_ASC_Network * network,
 	T_ASC_Parameters * parameters,
@@ -279,6 +285,34 @@ void QAssociation::finishAborting( QDcmtkResult result ) {
 }
 
 
+void QAssociation::finishAcquiringNetwork( QDcmtkResult result ) {
+	Q_ASSERT( state_ == AcquiringNetwork );
+
+	if ( result.ofCondition().good() ) {
+		qDebug( __FUNCTION__": "
+			"network object created:\n"
+			"\tport    : %d\n"
+			"\ttimeout : %d s",
+			port(), timeout()
+		);
+
+		setState( Requesting );
+		startRequesting();		
+	}
+	else {
+		raiseError(
+			QString( 
+				"Failed to initialize network. "
+				"Internal error description:\n%1"
+			)
+			.arg( result.ofCondition().text() )
+		);
+
+		setState( Unconnected );
+	}
+}
+
+
 void QAssociation::finishReleasing( QDcmtkResult result ) {
 	if ( result.ofCondition().good() ) {
 		qDebug( __FUNCTION__": association released successfully" );
@@ -496,11 +530,20 @@ void QAssociation::request() {
 	if ( state_ == Unconnected ) {
 		errorMessage_.clear();
 
-		if ( tAscNetwork() || initializeTAscNetwork() ) {
+		if ( tAscNetwork() ) {
 			setState( Requesting );
 
-			QMetaObject::invokeMethod( this, "startRequesting", Qt::QueuedConnection );
-		}		
+			QMetaObject::invokeMethod(
+				this, "startRequesting", Qt::QueuedConnection
+			);
+		}
+		else {
+			setState( AcquiringNetwork );
+
+			QMetaObject::invokeMethod(
+				this, "startAcquiringNetwork", Qt::QueuedConnection
+			);
+		}
 	}
 	else {
 		raiseError(
@@ -540,6 +583,25 @@ void QAssociation::startAborting() {
 	connect( 
 		task, SIGNAL( finished( QDcmtkResult ) ),
 		SLOT( finishAborting( QDcmtkResult ) )
+	);
+	connect(
+		task, SIGNAL( finished( QDcmtkResult ) ),
+		task, SLOT( deleteLater() )
+	);
+
+	task->start();
+}
+
+
+void QAssociation::startAcquiringNetwork() {
+	QDcmtkTask * task = QDcmtkTask::create( 
+		::ASC_initializeNetworkWrapper,
+		NET_REQUESTOR, static_cast< int >( port() ), timeout(), &tAscNetwork()
+	);
+
+	connect( 
+		task, SIGNAL( finished( QDcmtkResult ) ),
+		SLOT( finishAcquiringNetwork( QDcmtkResult ) )
 	);
 	connect(
 		task, SIGNAL( finished( QDcmtkResult ) ),
@@ -646,6 +708,15 @@ T_ASC_Network *& QAssociation::tAscNetwork() const {
 
 int QAssociation::timeout() const {
 	return connectionParameters().timeout();
+}
+
+
+OFCondition ASC_initializeNetworkWrapper(
+	T_ASC_NetworkRole role, int port, int timeout, T_ASC_Network ** network
+) {
+	return ::ASC_initializeNetwork(
+		role, port, timeout, network
+	);
 }
 
 
