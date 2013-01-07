@@ -46,9 +46,6 @@
     <ClCompile Include="AcceptorAssociation.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
-    <ClCompile Include="AssociationServer.cpp">
-      <Filter>Network Objects</Filter>
-    </ClCompile>
     <ClCompile Include="ServerAssociation.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
@@ -116,6 +113,9 @@
     <ClCompile Include="QDcmtkResult.inl" />
     <ClCompile Include="QDcmtkTask.cpp" />
     <ClCompile Include="QAssociation.cpp">
+      <Filter>Network Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QAssociationServer.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -219,9 +219,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <MocSource Include="AssociationServer.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
     <MocSource Include="AcceptorAssociation.hpp">
       <Filter>Network Objects</Filter>
     </MocSource>
@@ -251,6 +248,9 @@
     </MocSource>
     <MocSource Include="QDcmtkTask.hpp" />
     <MocSource Include="QAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </MocSource>
+    <MocSource Include="QAssociationServer.hpp">
       <Filter>Network Objects</Filter>
     </MocSource>
   </ItemGroup>

@@ -217,7 +217,6 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
   <ItemGroup>
     <ClCompile Include="AbstractService.cpp" />
     <ClCompile Include="AcceptorAssociation.cpp" />
-    <ClCompile Include="AssociationServer.cpp" />
     <ClCompile Include="ConnectionParameters.cpp" />
     <ClCompile Include="ConnectionParameters_priv.cpp" />
     <ClCompile Include="Dataset.cpp" />
@@ -233,6 +232,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClCompile Include="ModalityPerformedProcedureStepScu.cpp" />
     <ClCompile Include="MoveScu.cpp" />
     <ClCompile Include="QAssociation.cpp" />
+    <ClCompile Include="QAssociationServer.cpp" />
     <ClCompile Include="QDcmtkResult.inl" />
     <ClCompile Include="QDcmtkResultData.cpp" />
     <ClCompile Include="QDcmtkTask.cpp" />
@@ -259,9 +259,6 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <MocSource Include="AcceptorAssociation.hpp">
       <FileType>CppHeader</FileType>
     </MocSource>
-    <MocSource Include="AssociationServer.hpp">
-      <FileType>CppHeader</FileType>
-    </MocSource>
     <ClInclude Include="ConnectionParameters.hpp" />
     <ClInclude Include="ConnectionParameters_priv.hpp" />
     <ClInclude Include="Dataset.hpp" />
@@ -286,6 +283,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FileType>Document</FileType>
     </ClInclude>
     <MocSource Include="QAssociation.hpp" />
+    <MocSource Include="QAssociationServer.hpp" />
     <MocSource Include="QDcmtkTask.hpp">
       <FileType>CppHeader</FileType>
     </MocSource>
