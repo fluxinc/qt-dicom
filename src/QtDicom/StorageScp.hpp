@@ -151,10 +151,16 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 
 	signals :
 		/**
+		 * Signal emitted when C-ECHO request was received and handled. The AE
+		 * parameter contains Application Entity title of the requesting node.
+		 */
+		void echoReceived( QString AE );
+
+		/**
 		 * Signal emitted when the Storage SCP failed to store a file. The \a 
 		 * message parameter contains an explanation of the error.
 		 */
-		void failedToStore( QString message );
+		void failedToStore( QString message );		
 
 		/**
 		 * Signal emitted when the Storage SCP successfully stored a DICOM 
@@ -166,7 +172,7 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 * Signal emitted when Storage SCP successfully stores a DICOM Data
 		 * Set in the \a dataSet struvture.
 		 */
-		void stored( Dataset dataSet );
+		void stored( Dicom::Dataset dataSet );
 
 };
 

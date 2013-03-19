@@ -71,6 +71,12 @@ class QDICOM_DLLSPEC StorageScp::ReceiverThread : public QThread, public Service
 
 	signals :
 		/**
+		 * Signal emitted when C-ECHO request was received and handled. The AE
+		 * parameter contains Application Entity title of the requesting node.
+		 */
+		void echoReceived( QString AE );
+
+		/**
 		 * Signal emitted when the Storage SCP thread failed to store a DICOM
 		 * dataset. The \a message contains an error explanation.
 		 */
@@ -85,7 +91,7 @@ class QDICOM_DLLSPEC StorageScp::ReceiverThread : public QThread, public Service
 		 * Signal emitted when Storage SCP successfully stores a DICOM Data
 		 * Set in the \a dataSet struvture.
 		 */
-		void stored( Dataset dataSet );
+		void stored( Dicom::Dataset dataSet );
 };
 
 }; // Namespace DICOM ends here.

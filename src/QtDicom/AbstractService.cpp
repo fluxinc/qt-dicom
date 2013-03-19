@@ -47,11 +47,11 @@ void AbstractService::clearErrorStatus() {
 }
 
 
-const QString & AbstractService::commandName( int command ) {
+const char * AbstractService::commandName( int command ) {
 	switch ( command ) {
 #define CASE( VALUE, NAME ) \
 		case VALUE : { \
-			static const QString TheName( NAME ); \
+			static const char * TheName( NAME ); \
 			return TheName; \
 		}
 		CASE( DIMSE_C_ECHO_RQ,    "C-ECHO-RQ"    );
@@ -69,7 +69,7 @@ const QString & AbstractService::commandName( int command ) {
 #undef CASE
 		case DIMSE_NOTHING :
 		default : {
-			static const QString TheName( "DIMSE command" );
+			static const char * TheName = "DIMSE command";
 
 			return TheName;
 		}

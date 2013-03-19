@@ -101,6 +101,7 @@ void StorageScp::ReceiverThread::run() {
 		}
 		else if ( Message.CommandField == DIMSE_C_ECHO_RQ ) {
 			handleCEcho( Message.msg.CEchoRQ, presentationContextId );
+			emit echoReceived( association()->callingAeTitle() );
 		}
 		else {
 			raiseError( "Unsupported command received." );

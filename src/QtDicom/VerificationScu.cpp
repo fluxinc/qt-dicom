@@ -24,13 +24,6 @@ VerificationScu::~VerificationScu() {
 }
 
 
-const UidList & VerificationScu::sopClasses() {
-	static const UidList TheList( UID_VerificationSOPClass );
-
-	return TheList;
-}
-
-
 bool VerificationScu::verify( 
 	Association * a, const ConnectionParameters & Parameters
 ) {
@@ -47,7 +40,13 @@ bool VerificationScu::verify( const ConnectionParameters & Parameters ) {
 	RequestorAssociation a( Parameters );
 	setAssociation( &a );
 
-	a.request( Parameters, sopClasses() );
+	const QList< QPresentationContext > Contexts = 
+		QList< QPresentationContext >() << 
+			QPresentationContext::defaultFor( UID_VerificationSOPClass )
+	;
+
+	bool timedOut = false;
+	a.request( Contexts, &timedOut );
 	if ( a.isEstablished() ) {
 		bool result = cEcho();
 		a.release();

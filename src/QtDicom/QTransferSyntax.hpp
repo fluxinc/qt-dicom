@@ -124,12 +124,12 @@ class QDICOM_DLLSPEC QTransferSyntax {
 		const char * name() const;
 		int toInt() const;
 		QString toString() const;
-		const QUid & uid() const;
+		const char * uid() const;
 
 
 	private :
 		static const char * name( Id id );
-		static const QUid & uid( Id id );
+		static const char * uid( Id id );
 
 	private :
 		Id id_;

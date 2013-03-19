@@ -20,8 +20,6 @@ class QDICOM_DLLSPEC VerificationScu : public ServiceUser {
 		VerificationScu();
 		~VerificationScu();
 
-		static const UidList & sopClasses();
-
 		bool verify( Association * association, const ConnectionParameters & params );
 		bool verify( const ConnectionParameters & params );
 };

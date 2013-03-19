@@ -342,6 +342,27 @@ void QStorageScu::store( Dicom::Dataset dataset ) {
 	const QUid SopClass = dataset.sopClassUid();
 
 	if ( sopClasses_.contains( SopClass ) ) {
+		QMetaObject::invokeMethod( 
+			this, "storeDataset", Qt::QueuedConnection, Q_ARG( Dicom::Dataset, dataset )
+		);
+	}
+	else {
+		qWarning( __FUNCTION__": "
+			"Data Set's: %s SOP class: %s doesn't match requested",
+			dataset.sopInstanceUid().constData(),
+			qPrintable( sopClassString( SopClass ) )
+		);
+		setError( InvalidSopClass );
+
+		releaseAssociation();
+	}
+}
+
+
+void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
+	if ( state_ != Disconnected ) {
+		const QUid SopClass = dataset.sopClassUid();
+
 		QList< QTransferSyntax > AcceptedTs = acceptedTransferSyntaxes(
 			SopClass
 		);
@@ -403,33 +424,6 @@ void QStorageScu::store( Dicom::Dataset dataset ) {
 				return;
 			}
 		}
-
-
-		QMetaObject::invokeMethod( 
-			this, "storeDataset", Qt::QueuedConnection, Q_ARG( Dicom::Dataset, dataset )
-		);
-	}
-	else {
-		qWarning( __FUNCTION__": "
-			"Data Set's: %s SOP class: %s doesn't match requested",
-			dataset.sopInstanceUid().constData(),
-			qPrintable( sopClassString( SopClass ) )
-		);
-		setError( InvalidSopClass );
-
-		releaseAssociation();
-	}
-}
-
-
-void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
-	if ( state_ != Disconnected ) {
-		Q_ASSERT( sopClasses_.contains( dataset.sopClassUid() ) );
-		Q_ASSERT(
-			acceptedTransferSyntaxes( dataset.sopClassUid() ).contains(
-				dataset.syntax()
-			)
-		);
 
 		setState( Sending );
 

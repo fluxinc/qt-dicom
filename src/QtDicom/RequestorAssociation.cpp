@@ -351,7 +351,7 @@ void RequestorAssociation::setPresentationContexts(
 		const char * As = Pc.abstractSyntax().constData();
 	
 		for ( int j = 0; j < TssCount; ++j ) {
-			tss[ j ] = Tss.at( j ).uid().constData();
+			tss[ j ] = Tss.at( j ).uid();
 		}
 
 		const OFCondition Result = ASC_addPresentationContext(

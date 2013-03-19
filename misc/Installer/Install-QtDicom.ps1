@@ -39,7 +39,10 @@ catch {
     
     New-Item -type Directory -force "$Dst\bin" | Out-Null
     ( "QtDicom4", "QtDicomd4" ) | % {
-        Copy-Item -force "$Root\lib\$Arch\$_.dll" "$Dst\bin" | Out-Null
+        $BaseName = $_
+        ( "lib", "dll", "pdb" ) | % {
+            Copy-Item -force "$Root\lib\$Arch\$BaseName.$_" "$Dst\bin" | Out-Null
+        }
     }
     
     New-Item -type Directory -force "$Dst\include" | Out-Null

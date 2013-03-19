@@ -137,7 +137,7 @@ Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs ) cons
 			;
 			if ( codec != NULL ) {
 				const OFCondition Converted = newDset.chooseRepresentation( 
-					DcmXfer( DstTs.uid().constData() ).getXfer(),
+					DcmXfer( DstTs.uid() ).getXfer(),
 					codec->dcmParameters()
 				);
 

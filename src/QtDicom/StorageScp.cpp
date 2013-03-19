@@ -55,12 +55,17 @@ void StorageScp::createReceiverThread() {
 		SIGNAL( stored( QString ) )
 	);
 	connect( 
-		thread, SIGNAL( stored( Dataset ) ),
-		SIGNAL( stored( Dataset ) )
+		thread, SIGNAL( stored( Dicom::Dataset ) ),
+		SIGNAL( stored( Dicom::Dataset ) )
 	);
 	connect( 
 		thread, SIGNAL( failedToStore( QString ) ),
 		SIGNAL( failedToStore( QString ) )
+	);
+	
+	connect(
+		thread, SIGNAL( echoReceived( QString ) ),
+		SIGNAL( echoReceived( QString ) )
 	);
 	connect(
 		thread, SIGNAL( finished() ),

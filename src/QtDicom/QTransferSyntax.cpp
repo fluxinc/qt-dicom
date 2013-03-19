@@ -281,20 +281,20 @@ QString QTransferSyntax::toString() const {
 }
 
 
-const QUid & QTransferSyntax::uid() const {
+const char * QTransferSyntax::uid() const {
 	return uid( id_ );
 }
 
 
-const QUid & QTransferSyntax::uid( Id Ts ) {
-	const QUid * result = NULL;
+const char * QTransferSyntax::uid( Id Ts ) {
+	const char * result = NULL;
 
 	switch ( Ts ) {
 
 #define CASE( ID, UID ) \
 	case ID : {  \
-		static const QUid Uid( UID ); \
-		result = &Uid; \
+		static const char * TheUid = UID; \
+		result = TheUid; \
 	} break
 
 	CASE( Unknown, "" );
@@ -339,11 +339,11 @@ const QUid & QTransferSyntax::uid( Id Ts ) {
 
 	default :
 		Q_ASSERT( 0 );
-		static const QUid Default;
-		result = &Default;
+		static const char * Default = "";
+		result = Default;
 	}
 
-	return *result;
+	return result;
 }
 
 

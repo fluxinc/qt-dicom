@@ -133,7 +133,7 @@ class QDICOM_DLLSPEC AbstractService {
 		 * Returns name of a DIMSE \a command. The \a command parameter is 
 		 * DCMTK's enumerator value.
 		 */
-		static const QString & commandName( int command );
+		static const char * commandName( int command );
 
 	private :
 		Association * association_;
