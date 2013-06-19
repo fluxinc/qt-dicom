@@ -49,6 +49,7 @@ class QDICOM_DLLSPEC Dataset {
 		DcmDataset & dcmDataset() const;
 		bool isEmpty() const;
 		bool readXml( QXmlStreamReader & input, QString * errorMessage = 0 );
+		bool save( const QString & path ) const;
 		void setDcmDataset( const DcmDataset & dataset );
 		QByteArray sopClassUid() const;
 		QByteArray sopInstanceUid() const;

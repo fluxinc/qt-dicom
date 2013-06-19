@@ -28,17 +28,17 @@
 #include "DatasetConstIterator.hpp"
 
 
-QDate dateFromString( const QString & String );
-QDateTime dateTimeFromString( const QString & String );
-QTime timeFromString( const QString & String );
+static QDate dateFromString( const QString & String );
+static QDateTime dateTimeFromString( const QString & String );
+static QTime timeFromString( const QString & String );
 
-bool matchElement_Range( 
+static bool matchElement_Range( 
 	const QString & Pattern, const QString & Value, const DcmEVR & Vr
 );
-bool matchElement_SingleValue( 
+static bool matchElement_SingleValue( 
 	const QString & Pattern, const QString & Value, const DcmEVR & Vr
 );
-bool matchElement_WildCard( 
+static bool matchElement_WildCard( 
 	const QString & Pattern, const QString & Value, const DcmEVR & Vr
 );
 
@@ -653,6 +653,35 @@ bool Dataset::readXml( QXmlStreamReader & input, QString * errorMessage ) {
 				.arg( input.columnNumber() )
 			;
 		}
+		return false;
+	}
+}
+
+
+bool Dataset::save( const QString & FilePath ) const {
+	const std::string Path = QDir::toNativeSeparators( FilePath ).toStdString();
+
+	const E_TransferSyntax OriginalSyntax = dcmDataset().getOriginalXfer();	
+	const E_TransferSyntax FileSyntax =
+		OriginalSyntax != EXS_Unknown ?
+		OriginalSyntax : EXS_LittleEndianExplicit
+	;
+
+
+	DcmFileFormat file( &dcmDataset() );
+
+	const OFCondition Result = file.saveFile(
+		OFString( Path.data(), Path.size() ), FileSyntax
+	);
+
+	if ( Result.good() ) {
+		return true;
+	}
+	else {
+		qDebug( 
+			"Failed to save Data Set to `%s'; %s",
+			Path.c_str(), Result.text()
+		);
 		return false;
 	}
 }
