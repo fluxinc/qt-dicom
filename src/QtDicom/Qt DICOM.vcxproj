@@ -122,6 +122,12 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>powershell -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(SolutionDir)misc\Scripts\Stamp-BuildNumber.ps1" -Path "$(ProjectDir)Version.hpp" -Source "FILE:$(ProjectDir)Resources\Texts\Build Number.txt"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Stamping Version Info</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -149,6 +155,12 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;_UNICODE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>powershell -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File "$(SolutionDir)misc\Scripts\Stamp-BuildNumber.ps1" -Path "$(ProjectDir)Version.hpp" -Source "FILE:$(ProjectDir)Resources\Texts\Build Number.txt"</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Stamping Version Info</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
