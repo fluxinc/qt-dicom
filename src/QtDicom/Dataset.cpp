@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Flux Inc.                                       *
+ *   Copyright © 2011-2013 by Flux Inc.                                    *
  *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
  **************************************************************************/
 
@@ -178,7 +178,7 @@ Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs ) cons
 
 
 DcmDataset & Dataset::dcmDataset() const {
-	return d_->dataset_;
+	return d_->dcmDataSet();
 }
 
 
@@ -231,7 +231,7 @@ Dataset Dataset::fromXmlStream( QXmlStreamReader & input, QString * errorMessage
 
 
 bool Dataset::isEmpty() const {
-	return d_->dataset_.isEmpty();
+	return d_->dcmDataSet().isEmpty();
 }
 
 
@@ -688,7 +688,7 @@ bool Dataset::save( const QString & FilePath ) const {
 
 
 void Dataset::setDcmDataset( const DcmDataset & Dataset ) {
-	d_->dataset_ = Dataset;
+	d_->dcmDataSet() = Dataset;
 }
 
 

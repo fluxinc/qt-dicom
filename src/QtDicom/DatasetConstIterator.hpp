@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Flux Inc.                                       *
+ *   Copyright © 2011-2013 by Flux Inc.                                    *
  *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
  **************************************************************************/
 
@@ -9,8 +9,8 @@
 #include "QtDicom/Dataset.hpp"
 #include "QtDicom/Globals.hpp"
 
-#include <dcmtk/dcmdata/dcstack.h>
 
+class DcmStack;
 class DcmElement;
 class DcmItem;
 class DcmSequenceOfItems;
@@ -22,6 +22,8 @@ class QDICOM_DLLSPEC Dataset::ConstIterator {
 		ConstIterator( const ConstIterator & other );
 		ConstIterator( const Dataset & dataset, bool atEnd = false );
 		ConstIterator( const DcmItem & item, bool atEnd = false );
+		~ConstIterator();
+
 		bool operator !=( const ConstIterator & other ) const;
 		DcmObject & operator *() const;
 		ConstIterator & operator ++();
@@ -56,7 +58,7 @@ class QDICOM_DLLSPEC Dataset::ConstIterator {
 
 		const DcmStack & stack() const;
 		DcmStack & stack();
-		DcmStack stack_;
+		DcmStack * stack_;
 };
 
 }; // Namespace DICOM ends here.

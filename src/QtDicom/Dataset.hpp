@@ -13,8 +13,10 @@
 #include <QtDicom/Globals.hpp>
 
 
+class DcmElement;
 class DcmItem;
 class DcmObject;
+class DcmSequenceOfItems;
 class DcmTagKey;
 
 class QTransferSyntax;

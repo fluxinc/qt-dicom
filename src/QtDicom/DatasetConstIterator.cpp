@@ -1,9 +1,13 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Flux Inc.                                       *
+ *   Copyright © 2011-2013 by Flux Inc.                                    *
  *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
  **************************************************************************/
 
 #include "DatasetConstIterator.hpp"
+
+#include <dcmtk/dcmdata/dcdatset.h>
+#include <dcmtk/dcmdata/dcitem.h>
+#include <dcmtk/dcmdata/dcstack.h>
 
 namespace Dicom {
 
@@ -11,7 +15,7 @@ namespace Dicom {
 Dataset::ConstIterator::ConstIterator( const ConstIterator & Other ) :
 	baseItem_( Other.baseItem_ ),
 	position_( Other.position_ ),
-	stack_( Other.stack_ )
+	stack_( new DcmStack( Other.stack() ) )
 {
 	this->operator ++();
 }
@@ -20,7 +24,7 @@ Dataset::ConstIterator::ConstIterator( const ConstIterator & Other ) :
 Dataset::ConstIterator::ConstIterator( const Dataset & Dset, bool end ) :
 	baseItem_( Dset.dcmDataset() ),
 	position_( end ? End : Start ),
-	stack_()
+	stack_( new DcmStack() )
 {
 	if ( ! end ) {
 		this->operator ++();
@@ -30,11 +34,19 @@ Dataset::ConstIterator::ConstIterator( const Dataset & Dset, bool end ) :
 Dataset::ConstIterator::ConstIterator( const DcmItem & item, bool end ) :
 	baseItem_( item ),
 	position_( end ? End : Start ),
-	stack_()
+	stack_( new DcmStack() )
 {
 	if ( ! end ) {
 		this->operator ++();
 	}
+}
+
+
+Dataset::ConstIterator::~ConstIterator() {
+	Q_ASSERT( stack_ != nullptr );
+
+	delete stack_;
+	stack_ = nullptr;
 }
 
 
@@ -163,12 +175,16 @@ void Dataset::ConstIterator::setPosition( Position position ) {
 
 
 const DcmStack & Dataset::ConstIterator::stack() const {
-	return stack_;
+	Q_ASSERT( stack_ != nullptr );
+
+	return *stack_;
 }
 
 
 DcmStack & Dataset::ConstIterator::stack() {
-	return stack_;
+	Q_ASSERT( stack_ != nullptr );
+
+	return *stack_;
 }
 
 } // Namespace DICOM ends here.
