@@ -21,6 +21,11 @@ QTransferSyntax::~QTransferSyntax() {
 }
 
 
+QTransferSyntax::operator int() const {
+	return id_;
+}
+
+
 bool QTransferSyntax::operator == ( const QTransferSyntax & Ts ) const {
 	return id_ == Ts.id_;
 }
