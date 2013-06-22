@@ -704,10 +704,10 @@ void Dataset::setDcmDataset( const DcmDataset & Dataset ) {
 
 
 QByteArray Dataset::sopClassUid() const {
-	QByteArray sopClass( 65, '\0' ), sopInstance( 65, '\0' );
+	DIC_UI sopClass, sopInstance;
 
 	const bool SopClassPresent = DU_findSOPClassAndInstanceInDataSet( 
-		&unconstDcmDataSet(), sopClass.data(), sopInstance.data()
+		&unconstDcmDataSet(), sopClass, sopInstance
 	);
 	if ( SopClassPresent ) {
 		return sopClass;
@@ -719,13 +719,12 @@ QByteArray Dataset::sopClassUid() const {
 
 
 QByteArray Dataset::sopInstanceUid() const {
-	QByteArray sopClass( 65, '\0' ), sopInstance( 65, '\0' );
+	DIC_UI sopClass, sopInstance;
 
 	const bool SopClassPresent = DU_findSOPClassAndInstanceInDataSet( 
-		&unconstDcmDataSet(), sopClass.data(), sopInstance.data()
+		&unconstDcmDataSet(), sopClass, sopInstance
 	);
 	if ( SopClassPresent ) {
-		sopInstance.squeeze();
 		return sopInstance;
 	}
 	else {
