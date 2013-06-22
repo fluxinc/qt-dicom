@@ -669,13 +669,13 @@ bool Dataset::readXml( QXmlStreamReader & input, QString * errorMessage ) {
 }
 
 
-bool Dataset::save( const QString & FilePath ) const {
+bool Dataset::toDicomFile( const QString & FilePath, QString * message ) const {
 	const std::string Path = QDir::toNativeSeparators( FilePath ).toStdString();
 
-	const E_TransferSyntax OriginalSyntax = dcmDataset().getOriginalXfer();	
+	const E_TransferSyntax CurrentSyntax = dcmDataset().getCurrentXfer();	
 	const E_TransferSyntax FileSyntax =
-		OriginalSyntax != EXS_Unknown ?
-		OriginalSyntax : EXS_LittleEndianExplicit
+		CurrentSyntax != EXS_Unknown ?
+		CurrentSyntax : EXS_LittleEndianExplicit
 	;
 
 
@@ -688,13 +688,11 @@ bool Dataset::save( const QString & FilePath ) const {
 	if ( Result.good() ) {
 		return true;
 	}
-	else {
-		qDebug( 
-			"Failed to save Data Set to `%s'; %s",
-			Path.c_str(), Result.text()
-		);
-		return false;
+	else if ( message != nullptr ) {
+		*message = Result.text();
 	}
+
+	return false;
 }
 
 
@@ -762,27 +760,6 @@ QString Dataset::tagValue( const DcmTagKey & Key, bool * exists ) const {
 
 QString Dataset::tagValue( quint16 group, quint16 element, bool * exists ) const {
 	return tagValue( DcmTagKey( group, element ), exists );
-}
-
-
-bool Dataset::toDicomFile( const QString & Path, QString * errorMessage ) const {
-	DcmFileFormat file( &unconstDcmDataSet() );
-
-	const OFCondition Result = file.saveFile(
-		Path.toUtf8().constData(), dcmDataset().getOriginalXfer()
-	);
-
-	if ( Result.good() ) {
-		return true;
-	}
-	else {
-		if ( errorMessage ) {
-			*errorMessage = QString(
-				"Failed to save Data Set in DICOM file: `%1'; %2."
-			).arg( QDir::toNativeSeparators( Path ) ).arg( Result.text() );
-		}
-		return false;
-	}
 }
 
 
