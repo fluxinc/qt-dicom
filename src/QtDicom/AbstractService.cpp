@@ -256,10 +256,12 @@ void AbstractService::sendCommand(
 	// ... fucking DCMTK.
 	T_DIMSE_Message & command = const_cast< T_DIMSE_Message & >( Command );
 
+	DcmDataset * dcmDataSet = const_cast< DcmDataset * >( &Data.dcmDataset() );
+
 	OFCondition result = DIMSE_sendMessageUsingMemoryData(
 		association()->tAscAssociation(), id,
 		&command, 0,
-		( Data.isEmpty() ? 0 : & Data.dcmDataset() ),
+		( Data.isEmpty() ? 0 : dcmDataSet ),
 		0, 0
 	);
 	if ( result.bad() ) {

@@ -114,7 +114,7 @@ Dataset::const_iterator Dataset::constEnd() const {
 
 
 bool Dataset::containsTag( const DcmTagKey & key ) const {
-	return dcmDataset().tagExists( key );
+	return unconstDcmDataSet().tagExists( key );
 }
 
 
@@ -177,7 +177,12 @@ Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs ) cons
 }
 
 
-DcmDataset & Dataset::dcmDataset() const {
+const DcmDataset & Dataset::dcmDataset() const {
+	return  d_->dcmDataSet();
+}
+
+
+DcmDataset & Dataset::dcmDataset() {
 	return d_->dcmDataSet();
 }
 
@@ -231,14 +236,20 @@ Dataset Dataset::fromXmlStream( QXmlStreamReader & input, QString * errorMessage
 
 
 bool Dataset::isEmpty() const {
-	return d_->dcmDataSet().isEmpty();
+	return unconstDcmDataSet().isEmpty();
 }
 
 
 Dataset Dataset::match( const Dataset & Mask ) const {
 	Dataset result;
 
-	if ( matchItem( Mask.dcmDataset(), dcmDataset(), result.dcmDataset() ) ) {
+	const bool Status = matchItem( 
+		const_cast< Dataset & >( Mask ).dcmDataset(),
+		unconstDcmDataSet(),
+		result.dcmDataset()
+	);
+
+	if ( Status ) {
 		return result;
 	}
 	else {
@@ -668,7 +679,7 @@ bool Dataset::save( const QString & FilePath ) const {
 	;
 
 
-	DcmFileFormat file( &dcmDataset() );
+	DcmFileFormat file( &unconstDcmDataSet() );
 
 	const OFCondition Result = file.saveFile(
 		OFString( Path.data(), Path.size() ), FileSyntax
@@ -693,9 +704,10 @@ void Dataset::setDcmDataset( const DcmDataset & Dataset ) {
 
 
 QByteArray Dataset::sopClassUid() const {
-	char sopClass[ 65 ], sopInstance[ 65 ];
+	QByteArray sopClass( 65, '\0' ), sopInstance( 65, '\0' );
+
 	const bool SopClassPresent = DU_findSOPClassAndInstanceInDataSet( 
-		&dcmDataset(), sopClass, sopInstance
+		&unconstDcmDataSet(), sopClass.data(), sopInstance.data()
 	);
 	if ( SopClassPresent ) {
 		return sopClass;
@@ -708,8 +720,9 @@ QByteArray Dataset::sopClassUid() const {
 
 QByteArray Dataset::sopInstanceUid() const {
 	QByteArray sopClass( 65, '\0' ), sopInstance( 65, '\0' );
+
 	const bool SopClassPresent = DU_findSOPClassAndInstanceInDataSet( 
-		&dcmDataset(), sopClass.data(), sopInstance.data()
+		&unconstDcmDataSet(), sopClass.data(), sopInstance.data()
 	);
 	if ( SopClassPresent ) {
 		sopInstance.squeeze();
@@ -730,7 +743,7 @@ QTransferSyntax Dataset::syntax() const {
 
 QString Dataset::tagValue( const DcmTagKey & Key, bool * exists ) const {
 	OFString value;
-	const OFCondition Result = dcmDataset().findAndGetOFStringArray( 
+	const OFCondition Result = unconstDcmDataSet().findAndGetOFStringArray( 
 		Key, value
 	);
 	if ( Result.good() ) {
@@ -754,7 +767,7 @@ QString Dataset::tagValue( quint16 group, quint16 element, bool * exists ) const
 
 
 bool Dataset::toDicomFile( const QString & Path, QString * errorMessage ) const {
-	DcmFileFormat file( & dcmDataset() );
+	DcmFileFormat file( &unconstDcmDataSet() );
 
 	const OFCondition Result = file.saveFile(
 		Path.toUtf8().constData(), dcmDataset().getOriginalXfer()
@@ -776,9 +789,14 @@ bool Dataset::toDicomFile( const QString & Path, QString * errorMessage ) const 
 
 QString Dataset::toString() const {
 	std::ostringstream os;
-	dcmDataset().print( os, DCMTypes::PF_shortenLongTagValues | DCMTypes::PF_convertToMarkup );
+	unconstDcmDataSet().print( os, DCMTypes::PF_shortenLongTagValues | DCMTypes::PF_convertToMarkup );
 	std::string tmp = os.str();
 	return QString( tmp.c_str() );
+}
+
+
+DcmDataset & Dataset::unconstDcmDataSet() const {
+	return const_cast< DcmDataset & >( dcmDataset() );
 }
 
 
@@ -909,7 +927,7 @@ void Dataset::writeXml( QXmlStreamWriter & output ) const {
 	output.setAutoFormattingIndent( -1 );
 #endif
 
-	DcmDataset & dataset = dcmDataset();
+	DcmDataset & dataset = unconstDcmDataSet();
 
 	Q_ASSERT( dataset.ident() == EVR_dataset );
 	output.writeStartElement( "Dataset" );

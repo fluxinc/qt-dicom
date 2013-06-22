@@ -44,7 +44,14 @@ Dataset_priv & Dataset_priv::operator = ( const Dataset_priv & Other ) {
 }
 
 
-DcmDataset & Dataset_priv::dcmDataSet() const {
+const DcmDataset & Dataset_priv::dcmDataSet() const {
+	Q_ASSERT( dcmDataSet_ != nullptr );
+
+	return *dcmDataSet_;
+}
+
+
+DcmDataset & Dataset_priv::dcmDataSet() {
 	Q_ASSERT( dcmDataSet_ != nullptr );
 
 	return *dcmDataSet_;

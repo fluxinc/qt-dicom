@@ -318,13 +318,9 @@ bool ServiceUser::cStore(
 		throw OperationFailedException( "Invalid association." );
 	}
 
-	DIC_UI SopClass; DIC_UI SopInstance;
-	if ( DU_findSOPClassAndInstanceInDataSet( 
-		&Dataset.dcmDataset(), SopClass, SopInstance
-	) ) {
-		qt_noop();
-	}
-	else {
+	const QByteArray SopClass = Dataset.sopClassUid();
+	const QByteArray SopInstance = Dataset.sopInstanceUid();
+	if ( SopClass.isEmpty() || SopInstance.isEmpty() ) {
 		throw OperationFailedException(
 			"Failed to read SOP Class and SOP Instance UIDs from the dataset."
 		);
@@ -359,7 +355,7 @@ bool ServiceUser::cStore(
 				"Unable to find presentation context ID "
 				"matching SOP Class: %1 and Transfer Syntax: %2"
 			)
-			.arg( SopClass )
+			.arg( SopClass.constData() )
 			.arg( TransferSyntax.toString() )
 		);
 	}

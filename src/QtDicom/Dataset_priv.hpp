@@ -21,10 +21,11 @@ class Dataset_priv : public QSharedData {
 		~Dataset_priv();
 		Dataset_priv & operator = ( const Dataset_priv & other );
 
-		DcmDataset & dcmDataSet() const;
+		const DcmDataset & dcmDataSet() const;
+		DcmDataset & dcmDataSet();
 
 	private :
-		mutable DcmDataset * dcmDataSet_;
+		DcmDataset * dcmDataSet_;
 
 };
 

@@ -48,7 +48,9 @@ class QDICOM_DLLSPEC Dataset {
 
 		Dataset convertedToTransferSyntax( const QTransferSyntax & ts ) const;
 
-		DcmDataset & dcmDataset() const;
+		const DcmDataset & dcmDataset() const;
+		DcmDataset & dcmDataset();
+
 		bool isEmpty() const;
 		bool readXml( QXmlStreamReader & input, QString * errorMessage = 0 );
 		bool save( const QString & path ) const;
@@ -92,8 +94,6 @@ class QDICOM_DLLSPEC Dataset {
 		static Dataset fromXmlStream( QXmlStreamReader & input, QString * errorMessage = 0 );
 
 	private :
-
-	private :
 		/**
 		 * Matches an \a identifier's item agains the \a mask. If the do match,
 		 * a newly created object is returned, otherwise the result is \c 0.
@@ -109,7 +109,7 @@ class QDICOM_DLLSPEC Dataset {
 		 * stores them in a \a container.
 		 */
 		void readContainerItems(
-			QXmlStreamReader & input, DcmItem & constainer
+			QXmlStreamReader & input, DcmItem & container
 		) const;
 
 		/**
@@ -142,6 +142,9 @@ class QDICOM_DLLSPEC Dataset {
 		void readTag(
 			QXmlStreamReader & input, DcmItem & container
 		) const;
+
+
+		DcmDataset & unconstDcmDataSet() const;
 
 		/**
 		 * Writes all children elements of the \a container to the \a output
