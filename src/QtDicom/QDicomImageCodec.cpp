@@ -88,8 +88,14 @@ DcmRepresentationParameter * QDicomImageCodec::dcmParameters() {
 
 
 void QDicomImageCodec::init() {
-	DJDecoderRegistration::registerCodecs();
-	DJEncoderRegistration::registerCodecs();
+	DJDecoderRegistration::registerCodecs(
+		EDC_always, // color conversion
+		EUC_never // Never change UID
+	);
+	DJEncoderRegistration::registerCodecs(
+		ECC_lossyRGB, // Color space conversion
+		EUC_never     // Never change UID
+	);
 
 	addCodec( QTransferSyntax::JpegProcess1, 
 		new QDicomImageCodec( new DJ_RPLossy )
@@ -112,18 +118,26 @@ void QDicomImageCodec::init() {
 	);
 
 
-	DJLSDecoderRegistration::registerCodecs();
-	DJLSEncoderRegistration::registerCodecs();
+	DJLSDecoderRegistration::registerCodecs(
+		EJLSUC_never // Do not change SOP instance
+	);
+	DJLSEncoderRegistration::registerCodecs(
+		OFFalse, // Default arguments
+		3, 7, 21,
+		64, 0,
+		OFTrue, 0, OFTrue,
+		EJLSUC_never // Do not change SOP instance
+	);
 
 	addCodec( QTransferSyntax::JpegLsLossless,
-		new QDicomImageCodec( new DJLSRepresentationParameter( 0, true ) )
+		new QDicomImageCodec( new DJLSRepresentationParameter( 2, true ) )
 	);
 	addCodec( QTransferSyntax::JpegLsLossy,
 		new QDicomImageCodec( new DJLSRepresentationParameter( 2, false ) )
 	);
 
-	DcmRLEDecoderRegistration::registerCodecs();
-	DcmRLEEncoderRegistration::registerCodecs();
+	DcmRLEDecoderRegistration::registerCodecs( false );
+	DcmRLEEncoderRegistration::registerCodecs( false );
 
 	addCodec( QTransferSyntax::Rle,
 		new QDicomImageCodec( new DcmRLERepresentationParameter )
