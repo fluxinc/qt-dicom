@@ -91,11 +91,11 @@ DcmRepresentationParameter * QDicomImageCodec::dcmParameters() {
 
 void QDicomImageCodec::init() {
 	DJDecoderRegistration::registerCodecs(
-		EDC_always, // color conversion
+		EDC_photometricInterpretation, // color conversion
 		EUC_never // Never change UID
 	);
 	DJEncoderRegistration::registerCodecs(
-		ECC_lossyRGB, // Color space conversion
+		ECC_lossyYCbCr, // Color space conversion
 		EUC_never     // Never change UID
 	);
 
