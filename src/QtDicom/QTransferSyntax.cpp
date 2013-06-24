@@ -22,7 +22,7 @@ QTransferSyntax::~QTransferSyntax() {
 
 
 QTransferSyntax::operator int() const {
-	return id_;
+	return toInt();
 }
 
 
@@ -278,6 +278,11 @@ const char * QTransferSyntax::name( Id Ts ) {
 	}
 
 	return result;
+}
+
+
+int QTransferSyntax::toInt() const {
+	return id_;
 }
 
 
