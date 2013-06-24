@@ -10,6 +10,8 @@
 #include <dcmtk/dcmdata/dcrleerg.h> /* DcmRLEEncoderRegistration::registerCodecs */
 #include <dcmtk/dcmdata/dcrlerp.h>  /* DcmRLERepresentationParameter */
 
+#include <dcmtk/dcmimage/diregist.h> /* To add support for color images */
+
 #include <dcmtk/dcmjpeg/djencode.h> /* DJDecoderRegistration::registerCodecs */
 #include <dcmtk/dcmjpeg/djdecode.h> /* DJEncoderRegistration::registerCodecs */
 #include <dcmtk/dcmjpeg/djrplol.h>  /* DJ_RPLossless */

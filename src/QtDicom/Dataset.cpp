@@ -22,6 +22,8 @@
 #include <dcmtk/dcmdata/dcelem.h>
 #include <dcmtk/dcmdata/dcfilefo.h>
 
+#include <dcmtk/dcmimage/diregist.h>
+
 #include <dcmtk/dcmnet/diutil.h>
 
 #include "Dataset.hpp"
