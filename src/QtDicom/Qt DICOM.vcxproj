@@ -103,7 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -136,7 +136,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -171,7 +171,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -203,7 +203,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -245,7 +245,9 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModalityPerformedProcedureStepScu.cpp" />
     <ClCompile Include="MoveScu.cpp" />
+    <ClCompile Include="QDicomAttribute.cpp" />
     <ClCompile Include="QDicomImageCodec.cpp" />
+    <ClCompile Include="QDicomTag.cpp" />
     <ClCompile Include="QPresentationContext.cpp" />
     <ClCompile Include="QPresentationContextData.cpp" />
     <ClCompile Include="QStorageScu.cpp" />
@@ -294,7 +296,9 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     </MocSource>
     <ClInclude Include="ModalityPerformedProcedureStepScu.hpp" />
     <ClInclude Include="MoveScu.hpp" />
+    <ClInclude Include="QDicomAttribute" />
     <ClInclude Include="QDicomImageCodec" />
+    <ClInclude Include="QDicomTag" />
     <ClInclude Include="QPresentationContext.hpp">
       <FileType>Document</FileType>
     </ClInclude>
@@ -306,6 +310,12 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FileType>Document</FileType>
     </ClInclude>
     <ClInclude Include="QPresentationContextData.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="QDicomAttribute.hpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="QDicomTag.hpp">
       <FileType>Document</FileType>
     </ClInclude>
     <MocSource Include="QStorageScu.hpp" />

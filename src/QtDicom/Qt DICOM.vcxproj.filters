@@ -118,6 +118,12 @@
     <ClCompile Include="QPresentationContextData.cpp">
       <Filter>Network Objects</Filter>
     </ClCompile>
+    <ClCompile Include="QDicomAttribute.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomTag.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dataset.hpp">
@@ -198,6 +204,18 @@
     </ClInclude>
     <ClInclude Include="QPresentationContextData.hpp">
       <Filter>Network Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomAttribute.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomTag.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomAttribute">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomTag">
+      <Filter>Data Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

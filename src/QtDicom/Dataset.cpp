@@ -15,6 +15,7 @@
 #include <QtCore/QXmlStreamWriter>
 
 #include <QtDicom/QDicomImageCodec>
+#include <QtDicom/QDicomTag>
 #include <QtDicom/QTransferSyntax>
 #include <QtDicom/QUid>
 
@@ -87,6 +88,26 @@ Dataset & Dataset::operator = ( const Dataset & Other ) {
 	}
 
 	return * this;
+}
+
+
+QDicomAttribute Dataset::attribute( const QDicomTag & Tag, bool * exists ) const {
+	OFString value;
+	const OFCondition Result = unconstDcmDataSet().findAndGetOFStringArray( 
+		DcmTagKey( Tag.group(), Tag.element() ), value
+	);
+	if ( Result.good() ) {
+		if ( exists )  {
+			*exists = true;
+		}
+		return QDicomAttribute( Tag, QString( value.c_str() ).split( '\\' ) );
+	}
+	else {
+		if ( exists )  {
+			*exists = false;
+		}
+		return QDicomAttribute();
+	}
 }
 
 

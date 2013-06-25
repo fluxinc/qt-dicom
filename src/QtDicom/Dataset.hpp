@@ -11,6 +11,7 @@
 
 #include <QtDicom/Dataset_priv.hpp>
 #include <QtDicom/Globals.hpp>
+#include <QtDicom/QDicomAttribute>
 
 
 class DcmElement;
@@ -19,6 +20,7 @@ class DcmObject;
 class DcmSequenceOfItems;
 class DcmTagKey;
 
+class QDicomTag;
 class QTransferSyntax;
 class QXmlStreamReader;
 class QXmlStreamWriter;
@@ -36,6 +38,10 @@ class QDICOM_DLLSPEC Dataset {
 		Dataset( const DcmDataset & DCM );
 		~Dataset();
 		Dataset & operator = ( const Dataset & other );
+
+		QDicomAttribute attribute( 
+			const QDicomTag & tag, bool * exists = nullptr
+		) const;
 
 		bool canConvertToTransferSyntax( const QTransferSyntax & ts ) const;
 		const_iterator constBegin() const;
