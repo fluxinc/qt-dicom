@@ -14,11 +14,10 @@
 #include <dcmtk/dcmdata/dctag.h>
 
 
+static const QString & cacheKeyword( quint16, quint16 );
 static const QString & cachedKeyword( quint16, quint16 );
-static QMutex & cacheLock();
-static const QString & cacheKeyword(
-	QHash< quint16, QVector< QString * > > &, quint16, quint16
-);
+static QHash< quint16, QVector< QString * > > & keywordCache();
+static QMutex & keywordCacheLock();
 static QString keywordFromDcmTagName( const char * );
 
 
@@ -68,20 +67,16 @@ const QString & QDicomTag::keyword() const {
 }
 
 
-const QString & cacheKeyword(
-	QHash< quint16, QVector< QString * > > & cache, quint16 group, quint16 element
-) {
+const QString & cacheKeyword( quint16 group, quint16 element ) {
 	QString * keyword = nullptr;
 
-	cacheLock().lock();
+	keywordCacheLock().lock();
 
+	QHash< quint16, QVector< QString * > > & cache = keywordCache();
 	QVector< QString * > & groupKeywords = cache[ group ];
-	if ( groupKeywords.isEmpty() ) {
+	if ( groupKeywords.size() < element ) {
+		groupKeywords.resize( element + 1 );
 		groupKeywords.fill( nullptr );
-		if ( groupKeywords.size() < element ) {
-			groupKeywords.resize( element );
-			groupKeywords.fill( nullptr );
-		}
 	}
 	
 	if ( groupKeywords[ element ] == nullptr ) {
@@ -92,26 +87,17 @@ const QString & cacheKeyword(
 	else {
 		keyword = cache[ group ][ element ];
 	}
-	cacheLock().unlock();
+	keywordCacheLock().unlock();
 
 	Q_ASSERT( keyword != nullptr );
 	return *keyword;
 }
 
 
-QMutex & cacheLock() {
-	static QMutex ** mutex = nullptr;
-
-	return *::qInitializeOnce( mutex, [] () -> QMutex * {
-		return new QMutex;
-	} );
-}
-
-
 const QString & cachedKeyword( quint16 group, quint16 element ) {
-	static QHash< quint16, QVector< QString * > > cache;
+	const QHash< quint16, QVector< QString * > > & Cache = keywordCache();
 
-	QVector< QString * > groupKeywords = cache[ group ];
+	QVector< QString * > groupKeywords = Cache[ group ];
 	if ( groupKeywords.size() > element ) {
 		const QString * keyword = groupKeywords[ element ];
 		if (  keyword != nullptr ) {
@@ -119,7 +105,25 @@ const QString & cachedKeyword( quint16 group, quint16 element ) {
 		}
 	}
 
-	return cacheKeyword( cache, group, element );
+	return cacheKeyword( group, element );
+}
+
+
+QHash< quint16, QVector< QString * > > & keywordCache() {
+	static QHash< quint16, QVector< QString * > > * cache = nullptr;
+
+	return ::qInitializeOnce( cache, [] () -> QHash< quint16, QVector< QString * > > {
+		return QHash< quint16, QVector< QString * > >();
+	} );
+}
+
+
+QMutex & keywordCacheLock() {
+	static QMutex ** mutex = nullptr;
+
+	return *::qInitializeOnce( mutex, [] () -> QMutex * {
+		return new QMutex;
+	} );
 }
 
 
