@@ -6,6 +6,7 @@
 #include "QDicomTag.hpp"
 
 #include <QtCore/QHash>
+#include <QtCore/QRegExp>
 #include <QtCore/QVector>
 
 #include <QtFlux/QInitializeOnce>
@@ -19,6 +20,7 @@ static const QString & cachedKeyword( quint16, quint16 );
 static QHash< quint16, QVector< QString * > > & keywordCache();
 static QMutex & keywordCacheLock();
 static QString keywordFromDcmTagName( const char * );
+static QRegExp stringPattern();
 
 
 QDicomTag::QDicomTag() :
@@ -33,6 +35,12 @@ QDicomTag::QDicomTag( const Id & Id ) :
 }
 
 
+QDicomTag::QDicomTag( quint16 group, quint16 element ) {
+	setGroup( group );
+	setElement( element );
+}
+
+
 QDicomTag::~QDicomTag() {
 }
 
@@ -44,6 +52,30 @@ QDicomTag::operator quint32() const {
 
 quint16 QDicomTag::element() const {
 	return static_cast< quint16 >( value_ );
+}
+
+
+QDicomTag QDicomTag::fromString( const QString & Value ) {
+	const QRegExp Pattern = stringPattern();
+	if ( Pattern.exactMatch( Value ) ) {
+		bool status = false;
+
+		const quint16 Group = Pattern.cap( 1 ).toUInt( &status, 16 );
+		Q_ASSERT( status );
+		const quint16 Element = Pattern.cap( 2 ).toUInt( &status, 16 );
+		Q_ASSERT( status );
+
+
+		return QDicomTag( Group, Element );
+	}
+	else {
+		qDebug( __FUNCTION__": "
+			"unable to parse DICOM tag from string: `%s'",
+			qPrintable( Value )
+		);
+	}
+
+	return QDicomTag();
 }
 
 
@@ -72,6 +104,27 @@ bool QDicomTag::isValid() const {
 
 const QString & QDicomTag::keyword() const {
 	return cachedKeyword( group(), element() );
+}
+
+
+void QDicomTag::setElement( quint16 e ) {
+	value_ &= static_cast< quint32 >( 0xFFFF0000 );
+	value_ |= e;
+}
+
+
+void QDicomTag::setGroup( quint16 g ) {
+	value_ &= static_cast< quint32 >( 0x0000FFFF );
+	value_ |= static_cast< quint32 >( g ) << 16;
+}
+
+
+QString QDicomTag::toString() const {
+	return 
+		QString( "(%1,%2)" )
+		.arg( group(), 4, 16, QChar( '0' ) )
+		.arg( element(), 4, 16, QChar( '0' ) )
+	;
 }
 
 
@@ -151,4 +204,21 @@ QString keywordFromDcmTagName( const char * Name ) {
 	}
 
 	return result;
+}
+
+
+QRegExp stringPattern() {
+	static QRegExp * pattern = nullptr;
+
+	return ::qInitializeOnce( pattern, [] () -> QRegExp {
+		QRegExp pattern( "\\(?([0-9A-Fa-f]{4}),([0-9A-Fa-f]{4})\\)?" );
+		Q_ASSERT( pattern.isValid() );
+		Q_ASSERT( pattern.exactMatch( "(00010,0010)" ) );
+		Q_ASSERT( pattern.exactMatch( "0010,0010" ) );
+
+		// Force compilation in non-debug builds where Q_ASSERT is not evaluated
+		pattern.exactMatch( "0000,0000" );
+
+		return pattern;
+	} );
 }

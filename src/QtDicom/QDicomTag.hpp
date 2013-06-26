@@ -51,11 +51,13 @@ class QDICOM_DLLSPEC QDicomTag {
 		};
 
 	public :
+		static QDicomTag fromString( const QString & );
 		static QDicomTag fromUInt32( quint32 );
 
 	public :
 		QDicomTag();
 		QDicomTag( const Id & );
+		QDicomTag( quint16 group, quint16 element );
 		~QDicomTag();
 		operator quint32() const;
 			
@@ -66,6 +68,11 @@ class QDICOM_DLLSPEC QDicomTag {
 		bool isValid() const;
 
 		const QString & keyword() const;
+
+		void setElement( quint16 );
+		void setGroup( quint16 );
+
+		QString toString() const;
 
 	private :
 		quint32 value_;
