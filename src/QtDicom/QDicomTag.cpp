@@ -213,8 +213,17 @@ QRegExp stringPattern() {
 	return ::qInitializeOnce( pattern, [] () -> QRegExp {
 		QRegExp pattern( "\\(?([0-9A-Fa-f]{4}),([0-9A-Fa-f]{4})\\)?" );
 		Q_ASSERT( pattern.isValid() );
-		Q_ASSERT( pattern.exactMatch( "(00010,0010)" ) );
+		Q_ASSERT( pattern.exactMatch( "(0010,0010)" ) );
 		Q_ASSERT( pattern.exactMatch( "0010,0010" ) );
+		Q_ASSERT( ! pattern.exactMatch( "001g,0010" ) );
+		Q_ASSERT( ! pattern.exactMatch( "(001,001)" ) );
+
+		Q_ASSERT( pattern.exactMatch( "(0010,0020)" ) );
+		Q_ASSERT( pattern.captureCount() == 2 );
+		Q_ASSERT( pattern.cap( 1 ).size() == 4 );
+		Q_ASSERT( pattern.cap( 1 ) == "0010" );
+		Q_ASSERT( pattern.cap( 2 ).size() == 4 );
+		Q_ASSERT( pattern.cap( 2 ) == "0020" );
 
 		// Force compilation in non-debug builds where Q_ASSERT is not evaluated
 		pattern.exactMatch( "0000,0000" );
