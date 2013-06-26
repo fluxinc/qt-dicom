@@ -719,8 +719,42 @@ bool Dataset::toDicomFile( const QString & FilePath, QString * message ) const {
 }
 
 
+void Dataset::setAttribute( const QDicomTag & Tag, const QStringList & Values ) {
+	const std::string Value = Values.join( "\\" ).toStdString();
+
+	const OFCondition Status = dcmDataset().putAndInsertOFStringArray(
+		DcmTag( Tag.group(), Tag.element() ), Value.c_str()
+	);
+	if ( Status.good() ) {
+		return;
+	}
+	else {
+		qWarning( __FUNCTION__": "
+			"failed to set %s %s attribute to `%s'; %s",
+			qPrintable( Tag.keyword() ), qPrintable( Tag.toString() ), Value.c_str(),
+			Status.text()
+		);
+	}
+}
+
+
+void Dataset::setAttribute( const QDicomTag & Tag, const QString & Value ) {
+	setAttribute( QDicomAttribute( Tag, Value ) );
+}
+
+
+void Dataset::setAttribute( const QDicomAttribute & Attribute ) {
+	setAttribute( Attribute.tag(), Attribute.values() );
+}
+
+
 void Dataset::setDcmDataset( const DcmDataset & Dataset ) {
 	d_->dcmDataSet() = Dataset;
+}
+
+
+void Dataset::setSopInstanceUid( const QByteArray & Value ) {
+	setAttribute( QDicomTag::SopInstanceUid, Value.constData() );
 }
 
 
