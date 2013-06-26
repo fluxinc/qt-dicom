@@ -47,6 +47,14 @@ quint16 QDicomTag::element() const {
 }
 
 
+QDicomTag QDicomTag::fromUInt32( quint32 Value ) {
+	QDicomTag result;
+	result.value_ = Value;
+
+	return result;
+}
+
+
 quint16 QDicomTag::group() const {
 	return static_cast< quint16 > ( value_ >> 16 );
 }

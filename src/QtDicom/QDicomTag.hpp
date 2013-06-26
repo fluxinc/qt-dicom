@@ -51,6 +51,9 @@ class QDICOM_DLLSPEC QDicomTag {
 		};
 
 	public :
+		static QDicomTag fromUInt32( quint32 );
+
+	public :
 		QDicomTag();
 		QDicomTag( const Id & );
 		~QDicomTag();
