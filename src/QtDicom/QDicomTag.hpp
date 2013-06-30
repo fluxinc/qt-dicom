@@ -7,7 +7,7 @@
 #define QTDICOM_QDICOMTAG_HPP
 
 #include <QtCore/QtGlobal>
-#include <QtCore/QMutex>
+#include <QtCore/QMetaType>
 
 #include <QtDicom/Globals.hpp>
 
@@ -73,9 +73,13 @@ class QDICOM_DLLSPEC QDicomTag {
 		void setGroup( quint16 );
 
 		QString toString() const;
+		quint32 toUInt32() const;
 
 	private :
 		quint32 value_;
 };
+
+
+Q_DECLARE_METATYPE( QDicomTag );
 
 #endif // ! QTDICOM_QDICOMTAG_HPP

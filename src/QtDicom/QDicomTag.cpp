@@ -6,6 +6,7 @@
 #include "QDicomTag.hpp"
 
 #include <QtCore/QHash>
+#include <QtCore/QMutex>
 #include <QtCore/QRegExp>
 #include <QtCore/QVector>
 
@@ -125,6 +126,11 @@ QString QDicomTag::toString() const {
 		.arg( group(), 4, 16, QChar( '0' ) )
 		.arg( element(), 4, 16, QChar( '0' ) )
 	;
+}
+
+
+quint32 QDicomTag::toUInt32() const {
+	return value_;
 }
 
 
