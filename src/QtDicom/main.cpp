@@ -8,13 +8,13 @@
 #include <QtDicom/QDicomImageCodec>
 
 
-void cleanup() {
-	QDicomImageCodec::cleanup();
+static void globalCleanup() {
+	QDicomImageCodec::cleanupRegister();
 }
 
 
-void init() {
-	QDicomImageCodec::init();
+static void globalInit() {
+	QDicomImageCodec::initRegister();
 }
 
 
@@ -26,11 +26,11 @@ BOOL WINAPI DllMain(
 	switch ( reason ) {
 
 	case DLL_PROCESS_ATTACH :
-		init();
+		globalInit();
 		break;
 
 	case DLL_PROCESS_DETACH :
-		cleanup();
+		globalCleanup();
 		break;
 	};
 

@@ -22,56 +22,68 @@
 #include <dcmtk/dcmjpls/djrparam.h> /* DJLSRepresentationParameter */
 
 
-QHash< QTransferSyntax, QDicomImageCodec * > QDicomImageCodec::codecRegister_;
+QHash< QTransferSyntax, QDicomImageCodec > QDicomImageCodec::codecRegister_;
 
 
-QDicomImageCodec::QDicomImageCodec( DcmRepresentationParameter * param ) :
-	dcmParameters_( param )
+QDicomImageCodec::QDicomImageCodec() :
+	family_( Unknown ),
+	features_( None ),
+	parameters_( nullptr )
 {
 }
 
 
+QDicomImageCodec::QDicomImageCodec(
+	ParametersFamily family, DcmRepresentationParameter * parameters,
+	Features features
+) :
+	family_( family ),
+	features_( features ),
+	parameters_( parameters )
+{
+	Q_ASSERT( parameters != nullptr );
+}
+
+
+QDicomImageCodec::QDicomImageCodec( const QDicomImageCodec & Other ) :
+	family_( Other.family_ ),
+	features_( Other.features_ ),
+	parameters_( Other.isNull() ? nullptr : Other.parameters().clone() )
+{
+}
+
+
+QDicomImageCodec & QDicomImageCodec::operator = ( const QDicomImageCodec & Other ) {
+	if ( this != &Other ) {
+		clear();
+
+		family_ = Other.family_;
+		features_ = Other.features_;
+		parameters_ = Other.isNull() ? nullptr : Other.parameters().clone();
+	}
+
+	return *this;
+}
+
+
 QDicomImageCodec::~QDicomImageCodec() {
+	clear();
 }
 
 
 bool QDicomImageCodec::addCodec(
-	const QTransferSyntax & Ts,	QDicomImageCodec * codec
+	const QTransferSyntax & Ts,	const QDicomImageCodec & Codec
 ) {
 	Q_ASSERT( Ts.isValid() );
 	Q_ASSERT( ! codecRegister_.contains( Ts ) ); 
 
-	codecRegister_.insert( Ts, codec );
+	codecRegister_.insert( Ts, Codec );
 	return true;
 }
 
 
-QDicomImageCodec * QDicomImageCodec::codecForTransferSyntax(
-	const QTransferSyntax & Ts
-) {
-	static QDicomImageCodec dummy;
-
-	return codecRegister_.value( Ts, &dummy );
-}
-
-
-void QDicomImageCodec::cleanup() {
-	for (
-		QHash< QTransferSyntax, QDicomImageCodec * >::iterator i = codecRegister_.begin();
-		i != codecRegister_.end(); ++i
-	) {
-		if ( i.value() ) {
-			if ( i.value()->dcmParameters() ) {
-				delete i.value()->dcmParameters_;
-				i.value()->dcmParameters_ = NULL;
-			}
-			delete i.value();
-			i.value() = NULL;
-		}
-	}
-
+void QDicomImageCodec::cleanupRegister() {
 	codecRegister_.clear();
-
 	
 	DcmRLEEncoderRegistration::cleanup();
 	DcmRLEDecoderRegistration::cleanup();
@@ -84,12 +96,46 @@ void QDicomImageCodec::cleanup() {
 }
 
 
-DcmRepresentationParameter * QDicomImageCodec::dcmParameters() {
-	return dcmParameters_;
+void QDicomImageCodec::clear() {
+	family_ = Unknown;
+	features_ = None;
+	if ( parameters_ != nullptr ) {
+		delete parameters_;
+		parameters_ = nullptr;
+	}
 }
 
 
-void QDicomImageCodec::init() {
+const DcmRepresentationParameter & QDicomImageCodec::dcmParameters() const {
+	return parameters();
+}
+
+
+inline const QDicomImageCodec::ParametersFamily & QDicomImageCodec::family() const {
+	return family_;
+}
+
+
+inline const QDicomImageCodec::Features & QDicomImageCodec::features() const {
+	return features_;
+}
+
+
+QDicomImageCodec QDicomImageCodec::forTransferSyntax(
+	const QTransferSyntax & Ts
+) {
+	static QDicomImageCodec dummy;
+
+	return codecRegister_.value( Ts, dummy );
+}
+
+
+bool QDicomImageCodec::hasFeature( Feature f ) const {
+	return features().testFlag( f );
+}
+
+
+void QDicomImageCodec::initRegister() {
 	DJDecoderRegistration::registerCodecs(
 		EDC_photometricInterpretation, // color conversion
 		EUC_never // Never change UID
@@ -100,23 +146,23 @@ void QDicomImageCodec::init() {
 	);
 
 	addCodec( QTransferSyntax::JpegProcess1, 
-		new QDicomImageCodec( new DJ_RPLossy )
+		QDicomImageCodec( JpegLossy, new DJ_RPLossy, Quality )
 	);
 	addCodec( QTransferSyntax::JpegProcess2_4, 
-		new QDicomImageCodec( new DJ_RPLossy )
+		QDicomImageCodec( JpegLossy, new DJ_RPLossy, Quality )
 	);
 	addCodec( QTransferSyntax::JpegProcess6_8, 
-		new QDicomImageCodec( new DJ_RPLossy )
+		QDicomImageCodec( JpegLossy, new DJ_RPLossy, Quality )
 	);
 	addCodec( QTransferSyntax::JpegProcess10_12, 
-		new QDicomImageCodec( new DJ_RPLossy )
+		QDicomImageCodec( JpegLossy, new DJ_RPLossy, Quality )
 	);
 
 	addCodec( QTransferSyntax::JpegProcess14,
-		new QDicomImageCodec( new DJ_RPLossless )
+		QDicomImageCodec( JpegLossless, new DJ_RPLossless )
 	);
 	addCodec( QTransferSyntax::JpegProcess14Sv1,
-		new QDicomImageCodec( new DJ_RPLossless )
+		QDicomImageCodec( JpegLossless, new DJ_RPLossless )
 	);
 
 
@@ -132,21 +178,67 @@ void QDicomImageCodec::init() {
 	);
 
 	addCodec( QTransferSyntax::JpegLsLossless,
-		new QDicomImageCodec( new DJLSRepresentationParameter( 2, true ) )
+		QDicomImageCodec( JpegLsLossless, new DJLSRepresentationParameter( 2, true ) )
 	);
 	addCodec( QTransferSyntax::JpegLsLossy,
-		new QDicomImageCodec( new DJLSRepresentationParameter( 2, false ) )
+		QDicomImageCodec( JpegLsLossy, new DJLSRepresentationParameter( 2, false ) )
 	);
 
 	DcmRLEDecoderRegistration::registerCodecs( false );
 	DcmRLEEncoderRegistration::registerCodecs( false );
 
 	addCodec( QTransferSyntax::Rle,
-		new QDicomImageCodec( new DcmRLERepresentationParameter )
+		QDicomImageCodec( RleLossless, new DcmRLERepresentationParameter )
 	);
 }
 
 
-QList< QTransferSyntax > QDicomImageCodec::supported() {
+bool QDicomImageCodec::isNull() const {
+	return family_ == Unknown && features_ == None && parameters_ == nullptr;
+}
+
+
+bool QDicomImageCodec::isValid() const {
+	return family_ != Unknown && parameters_ != nullptr;
+}
+
+
+inline const DcmRepresentationParameter & QDicomImageCodec::parameters() const {
+	Q_ASSERT( parameters_ );
+
+	return *parameters_;
+}
+
+
+int QDicomImageCodec::quality() const {
+	if ( isValid() && hasFeature( Quality ) ) {
+		Q_ASSERT( family() == JpegLossy );
+		DJ_RPLossy * params = static_cast< DJ_RPLossy * >( parameters_ );
+
+		return params->getQuality();
+	}
+	else {
+		return -1;
+	}
+}
+
+
+void QDicomImageCodec::setQuality( int value ) {
+	if ( isValid() && hasFeature( Quality ) ) {
+		Q_ASSERT( family() == JpegLossy );
+
+		delete parameters_;
+		parameters_ = new DJ_RPLossy( value );
+	}
+	else {
+		qDebug( __FUNCTION__": "
+			"codec is invalid or does not support the Quality feature"
+		);
+	}
+}
+
+
+QList< QTransferSyntax > QDicomImageCodec::supportedTransferSyntaxes() {
 	return codecRegister_.keys();
 }
+

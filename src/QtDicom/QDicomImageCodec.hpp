@@ -15,35 +15,79 @@ class QTransferSyntax;
 
 
 class QDICOM_DLLSPEC QDicomImageCodec {
-	public :
-		static void cleanup();
-		static QDicomImageCodec * codecForTransferSyntax( 
-			const QTransferSyntax & TS
-		);
-		static void init();
-		static QList< QTransferSyntax > supported();
+	friend void globalCleanup();
+	friend void globalInit();
 
 	public :
+		static QDicomImageCodec forTransferSyntax( 
+			const QTransferSyntax & TS
+		);
+		static QList< QTransferSyntax > supportedTransferSyntaxes();
+
+	public :
+		enum Feature {
+			None = 0,
+			Quality = 1
+		};
+		Q_DECLARE_FLAGS( Features, Feature );
+
+	public :
+		QDicomImageCodec( const QDicomImageCodec & codec );
 		~QDicomImageCodec();
+		QDicomImageCodec & operator = ( const QDicomImageCodec & );
 
 		/**
 		 * Returns DCMTK's structure responsible for holding codec parameters.
+		 *
+		 * \note This method must be called only on valid codecs.
 		 */
-		DcmRepresentationParameter * dcmParameters();
+		const DcmRepresentationParameter & dcmParameters() const;
+
+		bool hasFeature( Feature f ) const;
+
+		bool isNull() const;
+		bool isValid() const;
+
+		int quality() const;
+		void setQuality( int value );
+
+	private :
+		enum ParametersFamily {
+			Unknown = 0,
+			JpegLossless,
+			JpegLossy,
+			JpegLsLossless,
+			JpegLsLossy,
+			RleLossless
+		};
 
 	private :
 		static bool addCodec( 
-			const QTransferSyntax & , QDicomImageCodec *
+			const QTransferSyntax & , const QDicomImageCodec &
 		);
+		static void initRegister();
+		static void cleanupRegister();
 
 	private :
-		QDicomImageCodec( DcmRepresentationParameter * dcmParameters = NULL );
+		QDicomImageCodec();
+		QDicomImageCodec(
+			ParametersFamily family, DcmRepresentationParameter * parameters,
+			Features features = None
+		);
+		void clear();
 
 	private :
-		static QHash< QTransferSyntax, QDicomImageCodec * > codecRegister_;
+		static QHash< QTransferSyntax, QDicomImageCodec > codecRegister_;
 
 	private :
-		DcmRepresentationParameter * dcmParameters_;
+		const ParametersFamily & family() const;
+		ParametersFamily family_;
+
+		const Features & features() const;
+		Features features_;
+
+		const DcmRepresentationParameter & parameters() const;
+		DcmRepresentationParameter * parameters_;
 };
 
 #endif

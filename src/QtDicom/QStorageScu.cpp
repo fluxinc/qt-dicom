@@ -229,7 +229,7 @@ QList< QPresentationContext > QStorageScu::preparePresentationContexts() const {
 
 			const bool CanDecodeOnTheFly = 
 				transferSyntax_.isCompressed() && 
-				QDicomImageCodec::supported().contains( transferSyntax_ )
+				QDicomImageCodec::supportedTransferSyntaxes().contains( transferSyntax_ )
 			;		
 
 			if ( CanDecodeOnTheFly ) {

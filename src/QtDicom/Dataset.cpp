@@ -115,7 +115,7 @@ bool Dataset::canConvertToTransferSyntax(
 	const QTransferSyntax & DstTs
 ) const {
 	static const QList< QTransferSyntax > SupportedTs = 
-		QDicomImageCodec::supported()
+		QDicomImageCodec::supportedTransferSyntaxes()
 	;
 
 	const QTransferSyntax SrcTs = syntax();
@@ -146,7 +146,7 @@ bool Dataset::containsTag( quint16 group, quint16 element ) const {
 }
 
 
-Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs ) const {
+Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs, int quality ) const {
 	const QTransferSyntax & SrcTs = syntax();
 
 	if ( DstTs != SrcTs ) {
@@ -155,13 +155,16 @@ Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs ) cons
 		if ( canConvertToTransferSyntax( DstTs ) ) {
 			DcmDataset newDset = dcmDataset();
 
-			QDicomImageCodec * codec = 
-				QDicomImageCodec::codecForTransferSyntax( DstTs )
+			QDicomImageCodec codec = 
+				QDicomImageCodec::forTransferSyntax( DstTs )
 			;
-			if ( codec != NULL ) {
+			if ( codec.isValid() ) {
+				if ( codec.hasFeature( QDicomImageCodec::Quality ) && quality > 0 ) {
+					codec.setQuality( quality );
+				}
+
 				const OFCondition Converted = newDset.chooseRepresentation( 
-					DcmXfer( DstTs.uid() ).getXfer(),
-					codec->dcmParameters()
+					DcmXfer( DstTs.uid() ).getXfer(), &codec.dcmParameters()
 				);
 
 				if ( Converted.good() ) {

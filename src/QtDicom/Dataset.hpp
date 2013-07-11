@@ -52,7 +52,7 @@ class QDICOM_DLLSPEC Dataset {
 		bool containsTag( quint16 group, quint16 element ) const;
 		bool containsTag( const DcmTagKey & key ) const;
 
-		Dataset convertedToTransferSyntax( const QTransferSyntax & ts ) const;
+		Dataset convertedToTransferSyntax( const QTransferSyntax & ts, int quality = -1 ) const;
 
 		const DcmDataset & dcmDataset() const;
 		DcmDataset & dcmDataset();
