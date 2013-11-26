@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemDefinitionGroup>
-    <MocSource>
+    <!-- Default values for the QtMoc item -->
+    <QtMoc>
       <NoWarningsFlag>True</NoWarningsFlag>
-      <NoIncludeFlag>True</NoIncludeFlag>
+      <NoIncludeFlag>False</NoIncludeFlag>
       <Definitions Condition="$(Configuration) != 'Debug'">UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_CORE_LIB;QT_THREAD_SUPPORT;_MSC_VER=1600;QT_NO_DEBUG</Definitions>
       <Definitions Condition="$(Configuration) == 'Debug'">UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_CORE_LIB;QT_THREAD_SUPPORT;_MSC_VER=1600</Definitions>
-      <OutputPath>%(RootDir)%(Directory)%(Filename).moc.inl</OutputPath>
+      <OutputPath>$(IntDir)%(Filename).moc.cpp</OutputPath>
       <CommandLineTemplate>&quot;$(QTDIR)\bin\moc.exe&quot; [NoWarningsFlag] [NoIncludeFlag] [Definitions] [OutputPath] [InputPath]</CommandLineTemplate>
-    </MocSource>
-    
-    <RccSource>
+    </QtMoc>
+
+    <!-- Default values for the QtRc item -->
+    <QtRc>
+      <BinaryModeFlag>false</BinaryModeFlag>
       <Compression>-1</Compression>
       <Threshold>70</Threshold>
-      <OutputPath>%(RootDir)%(Directory)%(Filename).rcc.inl</OutputPath>
+      <OutputPath>$(IntDir)%(Filename).rc.cpp</OutputPath>
       <CommandLineTemplate>&quot;$(QTDIR)\bin\rcc.exe&quot; [BinaryModeFlag] [Threshold] [Compression] [OutputPath] [InputPath]</CommandLineTemplate>
-    </RccSource>
+    </QtRc>
 
-    <UicSource>
+    <!-- Default values for the QtUic item -->
+    <QtUic>
       <NoHeaderProtectionFlag>False</NoHeaderProtectionFlag>
       <OutputPath>%(RootDir)%(Directory)%(Filename).uic.inl</OutputPath>
       <CommandLineTemplate>&quot;$(QTDIR)\bin\uic.exe&quot; [NoHeaderProtectionFlag] [OutputPath] [InputPath]</CommandLineTemplate>
-    </UicSource>
+    </QtUic>
   </ItemDefinitionGroup>
 </Project>

@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProjectSchemaDefinitions xmlns="http://schemas.microsoft.com/build/2009/properties" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+<ProjectSchemaDefinitions 
+  xmlns="http://schemas.microsoft.com/build/2009/properties" 
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+>
+  <!--
+    First, for each Qt tool create a new item type. Item types are used by other
+    build elements (like rules, properties page, file associations) to hook up 
+    to.
+  -->
+  <ItemType Name="QtMoc" DisplayName="Qt Meta Object Compiler" />
+  <ItemType Name="QtRc"  DisplayName="Qt Resource Compiler" />
+  <ItemType Name="QtUic" DisplayName="Qt User Interface Compiler" />
+
+  <!--
+   Then, again for every Qt tool, create a rule specification. Rules serve as
+   templates for property pages and tasks.
+  -->
+  
+  <!-- First, the QT_MOC rule for the meta-object compiler -->
   <Rule
-    Name="MocTask"
+    Name="QT_MOC"
     PageTemplate="tool"
-    DisplayName="Qt's Meta Object Compiler Settings"
-    Order="200">
+    DisplayName="Qt Meta Object Compiler"
+    SwitchPrefix="-"
+    Order="201"
+  >
+    <!-- 
+      Store the settings in the project file, under the QtMoc item group
+    -->
     <Rule.DataSource>
-      <DataSource
+      <DataSource 
         Persistence="ProjectFile"
-        ItemType="MocSource"
+        ItemType="QtMoc"
+        HasConfigurationCondition="True"
       />
     </Rule.DataSource>
+    
+    <!-- 
+      Two categories only: "General" with all the settings and "Command Line"
+      displaying the command-line parameters for confirmation.
+    -->
     <Rule.Categories>
       <Category
         Name="General">
@@ -26,31 +56,36 @@
         </Category.DisplayName>
       </Category>
     </Rule.Categories>
+    
+    <!--
+      Here come the properties.
+    -->
     <BoolProperty
       Name="NoWarningsFlag"
       DisplayName="Disable warnings"
       Description="Inhibits warning messages from being printed to the output (-nw)."
-      Switch="-nw"
+      Switch="nw"
     />
     <BoolProperty
       Name="NoIncludeFlag"
       DisplayName="Do not include source file"
       Description="Do not generate an #include statement in the output. This may be used to run the moc on on a C++ file containing one or more class declarations. You should then #include the meta-object code in the .cpp file (-i)."
-      Switch="-i"
+      Switch="i"
     />
     <StringListProperty
       Name="Definitions"
       DisplayName="C/C++ macro definitions"
       Description="Defines a list of macros or macro=definition pairs (-D&lt;macro&gt;[=&lt;definition&gt;])."
-      Switch="-D"
+      Switch="D"
     />
     <StringProperty
       Name="OutputPath"
       DisplayName="Output Path"
       Description="Template for the output file path (-o)."
       IsRequired="true"
-      Switch="-o "
+      Switch="o "
     />
+    
     <StringProperty
       Name="InputPath"
       IsRequired="true"
@@ -59,41 +94,41 @@
       <StringProperty.DataSource>
         <DataSource
           Persistence="ProjectFile"
-          ItemType="MocSource"
+          ItemType="QtMoc"
           SourceType="Item" />
       </StringProperty.DataSource>
     </StringProperty>
+    
     <StringListProperty
       Name="CommandLineTemplate"
       Visible="False"
       IncludeInCommandLine="False"
     />
-  </Rule>  
-  <ItemType
-    Name="MocSource"
-    DisplayName="Qt's Meta Object Compiler Source File"
-  />
-  <FileExtension
-    Name="*.hpp"
-    ContentType="MocSource"
-  />
-  <ContentType
-    Name="MocSource"
-    DisplayName="Qt's Meta Object Compiler Source File"
-    ItemType="MocSource"
-  />
-
+  </Rule>
+  
+  <!-- Second, the QT_RC rule for the resource compiler -->
   <Rule
-    Name="RccTask"
+    Name="QT_RC"
     PageTemplate="tool"
-    DisplayName="Qt's Resource Compiler Settings"
-    Order="200">
+    DisplayName="Qt Resource Compiler"
+    SwitchPrefix="-"
+    Order="202"
+  >
+    <!-- 
+      Store the settings in the project file, under the QtRc item group
+    -->
     <Rule.DataSource>
       <DataSource
         Persistence="ProjectFile"
-        ItemType="RccSource"
+        ItemType="QtRc"
+        HasConfigurationCondition="True"
       />
     </Rule.DataSource>
+
+    <!-- 
+      Two categories only: "General" with all the settings and "Command Line"
+      displaying the command-line parameters for confirmation.
+    -->
     <Rule.Categories>
       <Category
         Name="General">
@@ -109,17 +144,21 @@
         </Category.DisplayName>
       </Category>
     </Rule.Categories>
+
+    <!--
+      Then come the properties
+    -->
     <BoolProperty
       Name="BinaryModeFlag"
       DisplayName="Binary Mode"
       Description="Creates an external binary resource file to be registered from within application (-binary)."
-      Switch="-binary"
+      Switch="binary"
     />
     <IntProperty
       Name="Threshold"
       DisplayName="Threshold level"
       Description="Specifies a threshold level (as a percentage) to use when deciding whether to compress a file. If the reduction in the file size is greater than the threshold level, it is compressed; otherwise, the uncompressed data is stored instead. The default threshold level is 70%, meaning that compressed files which are 30% or less of their original size are stored as compressed data (-threshold)."
-      Switch="-threshold "
+      Switch="threshold "
       MinValue="0"
       MaxValue="100"
     />
@@ -128,26 +167,28 @@
       DisplayName="Compression level"
       Description="Compresses input files to the given compression level, which is an integer in the range 1 to 9. Level 1 does the least compression but is fastest. Level 9 does the most compression but is slowest. To turn off compression, use -no-compress. The default value for level is -1, which means use zlib's default compression level (-compress)."
     >
-      <EnumValue Name="off" DisplayName="Disabled" Switch="-no-compress" />
-      <EnumValue Name="-1"  DisplayName="Default"  Switch="-compress -1" IsDefault="true" />
-      <EnumValue Name="0"   DisplayName="Level 0"  Switch="-compress 0" /> 
-      <EnumValue Name="1"   DisplayName="Level 1"  Switch="-compress 1" />
-      <EnumValue Name="2"   DisplayName="Level 2"  Switch="-compress 2" />
-      <EnumValue Name="3"   DisplayName="Level 3"  Switch="-compress 3" />
-      <EnumValue Name="4"   DisplayName="Level 4"  Switch="-compress 4" />
-      <EnumValue Name="5"   DisplayName="Level 5"  Switch="-compress 5" />
-      <EnumValue Name="6"   DisplayName="Level 6"  Switch="-compress 6" />
-      <EnumValue Name="7"   DisplayName="Level 7"  Switch="-compress 7" />
-      <EnumValue Name="8"   DisplayName="Level 8"  Switch="-compress 8" />
-      <EnumValue Name="9"   DisplayName="Level 9"  Switch="-compress 9" />
+      <EnumValue Name="off" DisplayName="Disabled" Switch="no-compress" />
+      <EnumValue Name="-1"  DisplayName="Default"  Switch="compress -1" IsDefault="true" />
+      <EnumValue Name="0"   DisplayName="Level 0"  Switch="compress 0" />
+      <EnumValue Name="1"   DisplayName="Level 1"  Switch="compress 1" />
+      <EnumValue Name="2"   DisplayName="Level 2"  Switch="compress 2" />
+      <EnumValue Name="3"   DisplayName="Level 3"  Switch="compress 3" />
+      <EnumValue Name="4"   DisplayName="Level 4"  Switch="compress 4" />
+      <EnumValue Name="5"   DisplayName="Level 5"  Switch="compress 5" />
+      <EnumValue Name="6"   DisplayName="Level 6"  Switch="compress 6" />
+      <EnumValue Name="7"   DisplayName="Level 7"  Switch="compress 7" />
+      <EnumValue Name="8"   DisplayName="Level 8"  Switch="compress 8" />
+      <EnumValue Name="9"   DisplayName="Level 9"  Switch="compress 9" />
     </EnumProperty>
+
     <StringProperty
       Name="OutputPath"
-      DisplayName="Output Path"
+      DisplayName="Output path"
       Description="Template for the output file path (-o)."
       IsRequired="true"
-      Switch="-o "
+      Switch="o "
     />
+
     <StringProperty
       Name="InputPath"
       IsRequired="true"
@@ -155,42 +196,41 @@
       Visible="False">
       <StringProperty.DataSource>
         <DataSource
-          Persistence="ProjectFile"
-          ItemType="RccSource"
-          SourceType="Item" />
+          Persistence="ProjectFile" ItemType="RccSource" SourceType="Item"
+        />
       </StringProperty.DataSource>
     </StringProperty>
+
     <StringListProperty
       Name="CommandLineTemplate"
       Visible="False"
       IncludeInCommandLine="False"
     />
   </Rule>
-  <ItemType
-    Name="RccSource"
-    DisplayName="Qt's Resource Compiler Source File"
-  />
-  <FileExtension
-    Name="*.rcc"
-    ContentType="RccSource"
-  />
-  <ContentType
-    Name="RccSource"
-    DisplayName="Qt's Resouce Compiler Source File"
-    ItemType="RccSource"
-  />
-
+  
+  <!-- Third, the QT_UIC rule for the user interface compiler -->
   <Rule
-    Name="UicTask"
-    PageTemplate="tool"
-    DisplayName="Qt's User Interface Compiler Settings"
-    Order="200">
+   Name="QT_UIC"
+   PageTemplate="tool"
+   DisplayName="Qt User Interface Compiler"
+   SwitchPrefix="-"
+   Order="203"
+  >
+    <!-- 
+      Store the settings in the project file, under the QtUic item group
+    -->
     <Rule.DataSource>
       <DataSource
         Persistence="ProjectFile"
-        ItemType="UicSource"
+        ItemType="QtUic"
+        HasConfigurationCondition="True"
       />
     </Rule.DataSource>
+
+    <!-- 
+      Two categories only: "General" with all the settings and "Command Line"
+      displaying the command-line parameters for confirmation.
+    -->
     <Rule.Categories>
       <Category
         Name="General">
@@ -206,48 +246,78 @@
         </Category.DisplayName>
       </Category>
     </Rule.Categories>
+    
+    <!-- The properties -->
     <BoolProperty
       Name="NoHeaderProtectionFlag"
       DisplayName="Disable header protection"
       Description="Do not generate guards against multiple inclusion (#ifndef FOO_H ...) (-p)."
-      Switch="-p "
+      Switch="p "
     />
     <StringProperty
       Name="OutputPath"
       DisplayName="Output Path"
       Description="Template for the output file path (-o)."
       IsRequired="true"
-      Switch="-o "
+      Switch="o "
     />
+    
     <StringProperty
       Name="InputPath"
       IsRequired="true"
       Category="Command Line"
       Visible="False">
       <StringProperty.DataSource>
-        <DataSource
-          Persistence="ProjectFile"
-          ItemType="UicSource"
-          SourceType="Item" />
+        <DataSource 
+          Persistence="ProjectFile" ItemType="QtUic" SourceType="Item"
+        />
       </StringProperty.DataSource>
     </StringProperty>
+    
     <StringListProperty
       Name="CommandLineTemplate"
       Visible="False"
       IncludeInCommandLine="False"
     />
   </Rule>
-  <ItemType
-    Name="UicSource"
-    DisplayName="Qt's User Interface Description File"
-  />
-  <FileExtension
-    Name="*.uic"
-    ContentType="UicSource"
-  />
+
+  
+  <!--
+    Finally, associate file extensions with respective item type:
+  -->
+  
+  <!--
+   1. Create new content-type: QtMocSource and assign it to the QtMoc item type.
+   Then get all *.hpp files to be automatically referred as QtMocSource.
+  -->
   <ContentType
-    Name="UicSource"
-    DisplayName="Qt's User Interface Description File"
-    ItemType="UicSource"
+    Name="QtMocSource"
+    DisplayName="Qt Meta Object Compiler Source File"
+    ItemType="QtMoc"
   />
+  <FileExtension Name="*.hpp" ContentType="QtMocSource" />
+
+
+  <!--
+   2. Create new content-type: QtRcSource and assign it to the QtRc item type.
+   Then get all *.qrc files to be automatically referred as QtRcSource.
+  -->
+  <ContentType
+    Name="QtRcSource"
+    DisplayName="Qt Resouce Compiler Source File"
+    ItemType="QtRc"
+  />
+  <FileExtension Name="*.qrc" ContentType="QtRcSource" />
+
+
+  <!--
+   3. Create new content-type: QtUicSource and assign it to the QtUic item type. 
+   Then get all *.ui files to be automatically referred as QtUicSource.
+  -->
+  <ContentType
+    Name="QtUicSource"
+    DisplayName="Qt User Interface Description File"
+    ItemType="QtUic"
+  />
+  <FileExtension Name="*.ui" ContentType="QtUicSource" />
 </ProjectSchemaDefinitions>

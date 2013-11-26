@@ -4,7 +4,6 @@
  **************************************************************************/
 
 #include "DataSource.hpp"
-#include "DataSource.moc.inl"
 #include "DataSourceFactory.hpp"
 #include "FileSystemDataSource.hpp"
 

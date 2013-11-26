@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+  This file is imported by the main C++ project file. It defines and overwrites 
+  paths used by the Visual Studio during the build process.
+  
+  Please make appropriate changes (if necessary) and remove the ".template"
+  suffix from its name.
+  
+  Author: Paweł Żak <pawel.zak@fluxinc.ca>
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- 
+    Define the root dir first. You can either provide a reference to the 
+    solution file or just enter the full path.
+	
+	Note that if you specify path directly, you must end it with a slash, e.g:
+	
+	  <RootDir>T:\temp\</RootDir>
+  -->
+  <PropertyGroup>
+    <RootDir>$(SolutionDir)</RootDir>
+  </PropertyGroup>
+
+  <!--
+    Specify locations for the temporary files, where to put binaries and paths
+	to the Qt libs.
+  -->
+  <PropertyGroup Condition="'$(Platform)' == 'Win32'">
+    <IntDir>$(RootDir)tmp\x86\$(Configuration)\$(MSBuildProjectName)\</IntDir>
+    <QtDir>E:\Qt\4.8.5\msvc10\x86</QtDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'x64'">
+    <IntDir>$(RootDir)tmp\x64\$(Configuration)\$(MSBuildProjectName)\</IntDir>
+    <QtDir>E:\Qt\4.8.5\msvc10\amd64</QtDir>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <OutDir>$(RootDir)bin\$(PlatformShortName)\</OutDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+  </PropertyGroup>
+</Project>

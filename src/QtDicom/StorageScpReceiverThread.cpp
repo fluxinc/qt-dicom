@@ -4,7 +4,6 @@
  **************************************************************************/
 
 #include "StorageScpReceiverThread.hpp"
-#include "StorageScpReceiverThread.moc.inl"
 
 #include "QtDicom/AcceptorAssociation.hpp"
 

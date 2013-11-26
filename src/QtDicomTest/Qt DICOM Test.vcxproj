@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+    Import directories file with the following properties:
+     * RootDir
+	 * IntermediateOutputPath
+	 * OutputPath
+  -->
+  <Import Project="Qt DICOM Test.vcxproj.directories" />
+  
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -96,12 +104,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QtDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QTDIRBASE)\$(PlatformShortName)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QtDir)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCored4.lib;QtTestd4.lib;QtDicomd4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -112,12 +120,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QtDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(QTDIRBASE)\$(PlatformShortName)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QtDir)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCored4.lib;QtTestd4.lib;QtDicomd4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -130,14 +138,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QtDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(QTDIRBASE)\$(PlatformShortName)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QtDir)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtTest4.lib;QtDicom4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -150,14 +158,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(QTDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QtDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(QTDIRBASE)\$(PlatformShortName)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QtDir)\lib;$(SolutionDir)lib\$(PlatformShortName)</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtTest4.lib;QtDicom4.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -166,9 +174,9 @@
     <ClCompile Include="QtDicomTest.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <MocSource Include="QtDicomTest.hpp">
+    <QtMoc Include="QtDicomTest.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

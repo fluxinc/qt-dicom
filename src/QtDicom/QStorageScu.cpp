@@ -6,7 +6,6 @@
 #include "ConnectionParameters.hpp"
 #include "RequestorAssociation.hpp"
 #include "QStorageScu.hpp"
-#include "QStorageScu.moc.inl"
 #include "UidList.hpp"
 
 #include <QtCore/QDir>

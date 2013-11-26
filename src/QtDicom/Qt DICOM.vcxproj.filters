@@ -227,46 +227,46 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <MocSource Include="AssociationServer.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
-    <MocSource Include="Association.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
-    <MocSource Include="AcceptorAssociation.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
-    <MocSource Include="ServerAssociation.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
-    <MocSource Include="RequestorAssociation.hpp">
-      <Filter>Network Objects</Filter>
-    </MocSource>
-    <MocSource Include="FileSystemDataSource.hpp">
-      <Filter>Data Objects</Filter>
-    </MocSource>
-    <MocSource Include="DataSource.hpp">
-      <Filter>Data Objects</Filter>
-    </MocSource>
-    <MocSource Include="StorageScpReceiverThread.hpp">
-      <Filter>Service Class Providers</Filter>
-    </MocSource>
-    <MocSource Include="StorageScp.hpp">
-      <Filter>Service Class Providers</Filter>
-    </MocSource>
-    <MocSource Include="QueryScpReceiverThread.hpp">
-      <Filter>Service Class Providers</Filter>
-    </MocSource>
-    <MocSource Include="QueryScp.hpp">
-      <Filter>Service Class Providers</Filter>
-    </MocSource>
-    <MocSource Include="QStorageScu.hpp">
-      <Filter>Service Class Users</Filter>
-    </MocSource>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Resources\Version.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="Association.hpp">
+      <Filter>Network Objects</Filter>
+    </QtMoc>
+    <QtMoc Include="AcceptorAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </QtMoc>
+    <QtMoc Include="AssociationServer.hpp">
+      <Filter>Network Objects</Filter>
+    </QtMoc>
+    <QtMoc Include="StorageScpReceiverThread.hpp">
+      <Filter>Service Class Providers</Filter>
+    </QtMoc>
+    <QtMoc Include="StorageScp.hpp">
+      <Filter>Service Class Providers</Filter>
+    </QtMoc>
+    <QtMoc Include="QueryScp.hpp">
+      <Filter>Service Class Providers</Filter>
+    </QtMoc>
+    <QtMoc Include="QueryScpReceiverThread.hpp">
+      <Filter>Service Class Providers</Filter>
+    </QtMoc>
+    <QtMoc Include="QStorageScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </QtMoc>
+    <QtMoc Include="ServerAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </QtMoc>
+    <QtMoc Include="RequestorAssociation.hpp">
+      <Filter>Network Objects</Filter>
+    </QtMoc>
+    <QtMoc Include="FileSystemDataSource.hpp">
+      <Filter>Data Objects</Filter>
+    </QtMoc>
+    <QtMoc Include="DataSource.hpp">
+      <Filter>Data Objects</Filter>
+    </QtMoc>
   </ItemGroup>
 </Project>

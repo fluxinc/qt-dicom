@@ -1,100 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Create property pages for all rules defined in the Qt.xml file.
+  -->
   <ItemGroup>
     <PropertyPageSchema
-      Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml" />
-    <AvailableItemName
-      Include="MocSource">
-      <Targets>Qt's Meta Object Compiler</Targets>
+      Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml"
+    />
+  </ItemGroup>
+  
+  <!--
+    Add the QtMoc, QtRc and QtUic items to the build action (the build drop
+    -down list) and specify their respective targets.
+  -->
+  <ItemGroup>
+    <AvailableItemName Include="QtMoc">
+      <Targets>ResolveQtDir;QtMoCompile</Targets>
     </AvailableItemName>
-    <AvailableItemName
-      Include="RccSource">
-      <Targets>Qt's Resource Compiler</Targets>
+    <AvailableItemName Include="QtRc">
+      <Targets>ResolveQtDir;QtRCompile</Targets>
     </AvailableItemName>
-    <AvailableItemName
-      Include="UicSource">
-      <Targets>Qt's User Interface Compiler</Targets>
+    <AvailableItemName Include="QtUic">
+      <Targets>ResolveQtDir;QtUiCompile</Targets>
     </AvailableItemName>
   </ItemGroup>
+
+  
+  <!--
+    Create the QT_MOC, QT_RC and QT_UIC tasks, using XAML task factory and rule 
+    specifications from Qt.xml as a templates.
+  -->
   <UsingTask
-    TaskName="MocTask"
+    TaskName="QT_MOC"
     TaskFactory="XamlTaskFactory"
     AssemblyName="Microsoft.Build.Tasks.v4.0">
     <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
   </UsingTask>
-  <Target
-    Name="Qt's Meta Object Compiler"
-    Inputs="@(MocSource);$(MSBuildProjectFile)"
-    Outputs="@(MocSource->'%(OutputPath)')"
-    AfterTargets="Midl"
-    BeforeTargets="ClCompile"
-  >
-    <MocTask
-      Condition="'@(MocSource)' != '' and '%(MocSource.ExcludedFromBuild)' != 'true'"
-      NoWarningsFlag="%(MocSource.NoWarningsFlag)"
-      NoIncludeFlag="%(MocSource.NoIncludeFlag)"
-      Definitions="%(MocSource.Definitions)"
-      InputPath="%(MocSource.FullPath)"
-      OutputPath="%(MocSource.OutputPath)"
-      CommandLineTemplate="%(MocSource.CommandLineTemplate)"
-    />
-    <Message
-      Importance="High"
-      Text="MOC @(MocSource)"
+  <UsingTask
+    TaskName="QT_RC"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <UsingTask
+    TaskName="QT_UIC"
+    TaskFactory="XamlTaskFactory"
+    AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+
+  <!--
+    Specify the ResolveQtDir target that tests if %QTDIR% is set
+  -->
+  <Target Name="ResolveQtDir" BeforeTargets="QtMoCompile" >
+    <Error
+      Condition="'$(QTDIR)' == ''"
+      Text="Please define QTDIR environment variable"
     />
   </Target>
   
-  <UsingTask
-    TaskName="RccTask"
-    TaskFactory="XamlTaskFactory"
-    AssemblyName="Microsoft.Build.Tasks.v4.0">
-    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
-  </UsingTask>
+  <!--
+    QtMoCompile target: uses Qt Meta Object Compiler to transform C++ header 
+    files with classes inheriting from QObject into meta-object extensions for
+    those classes.
+  -->
   <Target
-    Name="Qt's Resource Compiler"
-    Inputs="@(RccSource);$(MSBuildProjectFile)"
-    Outputs="@(RccSource->'%(OutputPath)')"
+    Name="QtMoCompile"
+    Inputs="@(QtMoc);$(MSBuildProjectFile)"
+    Outputs="@(QtMoc->'%(OutputPath)')"
     AfterTargets="Midl"
     BeforeTargets="ClCompile"
+    DependsOnTargets="ResolveQtDir"
   >
-    <RccTask
-      Condition="'@(RccSource)' != '' and '%(RccSource.ExcludedFromBuild)' != 'true'"
-      BinaryModeFlag="%(RccSource.BinaryModeFlag)"
-      Compression="%(RccSource.Compression)"
-      Threshold="%(RccSource.Threshold)"
-      InputPath="%(RccSource.FullPath)"
-      OutputPath="%(RccSource.OutputPath)"
-      CommandLineTemplate="%(RccSource.CommandLineTemplate)"
+    <!-- Print message with all the inputs listed -->
+    <Message Importance="High" Text="Qt MOC: @(QtMoc)" />
+    
+    <!--
+      Invoke the QT_MOC task (specified above with the UsingTask statement), 
+      passing required parameters.
+    -->
+    <QT_MOC
+      Condition="'@(QtMoc)' != '' and '%(QtMoc.ExcludedFromBuild)' != 'true'"
+      NoWarningsFlag="%(QtMoc.NoWarningsFlag)"
+      NoIncludeFlag="%(QtMoc.NoIncludeFlag)"
+      Definitions="%(QtMoc.Definitions)"
+      InputPath="%(QtMoc.FullPath)"
+      OutputPath="%(QtMoc.OutputPath)"
+      CommandLineTemplate="%(QtMoc.CommandLineTemplate)"
     />
-    <Message
-      Importance="High"
-      Text="RCC @(RccSource)"
+
+    <!--
+      Add MOC output to the compiler input
+    -->
+    <ItemGroup>
+      <ClCompile Include="@(QtMoc->'%(OutputPath)')" />
+    </ItemGroup>
+    
+    <!--
+      Append output to a TLOG specific for Qt MOC, to be later removed by the
+      clean action.
+    -->
+    <WriteLinesToFile File="$(IntDir)qt_moc.write.1.tlog" Lines="@(QtMoc->'%(OutputPath)')"/>
+  </Target>
+
+  <!--
+    QtRCompile target: uses Qt Resource Compiler to pack resources specified in
+    the description file (usually .qrc; XML format) into either a binary or cpp
+    file. In case CPP output is used, it is being added to the CL compiler input
+  -->
+  <Target
+    Name="QtRCompile"
+    Inputs="@(QtRc);$(MSBuildProjectFile)"
+    Outputs="@(QtRc->'%(OutputPath)')"
+    AfterTargets="Midl"
+    BeforeTargets="ClCompile"
+    DependsOnTargets="ResolveQtDir"
+  >
+    <!-- Print message with all the inputs listed -->
+    <Message Importance="High" Text="Qt RC: @(QtRc)" />
+
+    <!--
+      Invoke the RC task (specified above with the UsingTask statement), 
+      passing required parameters.
+    -->
+    <QT_RC
+      Condition="'@(QtRc)' != '' and '%(QtRc.ExcludedFromBuild)' != 'true'"
+      BinaryModeFlag="%(QtRc.BinaryModeFlag)"
+      Compression="%(QtRc.Compression)"
+      Threshold="%(QtRc.Threshold)"
+      InputPath="%(QtRc.FullPath)"
+      OutputPath="%(QtRc.OutputPath)"
+      CommandLineTemplate="%(QtRc.CommandLineTemplate)"
+    />
+
+    <!--
+      Add RC output to the compiler input if not binary mode
+    -->
+    <ItemGroup>
+      <ClCompile 
+        Condition="'%(QtRc.BinaryModeFlag)' != 'true'"
+        Include="@(QtRc->'%(OutputPath)')"
+      />
+    </ItemGroup>
+    
+    <!--
+      Append output to a TLOG specific for Qt RC, to be later removed by the
+      clean action. This also affects only the CPP (non-binary) mode
+    -->
+    <WriteLinesToFile
+      Condition="'%(QtRc.BinaryModeFlag)' != 'true'"
+      File="$(IntDir)qt_rc.write.1.tlog" Lines="@(QtRc->'%(OutputPath)')"
     />
   </Target>
 
-  <UsingTask
-    TaskName="UicTask"
-    TaskFactory="XamlTaskFactory"
-    AssemblyName="Microsoft.Build.Tasks.v4.0">
-    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
-  </UsingTask>
+  <!--
+    QtUiCompile target: uses Qt User Interface Compiler to generate C++ headers
+    from user interface files (usually .ui) created by the Qt Designer
+  -->
   <Target
-    Name="Qt's User Interface Compiler"
-    Inputs="@(UicSource);$(MSBuildProjectFile)"
-    Outputs="@(UicSource->'%(OutputPath)')"
+    Name="QtUiCompile"
+    Inputs="@(QtUic);$(MSBuildProjectFile)"
+    Outputs="@(QtUic->'%(OutputPath)')"
     AfterTargets="Midl"
     BeforeTargets="ClCompile"
+    DependsOnTargets="ResolveQtDir"
   >
-    <UicTask
-      Condition="'@(UicSource)' != '' and '%(UicSource.ExcludedFromBuild)' != 'true'"
-      NoHeaderProtectionFlag="%(UicSource.NoHeaderProtectionFlag)"
-      InputPath="%(UicSource.FullPath)"
-      OutputPath="%(UicSource.OutputPath)"
-      CommandLineTemplate="%(UicSource.CommandLineTemplate)"
+    <!-- Print message with all the inputs listed -->
+    <Message Importance="High" Text="Qt UIC: @(QtUic)" />
+
+    <!--
+      Invoke the QT_UIC task (specified above with the UsingTask statement), 
+      passing required parameters.
+    -->
+    <QT_UIC
+      Condition="'@(QtUic)' != '' and '%(QtUic.ExcludedFromBuild)' != 'true'"
+      NoHeaderProtectionFlag="%(QtUic.NoHeaderProtectionFlag)"
+      InputPath="%(QtUic.FullPath)"
+      OutputPath="%(QtUic.OutputPath)"
+      CommandLineTemplate="%(QtUic.CommandLineTemplate)"
     />
-    <Message
-      Importance="High"
-      Text="UIC @(UicSource)"
+
+    <!--
+      Append output to a TLOG specific for Qt UIC, to be later removed by the
+      clean action.
+    -->
+    <WriteLinesToFile 
+      File="$(IntDir)qt_uic.write.1.tlog" Lines="@(QtUic->'%(OutputPath)')"
     />
   </Target>
 </Project>

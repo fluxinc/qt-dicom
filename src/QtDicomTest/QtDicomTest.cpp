@@ -4,7 +4,6 @@
  **************************************************************************/
 
 #include "QtDicomTest.hpp"
-#include "QtDicomTest.moc.inl"
 
 #include <QtDicom/RequestorAssociation.hpp>
 

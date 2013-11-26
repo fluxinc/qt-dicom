@@ -1,4 +1,5 @@
-ipch/
-Qt DICOM.sdf
-Qt DICOM.opensdf
-Qt DICOM.suo
+/ipch/
+/Qt DICOM.sdf
+/Qt DICOM.opensdf
+/Qt DICOM.suo
+/Qt DICOM.v12.suo

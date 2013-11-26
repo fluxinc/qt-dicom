@@ -4,7 +4,6 @@
  **************************************************************************/
 
 #include "Association.hpp"
-#include "Association.moc.inl"
 #include "ConnectionParameters.hpp"
 
 #include <QtCore/QString>

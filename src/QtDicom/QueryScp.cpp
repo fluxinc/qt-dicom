@@ -5,7 +5,6 @@
 
 #include "DataSource.hpp"
 #include "QueryScp.hpp"
-#include "QueryScp.moc.inl"
 #include "QueryScpReceiverThread.hpp"
 
 #include <dcmtk/dcmnet/dimse.h>

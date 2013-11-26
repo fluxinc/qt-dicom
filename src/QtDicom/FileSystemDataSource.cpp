@@ -6,7 +6,6 @@
 #include "DataSourceCreator.hpp"
 #include "DataSourceFactory.hpp"
 #include "FileSystemDataSource.hpp"
-#include "FileSystemDataSource.moc.inl"
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfoList>

@@ -4,7 +4,6 @@
  **************************************************************************/
 
 #include "ServerAssociation.hpp"
-#include "ServerAssociation.moc.inl"
 
 #include <dcmtk/dcmnet/assoc.h>
 

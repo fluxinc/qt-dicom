@@ -4,7 +4,6 @@
  **************************************************************************/
 
 #include "AcceptorAssociation.hpp"
-#include "AcceptorAssociation.moc.inl"
 
 #include <dcmtk/dcmnet/assoc.h>
 

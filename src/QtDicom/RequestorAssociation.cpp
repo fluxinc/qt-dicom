@@ -5,7 +5,6 @@
 
 #include "Exceptions.hpp"
 #include "RequestorAssociation.hpp"
-#include "RequestorAssociation.moc.inl"
 
 #include <QtDicom/QPresentationContext>
 #include <QtDicom/QTransferSyntax>

@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- 
+    Import directories file with the following properties:
+     * RootDir
+	 * IntermediateOutputPath
+	 * OutputPath
+   -->
+  <Import Project="Qt DICOM.vcxproj.directories" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -103,13 +110,15 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstdd.lib;oflogd.lib;dcmdatad.lib;dcmnetd.lib;dcmimgled.lib;dcmimaged.lib;dcmjpegd.lib;dcmjplsd.lib;charlsd.lib;ijg8d.lib;ijg12d.lib;ijg16d.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
@@ -136,13 +145,15 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstdd.lib;oflogd.lib;dcmdatad.lib;dcmnetd.lib;dcmimgled.lib;dcmimaged.lib;dcmjpegd.lib;dcmjplsd.lib;charlsd.lib;ijg8d.lib;ijg12d.lib;ijg16d.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
@@ -171,15 +182,16 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
@@ -203,15 +215,16 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\include;$(QTDIRBASE)\$(PlatformShortName)\include;$(QTFLUXDIRBASE)\$(PlatformShortName)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DCMTKDIRBASE)\$(PlatformShortName)\lib;$(QTDIRBASE)\$(PlatformShortName)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
@@ -268,32 +281,32 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
   <ItemGroup>
     <ClInclude Include="AbstractService.hpp" />
     <ClInclude Include="Globals.hpp" />
-    <MocSource Include="AcceptorAssociation.hpp">
+    <QtMoc Include="AcceptorAssociation.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
-    <MocSource Include="Association.hpp">
+    </QtMoc>
+    <QtMoc Include="Association.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
-    <MocSource Include="AssociationServer.hpp">
+    </QtMoc>
+    <QtMoc Include="AssociationServer.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
     <ClInclude Include="ConnectionParameters.hpp" />
     <ClInclude Include="ConnectionParameters_priv.hpp" />
     <ClInclude Include="Dataset.hpp" />
     <ClInclude Include="DatasetConstIterator.hpp" />
     <ClInclude Include="Dataset_priv.hpp" />
-    <MocSource Include="DataSource.hpp">
+    <QtMoc Include="DataSource.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
     <ClInclude Include="DataSourceCreator.hpp" />
     <ClInclude Include="DataSourceCreatorBase.hpp" />
     <ClInclude Include="DataSourceFactory.hpp" />
     <ClInclude Include="Exceptions.hpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <MocSource Include="FileSystemDataSource.hpp">
+    <QtMoc Include="FileSystemDataSource.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
     <ClInclude Include="ModalityPerformedProcedureStepScu.hpp" />
     <ClInclude Include="MoveScu.hpp" />
     <ClInclude Include="QDicomAttribute" />
@@ -318,34 +331,34 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClInclude Include="QDicomTag.hpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <MocSource Include="QStorageScu.hpp" />
-    <MocSource Include="QueryScp.hpp">
+    <QtMoc Include="QStorageScu.hpp" />
+    <QtMoc Include="QueryScp.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
-    <MocSource Include="QueryScpReceiverThread.hpp">
+    </QtMoc>
+    <QtMoc Include="QueryScpReceiverThread.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
     <ClInclude Include="QPresentationContext" />
     <ClInclude Include="QTransferSyntax" />
     <ClInclude Include="QueryScu.hpp" />
     <ClInclude Include="QUid.hpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <MocSource Include="RequestorAssociation.hpp">
+    <QtMoc Include="RequestorAssociation.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
-    <MocSource Include="ServerAssociation.hpp">
+    </QtMoc>
+    <QtMoc Include="ServerAssociation.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
     <ClInclude Include="QUid" />
     <ClInclude Include="ServiceProvider.hpp" />
     <ClInclude Include="ServiceUser.hpp" />
-    <MocSource Include="StorageScp.hpp">
+    <QtMoc Include="StorageScp.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
-    <MocSource Include="StorageScpReceiverThread.hpp">
+    </QtMoc>
+    <QtMoc Include="StorageScpReceiverThread.hpp">
       <FileType>CppHeader</FileType>
-    </MocSource>
+    </QtMoc>
     <ClInclude Include="UidList.hpp" />
     <ClInclude Include="VerificationScu.hpp" />
     <ClInclude Include="Version.hpp">

@@ -5,7 +5,6 @@
 
 #include "AcceptorAssociation.hpp"
 #include "QueryScpReceiverThread.hpp"
-#include "QueryScpReceiverThread.moc.inl"
 
 #include <dcmtk/dcmnet/dimse.h>
 
