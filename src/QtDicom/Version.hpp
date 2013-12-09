@@ -8,7 +8,7 @@
 
 #define COMPANY_NAME_STRING       "Flux Inc."
 #define PRODUCT_NAME_STRING       "Qt DICOM"
-#define LEGAL_COPYRIGHT_STRING     L"Copyright \x00a9 2010-2012 Flux Inc."
+#define LEGAL_COPYRIGHT_STRING     L"Copyright \x00a9 2010-2013 Flux Inc."
 #ifndef _DEBUG
 #	define ORIGINAL_FILENAME_STRING   "QtDicom4.dll"
 #else
