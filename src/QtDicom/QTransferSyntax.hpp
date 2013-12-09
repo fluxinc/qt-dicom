@@ -20,8 +20,6 @@ class QUid;
  * \author Paweł Żak <pawel.zak@fluxinc.ca>
  */
 class QDICOM_DLLSPEC QTransferSyntax {
-	friend uint qHash( const QTransferSyntax & );
-
 	public :
 		enum Id {
 			Unknown = 0,
@@ -106,30 +104,42 @@ class QDICOM_DLLSPEC QTransferSyntax {
 
 	public :		
 		static QTransferSyntax fromName( const QString & name );
-		static QTransferSyntax fromUid( const char * UID );
+		static QTransferSyntax fromUid( const QByteArray & UID );
 
 	public :
-		QTransferSyntax( Id id = Unknown );
+		/**
+		 * Creates a null (unknown) transfer syntax.
+		 */
+		QTransferSyntax();
+
+		/**
+		 * Creates a transfer syntax /a syntax.
+		 */
+		QTransferSyntax( Id syntax );
+
+		/**
+		 * Destroys the transfer syntax.
+		 */
 		~QTransferSyntax();
 
-		operator int() const;
+		operator Id() const;
 
-		bool operator == ( const QTransferSyntax & TS ) const;
-		bool operator != ( const QTransferSyntax & TS ) const;
+		//bool operator == ( const QTransferSyntax & TS ) const;
+		//bool operator != ( const QTransferSyntax & TS ) const;
 
+		Id id() const;
 		bool isCompressed() const;
 		bool isNull() const;
 		bool isRetired() const;
 		bool isValid() const;
-		const char * name() const;
-		int toInt() const;
+		const QString & name() const;
+		//int toInt() const;
 		QString toString() const;
-		const char * uid() const;
-
+		const QByteArray & uid() const;
 
 	private :
-		static const char * name( Id id );
-		static const char * uid( Id id );
+		static const QString & name( Id id );
+		static const QByteArray & uid( Id id );
 
 	private :
 		Id id_;

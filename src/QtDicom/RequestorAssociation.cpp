@@ -270,7 +270,18 @@ int RequestorAssociation::request(
 	const UidList & AbstractSyntaxes,
 	bool * timedOut
 ) {
-	return request( Parameters, AbstractSyntaxes, UidList(), timedOut );
+	static const QTransferSyntax Ts = QTransferSyntax::LittleEndian;
+	return request( Parameters, AbstractSyntaxes, UidList( Ts.uid() ), timedOut );
+}
+
+
+int RequestorAssociation::request(
+	const ConnectionParameters & Parameters,
+	const QByteArray & AbstractSyntax,
+	bool * timedOut
+) {
+	static const QTransferSyntax Ts = QTransferSyntax::LittleEndian;
+	return request( Parameters, UidList( AbstractSyntax ), UidList( Ts.uid() ), timedOut );
 }
 
 

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+  QDicomPrinterDriver description file for Fuji DRYPIX 7000
+-->
+
+<!--
+  The document root. Current `version' is `0.1'. The attribute is mandatory.
+-->
+<QDicomPrinterDriver version="0.1">
+
+
+  <!-- I   GENERAL PROPERTIES -->
+
+  <!--
+    Name of the device manufacturer. Make sure the capitalization is correct by
+    checking product website.
+  -->
+  <VendorName>Fuji</VendorName>
+
+  <!--
+    Name of the device model. As with the vendor name, make sure the 
+    capitalization is correct by checking product website.
+    
+    If a single description file applies to multiple models, use `x' character
+    to indicate model name characters or digits that are not common. Ideally,
+    though, a single description file should correspond to a single model.
+  -->
+  <ModelName>DRYPIX 7000</ModelName>
+
+  <!--
+    Comma-separated list of printer features. Possible values include:
+
+    * `FilmSessionLabel' - indicates that the printer supports labelling film
+      session when it is created.
+      
+      The Film Session Label is an optional Attribute of the Basic Film Session
+      SOP Class so it shouldn't be sent if device doesn't support it. Otherwise
+      an unnecessary warning response may be read from the device.
+
+      Note, that we're only interested here in the N-CREATE message attributes,
+      not N-SET.
+
+    * `BorderDensity' - similarly to the above, indicates whether or not the
+      optional attribute: Border Density of the Basic Film Box SOP class can be
+      set with the N-CREATE message.
+
+    * `EmptyImageDensity' - same as the `BorderDensity'.
+
+    * `Trim' - same as the `BorderDensity' and `EmptyImageDensity'.
+
+    * `HighQuality' - indicates whether or not the imager supports double-density
+      printing. There are two conditions that have to be met in order to set this
+      flag. First, the imager must support Requested Resolution ID Attribute in
+      the Basic Film Box SOP Class and allow to set it to `HIGH' value. Secondly,
+      printable areas for standard and double-density printing must differ.
+
+    * `RequestedImageSize' - tells if imager supports the Requested Image Size
+      Attribute of the Basic Grayscale Image Box SOP Class. This Attribute 
+      allows to control output width down to a millimetre, which is the only way
+      to produce 1:1 output on imagers that do not support `Magnification Type' = 
+      `NONE'.
+
+  -->
+  <Features>FilmSessionLabel, BorderDensity, Trim, RequestedImageSize, HighQuality</Features>
+
+  
+
+  <!-- II  BASIC FILM SESSION-RELATED PROPERTIES -->
+
+  <!--
+    Possible values for the Medium Type Attribute. The first one should be 
+    printer's default.
+    
+    Any non-standard value should be omitted. Standard values include on the
+    following:
+
+    * PAPER,
+    * CLEAR FILM,
+    * BLUE FILM,
+    * MAMMO CLEAR FILM,
+    * MAMMO BLUE FILM.
+  -->
+  <MediumTypes>CLEAR FILM, BLUE FILM</MediumTypes>
+
+  <!--
+    Possible values for the Film Destination Attribute. The first one should be
+    printer's default.
+
+    Any non-standard value should be left out. Standard values include the 
+    following:
+
+      * MAGAZINE,
+      * PROCESSOR,
+      * BIN_i, where `i' is an integer value, e.g. BIN_1, BIN_2, etc.
+  -->
+  <FilmDestinations>PROCESSOR, BIN_1, BIN_2, BIN_3, BIN_4, BIN_5, BIN_6, BIN_7, BIN_8, BIN_9, BIN_10</FilmDestinations>
+
+  <!--
+    The maximum allowed number of copies. Cannot be higher than 16000.
+  -->
+  <MaxCopyCount>99</MaxCopyCount>
+
+  
+
+  <!-- III BASIC FILM BOX-RELATED PROPERTIES -->
+
+  <!--
+    Supported values for the Film Size ID Attribute (in other words, possible
+    film types). Any non-standard values should be omitted. Standard values
+    include only the following:
+
+      * A3,
+		  * A4,
+		  * 24CMX24CM,
+		  * 24CMX30CM,
+		  * 25.7CMX36.4CM
+		  * 8INX10IN,
+		  * 8.5INX11IN,
+		  * 10INX12IN,
+		  * 10INX14IN,
+		  * 11INX14IN,
+		  * 11INX17IN,
+		  * 14INX14IN,
+		  * 14INX17IN.
+
+    The first value should point out printer's default.
+  -->
+  <FilmSizes>8INX10IN, 10INX12IN, 10INX14IN, 14INX14IN, 14INX17IN</FilmSizes>
+
+  <!--
+    Supported values for the Magnification Type Attribute. The first on should
+    indicate printer's default.
+    
+    Only values from the standard set should be listed. The set contains the
+    following values:
+
+      * NONE,
+      * REPLICATE,
+      * BILINEAR,
+      * CUBIC.
+  -->
+  <MagnificationTypes>CUBIC, NONE</MagnificationTypes>
+
+
+  
+  
+  <!-- IV  BASIC GRAYSCALE IMAGE BOX-RELATED PROPERTIES -->
+
+  <!--
+    Lists all possible bit depths for image data. The best way to fill this
+    property is by examining allowed values for the Bits Stored Attribute.
+
+    While DICOM standard allows only for 8- and 12-bit mode printing, some
+    of the imagers support up to 16 bits. That's the only extension to DICOM
+    we should consider using.
+  -->
+  <Depths>8, 10, 12</Depths>
+
+  <!--
+    Provides physical resolution (in DPI) of the device, in standard and
+    high resolution modes (where applicable).
+    
+    If unsure, look for the largest printable area and divide the number of
+    pixels in Y axis by the film height. Then round up the number to the most
+    common values, which include:
+
+      * 254 DPI (100 microns),
+      * 300 DPI (84.666 microns),
+      * 320 DPI (79.375 microns),
+      * 508 DPI (50 microns).
+    
+    If resolution is given by dot pitch (usually in microns), use the following
+    formula to calculate DPI: [DPI] = 25400 / [microns].
+  -->
+  <Resolutions>
+    <NormalQuality>254</NormalQuality>
+    <HighQuality>508</HighQuality>
+  </Resolutions>
+
+  <!--
+    Lists printable areas available depending on the chosen film type and
+    quality (where applicable). Each spec have the following format:
+    
+      <film size>: <width> x <height>
+
+    and the list is comma-separated.
+    
+    We're assuming vertical film alignment (width is smaller than height).
+    If for some particular imager landscape and portrait areas differ from each
+    other, the smaller values should be used.
+    
+    The same applies when printer have different areas depending on medium
+    type (which happens sometimes with mammo films). In such cases always the
+    smaller area should be used.
+
+    STANDARD\1,1 format, no annotation boxes and no trim frame should be
+    assumed.
+  -->
+  <PrintableAreas>
+    <NormalQuality>
+	  8INX10IN  : 1898 x 2410,
+      10INX12IN : 2404 x 2916,
+      10INX14IN : 2538 x 3522,
+      14INX14IN : 3500 x 3410,
+      14INX17IN : 3442 x 4170
+    </NormalQuality>
+    <HighQuality>
+      8INX10IN  : 3795 x 4819,
+      10INX12IN : 4807 x 5831,
+      10INX14IN : 4919 x 7043,
+      14INX14IN : 6999 x 6819,
+      14INX17IN : 6883 x 8339
+    </HighQuality>
+  </PrintableAreas>
+</QDicomPrinterDriver>

@@ -116,7 +116,7 @@ void StorageScp::ReceiverThread::run() {
 	}
 
 	if ( hasError() ) {
-		emit failedToStore( errorMessage() );
+		emit failedToStore( errorString() );
 	}	
 }
 

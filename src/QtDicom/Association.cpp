@@ -5,6 +5,7 @@
 
 #include "Association.hpp"
 #include "ConnectionParameters.hpp"
+#include "QSopClass.hpp"
 
 #include <QtCore/QString>
 
@@ -60,21 +61,30 @@ void Association::abort() {
 int Association::acceptedPresentationContextId(
 	const char * AbstractSyntax, const char * TransferSyntax
 ) const {
+	int result = -1;
 	if ( tAscAssociation() ) {
 		if ( ! TransferSyntax ) {
-			return ASC_findAcceptedPresentationContextID( 
+			result = ASC_findAcceptedPresentationContextID( 
 				tAscAssociation(), AbstractSyntax
 			);
 		}
 		else {
-			return ASC_findAcceptedPresentationContextID( 
+			result = ASC_findAcceptedPresentationContextID( 
 				tAscAssociation(), AbstractSyntax, TransferSyntax
 			);
 		}
+
+		if ( result <= 0 ) {
+			const QSopClass SopClass = QSopClass::fromUid( AbstractSyntax );
+			if ( SopClass.hasMeta() ) {
+				result = acceptedPresentationContextId(
+					SopClass.meta().uid(), TransferSyntax
+				);
+			}
+		}
 	}
-	else {
-		return -1;
-	}
+
+	return result;
 }
 
 

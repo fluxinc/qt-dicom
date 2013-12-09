@@ -4,6 +4,7 @@
  **************************************************************************/
 
 #include "QDicomAttribute.hpp"
+#include "QSopClass.hpp"
 
 
 QDicomAttribute::QDicomAttribute() {
@@ -22,6 +23,14 @@ QDicomAttribute::QDicomAttribute(
 	const QDicomTag & Tag, const QString & Value
 ) :
 	data_( new Data( Tag, Value.split( '\\' ) ) )
+{
+}
+
+
+QDicomAttribute::QDicomAttribute(
+	const QDicomTag & Tag, const QSopClass & SopClass 
+) :
+	data_( new Data( Tag, QStringList() << QString::fromAscii( SopClass.uid() ) ) )
 {
 }
 

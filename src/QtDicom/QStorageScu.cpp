@@ -159,7 +159,7 @@ void QStorageScu::connectToAe(
 
 
 QString QStorageScu::dimseErrorString() const {
-	return dimseClient_.errorMessage();
+	return dimseClient_.errorString();
 }
 
 

@@ -9,6 +9,8 @@
 #include "QtDicom/Association.hpp"
 #include "QtDicom/Dataset.hpp"
 
+#include <QtGui/QApplication>
+
 #include <dcmtk/dcmnet/assoc.h>
 #include <dcmtk/dcmnet/dimse.h>
 
@@ -42,8 +44,7 @@ const Association * AbstractService::association() const {
 
 
 void AbstractService::clearErrorStatus() {
-	errorFlag_ = false;
-	errorMessage_ = QString();
+	errorString_.clear();
 }
 
 
@@ -77,13 +78,13 @@ const char * AbstractService::commandName( int command ) {
 }
 
 
-const QString & AbstractService::errorMessage() const {
-	return errorMessage_;
+const QString & AbstractService::errorString() const {
+	return errorString_;
 }
 
 
 bool AbstractService::hasError() const {
-	return errorFlag_;
+	return errorString_.size() > 0;
 }
 
 
@@ -112,9 +113,19 @@ void AbstractService::ignoreDataset() {
 }
 
 
+void AbstractService::progressCallback( void * data, unsigned long count ) {
+	qDebug( __FUNCTION__" : with %ld bytes", count );
+
+	if ( qApp != nullptr ) {
+		qApp->processEvents();
+	}
+}
+
+
 void AbstractService::raiseError( const QString & Message ) {
-	errorFlag_ = true;
-	errorMessage_ = Message;
+	if ( ! hasError() ) {
+		errorString_ = Message;
+	}
 }
 
 
@@ -155,7 +166,7 @@ T_DIMSE_Message AbstractService::receiveCommand(
 				QString( "Received command is not a %1 only a %2 (0x%3)." )
 				.arg( ExpectedCommandName )
 				.arg( commandName( message.CommandField ) )
-				.arg( static_cast< int >( message.CommandField ), 16 )
+				.arg( static_cast< int >( message.CommandField ), 4, 16, QChar( '0' ) )
 			);
 		}
 	}
@@ -226,7 +237,7 @@ Dataset AbstractService::receiveDataset( unsigned char & id ) {
 		association()->connectionParameters().timeout(),
 		&id,
 		& tmp,
-		0, 0
+		progressCallback, nullptr
 	);
 	if ( result.bad() ) {
 		throw OperationFailedException(
@@ -236,13 +247,6 @@ Dataset AbstractService::receiveDataset( unsigned char & id ) {
 	}
 
 	return Dataset( dataset );
-}
-
-
-void AbstractService::sendCommand(
-	const T_DIMSE_Message & command, unsigned char id
-) {
-	sendCommand( command, Dataset(), id );
 }
 
 
@@ -262,7 +266,7 @@ void AbstractService::sendCommand(
 		association()->tAscAssociation(), id,
 		&command, 0,
 		( Data.isEmpty() ? 0 : dcmDataSet ),
-		0, 0
+		progressCallback, nullptr
 	);
 	if ( result.bad() ) {
 		throw OperationFailedException(
@@ -271,6 +275,13 @@ void AbstractService::sendCommand(
 			.arg( result.text() )
 		);
 	}
+}
+
+
+void AbstractService::sendCommand(
+	const T_DIMSE_Message & command, unsigned char id
+) {
+	sendCommand( command, Dataset(), id );
 }
 
 

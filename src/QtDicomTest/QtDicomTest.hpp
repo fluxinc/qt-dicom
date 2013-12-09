@@ -13,7 +13,8 @@ class QtDicomTest : public QObject {
 	Q_OBJECT;
 
 	public :
-	public slots :
+	private slots :
+		void testQDicomPrinter();
 		void testRequestorAssociation();
 };
 

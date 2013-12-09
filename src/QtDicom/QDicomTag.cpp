@@ -12,33 +12,32 @@
 
 #include <QtFlux/QInitializeOnce>
 
-
 #include <dcmtk/dcmdata/dctag.h>
 
 
-static const QString & cacheKeyword( quint16, quint16 );
-static const QString & cachedKeyword( quint16, quint16 );
-static QHash< quint16, QVector< QString * > > & keywordCache();
+static const QString & cacheKeyword( const quint32 & );
+static const QString & cachedKeyword( const quint32 & );
+static QHash< quint32, QString * > & keywordCache();
 static QMutex & keywordCacheLock();
 static QString keywordFromDcmTagName( const char * );
 static QRegExp stringPattern();
 
 
 QDicomTag::QDicomTag() :
-	value_( 0 )
+	id_( Unknown )
 {
 }
 
 
 QDicomTag::QDicomTag( const Id & Id ) :
-	value_( Id )
+	id_( Id )
 {
 }
 
 
-QDicomTag::QDicomTag( quint16 group, quint16 element ) {
-	setGroup( group );
-	setElement( element );
+QDicomTag::QDicomTag( const quint16 & Group, const quint16 & Element ) {
+	setGroup( Group );
+	setElement( Element );
 }
 
 
@@ -46,13 +45,18 @@ QDicomTag::~QDicomTag() {
 }
 
 
-QDicomTag::operator quint32() const {
-	return value_;
+QDicomTag::operator DcmTag () const {
+	return toDcmTag();
+}
+
+
+QDicomTag::operator Id() const {
+	return id_;
 }
 
 
 quint16 QDicomTag::element() const {
-	return static_cast< quint16 >( value_ );
+	return static_cast< quint16 >( id_ );
 }
 
 
@@ -80,43 +84,46 @@ QDicomTag QDicomTag::fromString( const QString & Value ) {
 }
 
 
-QDicomTag QDicomTag::fromUInt32( quint32 Value ) {
-	QDicomTag result;
-	result.value_ = Value;
-
-	return result;
-}
-
-
 quint16 QDicomTag::group() const {
-	return static_cast< quint16 > ( value_ >> 16 );
+	return static_cast< quint16 > ( id_ >> 16 );
 }
 
 
 bool QDicomTag::isNull() const {
-	return value_ == 0;
+	return id_ == Unknown;
 }
 
 
 bool QDicomTag::isValid() const {
-	return value_ != 0;
+	return id_ != Unknown;
 }
 
 
 const QString & QDicomTag::keyword() const {
-	return cachedKeyword( group(), element() );
+	return ::cachedKeyword( toUInt32() );
 }
 
 
 void QDicomTag::setElement( quint16 e ) {
-	value_ &= static_cast< quint32 >( 0xFFFF0000 );
-	value_ |= e;
+	quint32 value = id_;
+	value &= static_cast< quint32 >( 0xFFFF0000 );
+	value |= e;
+
+	id_ = static_cast< Id >( value );
 }
 
 
 void QDicomTag::setGroup( quint16 g ) {
-	value_ &= static_cast< quint32 >( 0x0000FFFF );
-	value_ |= static_cast< quint32 >( g ) << 16;
+	quint32 value = id_;
+	value &= static_cast< quint32 >( 0x0000FFFF );
+	value |= static_cast< quint32 >( g ) << 16;
+
+	id_ = static_cast< Id >( value );
+}
+
+
+DcmTag QDicomTag::toDcmTag() const {
+	return DcmTag( group(), element() );
 }
 
 
@@ -130,57 +137,45 @@ QString QDicomTag::toString() const {
 
 
 quint32 QDicomTag::toUInt32() const {
-	return value_;
+	return id_;
 }
 
 
-const QString & cacheKeyword( quint16 group, quint16 element ) {
-	QString * keyword = nullptr;
-
+const QString & cacheKeyword( const quint32 & Id ) {
 	keywordCacheLock().lock();
 
-	QHash< quint16, QVector< QString * > > & cache = keywordCache();
-	QVector< QString * > & groupKeywords = cache[ group ];
-	if ( groupKeywords.size() < element ) {
-		groupKeywords.resize( element + 1 );
-		groupKeywords.fill( nullptr );
-	}
-	
-	if ( groupKeywords[ element ] == nullptr ) {
-		DcmTag tag( group, element );
-		keyword = new QString( keywordFromDcmTagName( tag.getTagName() ) );
-		cache[ group ][ element ] = keyword;
-	}
-	else {
-		keyword = cache[ group ][ element ];
-	}
+	DcmTag tag( static_cast< quint16 >( Id >> 16 ), static_cast< quint16 >( Id ) );
+	QString * keyword = new QString(
+		::keywordFromDcmTagName( tag.getTagName() )
+	); 
+	::keywordCache()[ Id ] = keyword;
+
 	keywordCacheLock().unlock();
 
-	Q_ASSERT( keyword != nullptr );
+
 	return *keyword;
 }
 
 
-const QString & cachedKeyword( quint16 group, quint16 element ) {
-	const QHash< quint16, QVector< QString * > > & Cache = keywordCache();
+const QString & cachedKeyword( const quint32 & Id ) {
+	keywordCacheLock().lock();
+	const QString * Keyword = ::keywordCache().value( Id, nullptr );
+	keywordCacheLock().unlock();
 
-	QVector< QString * > groupKeywords = Cache[ group ];
-	if ( groupKeywords.size() > element ) {
-		const QString * keyword = groupKeywords[ element ];
-		if (  keyword != nullptr ) {
-			return *keyword;
-		}
+	if ( Keyword != nullptr ) {
+		return *Keyword;
 	}
-
-	return cacheKeyword( group, element );
+	else {
+		return ::cacheKeyword( Id );
+	}
 }
 
 
-QHash< quint16, QVector< QString * > > & keywordCache() {
-	static QHash< quint16, QVector< QString * > > * cache = nullptr;
+QHash< quint32, QString * > & keywordCache() {
+	static QHash< quint32, QString * > * cache = nullptr;
 
-	return ::qInitializeOnce( cache, [] () -> QHash< quint16, QVector< QString * > > {
-		return QHash< quint16, QVector< QString * > >();
+	return ::qInitializeOnce( cache, [] () -> QHash< quint32, QString * > {
+		return QHash< quint32, QString * >();
 	} );
 }
 
@@ -189,12 +184,14 @@ QMutex & keywordCacheLock() {
 	static QMutex ** mutex = nullptr;
 
 	return *::qInitializeOnce( mutex, [] () -> QMutex * {
-		return new QMutex;
+		return new QMutex();
 	} );
 }
 
 
 QString keywordFromDcmTagName( const char * Name ) {
+	Q_ASSERT( ::strlen( Name ) > 0 );
+
 	QString result = Name;
 
 	QChar previous;
@@ -208,6 +205,13 @@ QString keywordFromDcmTagName( const char * Name ) {
 
 		previous = Current;
 	}
+
+
+	static const QRegExp IdPattern( "\\sId(\\s|$)" );
+	result.replace( IdPattern, " ID\\1" );
+
+	static const QRegExp UidPattern( "\\sUid(\\s|$)" );
+	result.replace( IdPattern, " UID\\1" );
 
 	return result;
 }

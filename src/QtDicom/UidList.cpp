@@ -9,6 +9,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QXmlStreamWriter>
 
+#include <QtFlux/QInitializeOnce>
+
 #include <dcmtk/dcmdata/dcuid.h>
 #include <dcmtk/dcmdata/dcxfer.h>
 

@@ -192,7 +192,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QtCore4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>QtCore4.lib;QtGui4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
@@ -225,7 +225,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QtCore4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>QtCore4.lib;QtGui4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
@@ -260,9 +260,31 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClCompile Include="MoveScu.cpp" />
     <ClCompile Include="QDicomAttribute.cpp" />
     <ClCompile Include="QDicomImageCodec.cpp" />
+    <ClCompile Include="QDicomPrintEngine.cpp" />
+    <ClCompile Include="QDicomPrintEngineScu_test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="QDicomPrinter.cpp" />
+    <ClCompile Include="QDicomPrinterDriver.cpp" />
+    <ClCompile Include="QDicomPrinterDriverXmlParser.cpp" />
+    <ClCompile Include="QDicomPrinterDriver_test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="QDicomPrintEngineScu.cpp" />
     <ClCompile Include="QDicomTag.cpp" />
+    <ClCompile Include="QDicomTag_test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="QPresentationContext.cpp" />
     <ClCompile Include="QPresentationContextData.cpp" />
+    <ClCompile Include="QSopClass.cpp" />
+    <ClCompile Include="QSopClass_test.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="QStorageScu.cpp" />
     <ClCompile Include="QTransferSyntax.cpp" />
     <ClCompile Include="QueryScp.cpp" />
@@ -276,7 +298,9 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClCompile Include="StorageScp.cpp" />
     <ClCompile Include="StorageScpReceiverThread.cpp" />
     <ClCompile Include="UidList.cpp" />
+    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="VerificationScu.cpp" />
+    <ClCompile Include="Version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractService.hpp" />
@@ -311,10 +335,19 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
     <ClInclude Include="MoveScu.hpp" />
     <ClInclude Include="QDicomAttribute" />
     <ClInclude Include="QDicomImageCodec" />
+    <ClInclude Include="QDicomPrintEngine.hpp" />
+    <ClInclude Include="QDicomPrinter" />
+    <ClInclude Include="QDicomPrinter.hpp" />
+    <ClInclude Include="QDicomPrinterDriver" />
+    <ClInclude Include="QDicomPrinterDriver.hpp" />
+    <ClInclude Include="QDicomPrintEngineScu.hpp" />
+    <ClInclude Include="QDicomPrinterDriverXmlParser.hpp" />
     <ClInclude Include="QDicomTag" />
     <ClInclude Include="QPresentationContext.hpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <ClInclude Include="QSopClass" />
+    <ClInclude Include="QSopClass.hpp" />
     <ClInclude Include="QStorageScu" />
     <ClInclude Include="QTransferSyntax.hpp">
       <FileType>Document</FileType>
@@ -360,6 +393,7 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <FileType>CppHeader</FileType>
     </QtMoc>
     <ClInclude Include="UidList.hpp" />
+    <ClInclude Include="Utilities.hpp" />
     <ClInclude Include="VerificationScu.hpp" />
     <ClInclude Include="Version.hpp">
       <FileType>Document</FileType>
@@ -367,10 +401,56 @@ copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="DataSourceCreator.inl" />
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5300.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5302.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5500.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5503.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_AXYS.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5700.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5800.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5850.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5950.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_6800.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_6850.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_8150.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_8900.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_Chroma.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Codonics_Horizon_v2.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_1000.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_2000.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_3000.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_4000.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_5000.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_7000.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_FMDPL.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Generic.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_722.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_751.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_752.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_771.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_793.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_832.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_873.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_970AD.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_990AD.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D72XR.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D74XRD.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D77MD.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D897.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF500.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF550.xml" />
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF750.xml" />
     <None Include="Resources\Texts\Build Number.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\Version.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRc Include="Resources\QDicomPrinterDrivers.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

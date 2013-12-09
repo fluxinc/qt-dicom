@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<QDicomPrinterDriver version="0.1">
+  <VendorName>Flux Inc.</VendorName>
+  <ModelName>Generic Imager</ModelName>
+  <Features>RequestedImageSize,Trim,HighQuality</Features>
+
+  <!-- Basic Film Session related -->
+  <MediumTypes>Paper, ClearFilm</MediumTypes>
+  <FilmDestinations>Processor, Bin_1</FilmDestinations>
+  <MaxCopyCount>1000</MaxCopyCount>
+
+  <!-- Basic Film Box related -->
+  <FilmSizes>8INx10IN</FilmSizes>
+  <MagnificationTypes>None, Cubic</MagnificationTypes>
+
+  <!-- Basic Grayscale Image Box related -->
+  <Depths>8, 9, 10, 11, 12, 13, 14, 15, 16</Depths>
+
+  <Resolutions>
+    <NormalQuality>254</NormalQuality>
+    <HighQuality>508</HighQuality>
+  </Resolutions>
+
+  <PrintableAreas>
+    <NormalQuality>
+      8INX10IN: 2032 x 2540
+    </NormalQuality>
+    <HighQuality>
+      8INX10IN: 4064 x 5080
+    </HighQuality>
+  </PrintableAreas>
+</QDicomPrinterDriver>

@@ -14,6 +14,9 @@
 #include <QtDicom/QDicomTag>
 
 
+class QSopClass;
+
+
 class QDICOM_DLLSPEC QDicomAttribute {
 	public :
 		QDicomAttribute();
@@ -22,6 +25,9 @@ class QDICOM_DLLSPEC QDicomAttribute {
 		);
 		QDicomAttribute(
 			const QDicomTag & tag, const QString & value
+		);
+		QDicomAttribute(
+			const QDicomTag & tag, const QSopClass & value
 		);
 		~QDicomAttribute();
 		

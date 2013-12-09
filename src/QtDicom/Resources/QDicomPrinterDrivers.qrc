@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/QtDicom">
+    <file>QDicomPrinterDrivers/Generic.xml</file>
+
+    <file>QDicomPrinterDrivers/Agfa_DRYSTAR_5300.xml</file>
+    <file>QDicomPrinterDrivers/Agfa_DRYSTAR_5302.xml</file>
+    <file>QDicomPrinterDrivers/Agfa_DRYSTAR_5500.xml</file>
+    <file>QDicomPrinterDrivers/Agfa_DRYSTAR_5503.xml</file>
+    <file>QDicomPrinterDrivers/Agfa_DRYSTAR_AXYS.xml</file>
+
+    <file>QDicomPrinterDrivers/Carestream_DryView_5700.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_5800.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_5850.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_5950.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_6800.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_6850.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_8150.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_8900.xml</file>
+    <file>QDicomPrinterDrivers/Carestream_DryView_Chroma.xml</file>
+
+    <file>QDicomPrinterDrivers/Codonics_Horizon_v2.xml</file>
+
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_1000.xml</file>
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_2000.xml</file>
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_3000.xml</file>
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_4000.xml</file>
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_5000.xml</file>
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_7000.xml</file>
+    <file>QDicomPrinterDrivers/Fuji_DRYPIX_FMDPL.xml</file>
+
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_722.xml</file>
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_751.xml</file>
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_752.xml</file>
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_771.xml</file>
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_793.xml</file>
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_832.xml</file>
+    <file>QDicomPrinterDrivers/Konica_Minolta_Drypro_873.xml</file>
+
+    <file>QDicomPrinterDrivers/Sony_UP_970AD.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_990AD.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_D72XR.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_D74XRD.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_D77MD.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_D897.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_DF500.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_DF550.xml</file>
+    <file>QDicomPrinterDrivers/Sony_UP_DF750.xml</file>
+  </qresource>
+</RCC>

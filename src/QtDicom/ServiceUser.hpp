@@ -13,6 +13,7 @@
 
 
 class DcmDataset;
+class QSopClass;
 
 struct T_DIMSE_Message;
 
@@ -89,22 +90,82 @@ class QDICOM_DLLSPEC ServiceUser : public AbstractService {
 			const QString & moveAe, int moveId
 		);
 
+
+		/**
+		 * Performs an N-ACTION operation.
+		 */
+		bool nAction(
+			const char * Class,
+			const char * Instance,
+			const quint16 & action,
+			const Dataset & information,
+			Dataset * reply = nullptr,
+			quint16 * status = nullptr
+		);
+		bool nAction(
+			const char * Class,
+			const char * Instance,
+			const quint16 & action,
+			quint16 * status = nullptr
+		);
+		bool nAction(
+			const QSopClass & Class,
+			const char * Instance,
+			const quint16 & action,
+			const Dataset & information,
+			Dataset * reply = nullptr,
+			quint16 * status = nullptr
+		);
+		bool nAction(
+			const QSopClass & Class,
+			const char * Instance,
+			const quint16 & action,
+			quint16 * status = nullptr
+		);
+
 		/**
 		 * Performs a N-CREATE operation. Returns affected SOP Instance UID
 		 * (when applicable).
 		 */
 		QByteArray nCreate( 
 			const char * Class,
-			const char * Instance = 0,
+			const char * Instance = nullptr,
 			const Dataset & attributes = Dataset(),
-			Dataset * created = 0,
-			quint16 * status = 0
+			Dataset * created = nullptr,
+			quint16 * status = nullptr 
+		);
+		QByteArray nCreate( 
+			const QSopClass & Class,
+			const char * Instance = nullptr,
+			const Dataset & attributes = Dataset(),
+			Dataset * created = nullptr,
+			quint16 * status = nullptr 
 		);
 		QByteArray nCreate( 
 			const char * SopClass,
 			const Dataset & attributes,
-			Dataset * created = 0,
-			quint16 * status = 0
+			Dataset * created = nullptr,
+			quint16 * status = nullptr 
+		);
+		QByteArray nCreate( 
+			const QSopClass & SopClass,
+			const Dataset & attributes,
+			Dataset * created = nullptr,
+			quint16 * status = nullptr 
+		);
+
+		/**
+		 * Performs N-DELETE operation. Returns \c true on success.
+		 */
+		bool nDelete(
+			const char * Class,
+			const char * Instance,
+			quint16 * status = nullptr
+		);
+		bool nDelete(
+			const QSopClass & Class,
+			const char * Instance,
+			quint16 * status = nullptr
 		);
 
 		/**
@@ -115,12 +176,18 @@ class QDICOM_DLLSPEC ServiceUser : public AbstractService {
 			const char * Class,
 			const char * Instance,
 			const Dataset & attributes = Dataset(),
-			Dataset * modified = 0,
-			quint16 * status = 0
+			Dataset * modified = nullptr,
+			quint16 * status = nullptr 
 		);
 
 
 	private :
+		/**
+		 */
+		Dataset processNEventReport(
+			const T_DIMSE_Message &, unsigned char &
+		);
+
 		/**
 		 * Validates a C-ECHO \a response which was received after issuing the
 		 * \a request. Method throws an exception if any abnormality is found.
@@ -140,7 +207,6 @@ class QDICOM_DLLSPEC ServiceUser : public AbstractService {
 			const T_DIMSE_Message & response,
 			const T_DIMSE_Message & request
 		);
-
 
 		/**
 		 * Validates a C-MOVE \a response which was received after sending the
@@ -162,12 +228,42 @@ class QDICOM_DLLSPEC ServiceUser : public AbstractService {
 			const T_DIMSE_Message & request
 		);
 
+		/**
+		 * Validates a N-ACTION \a response to \a request. This method throws
+		 * an exception if response status indicates a fatal error. In case of
+		 * less severe errors, only a warning message is printed.
+		 */
+		void validateNActionResponse(
+			const T_DIMSE_Message & response,
+			const T_DIMSE_Message & request
+		);
 
+		/**
+		 * Validates a N-CREATE \a response to \a request. This method throws
+		 * an exception if response status indicates a fatal error. In case of
+		 * less severe errors, only a warning message is printed.
+		 */
 		void validateNCreateResponse(
 			const T_DIMSE_Message & response,
 			const T_DIMSE_Message & request
 		);
 
+
+		/**
+		 * Validates a N-DELETE \a response to \a request. This method throws
+		 * an exception if response status indicates a fatal error. In case of
+		 * less severe errors, only a warning message is printed.
+		 */
+		void validateNDeleteResponse(
+			const T_DIMSE_Message & response,
+			const T_DIMSE_Message & request
+		);
+
+		/**
+		 * Validates a N-SET \a response to \a request. This method throws
+		 * an exception if response status indicates a fatal error. In case of
+		 * less severe errors, only a warning message is printed.
+		 */
 		void validateNSetResponse(
 			const T_DIMSE_Message & response,
 			const T_DIMSE_Message & request

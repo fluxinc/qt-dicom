@@ -8,6 +8,30 @@
 #include <QtDicom/QDicomImageCodec>
 
 
+#ifdef _DEBUG
+
+extern bool TestQDicomPrintEngineScu();
+extern bool TestQDicomPrinterDriver();
+extern bool TestQDicomTag();
+extern bool TestQSopClass();
+extern bool TestQTransferSyntax();
+
+static bool RunTests() {
+	return
+		::TestQDicomPrintEngineScu() &&
+		::TestQDicomPrinterDriver() &&
+		::TestQDicomTag() &&
+		::TestQSopClass() &&
+		::TestQTransferSyntax()
+	;
+}
+#else // ! _DEBUG
+static bool RunTests() {
+	return true;
+} 
+#endif // DEBUG
+
+
 static void globalCleanup() {
 	QDicomImageCodec::cleanupRegister();
 }
@@ -15,6 +39,8 @@ static void globalCleanup() {
 
 static void globalInit() {
 	QDicomImageCodec::initRegister();
+
+	Q_ASSERT( ::RunTests() );
 }
 
 

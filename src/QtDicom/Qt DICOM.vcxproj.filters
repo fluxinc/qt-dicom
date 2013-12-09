@@ -19,6 +19,9 @@
     <Filter Include="Resources\Texts">
       <UniqueIdentifier>{7bdfee73-0c5c-44ec-abc7-33f6d7780242}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources\QDicomPrinterDrivers">
+      <UniqueIdentifier>{4e4a8511-6f0f-4f9f-8c46-2beb94683292}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dataset.cpp">
@@ -124,6 +127,38 @@
     <ClCompile Include="QDicomTag.cpp">
       <Filter>Data Objects</Filter>
     </ClCompile>
+    <ClCompile Include="QDicomPrinter.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomPrintEngine.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomPrinterDriver.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QSopClass.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QSopClass_test.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomPrintEngineScu.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomTag_test.cpp">
+      <Filter>Data Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomPrinterDriver_test.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="QDicomPrintEngineScu_test.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp" />
+    <ClCompile Include="Version.cpp" />
+    <ClCompile Include="QDicomPrinterDriverXmlParser.cpp">
+      <Filter>Service Class Users</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dataset.hpp">
@@ -217,6 +252,34 @@
     <ClInclude Include="QDicomTag">
       <Filter>Data Objects</Filter>
     </ClInclude>
+    <ClInclude Include="QDicomPrinter.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomPrinter">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomPrintEngine.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomPrinterDriver.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomPrinterDriver">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="QSopClass.hpp">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QSopClass">
+      <Filter>Data Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="QDicomPrintEngineScu.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.hpp" />
+    <ClInclude Include="QDicomPrinterDriverXmlParser.hpp">
+      <Filter>Service Class Users</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DataSourceCreator.inl">
@@ -224,6 +287,123 @@
     </None>
     <None Include="Resources\Texts\Build Number.txt">
       <Filter>Resources\Texts</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Generic.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5302.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5300.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5500.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5503.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_AXYS.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5700.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5800.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5850.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_5950.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_6800.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_6850.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_8150.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_8900.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Carestream_DryView_Chroma.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Codonics_Horizon_v2.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_1000.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_2000.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_3000.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_4000.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_5000.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_7000.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_FMDPL.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_722.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_751.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_752.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_771.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_793.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_832.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_873.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_970AD.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_990AD.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D72XR.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D74XRD.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D77MD.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_D897.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF500.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF550.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF750.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -268,5 +448,10 @@
     <QtMoc Include="DataSource.hpp">
       <Filter>Data Objects</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRc Include="Resources\QDicomPrinterDrivers.qrc">
+      <Filter>Resources</Filter>
+    </QtRc>
   </ItemGroup>
 </Project>

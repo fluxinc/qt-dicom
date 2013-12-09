@@ -78,7 +78,7 @@ class QDICOM_DLLSPEC RequestorAssociation : public Association {
 		);
 		int request(
 			const UidList & abstractSyntaxes,
-			const UidList & transferSyntaxes = UidList(),
+			const UidList & transferSyntaxes,
 			bool * timedOut = 0
 		);
 		int request(
@@ -90,13 +90,18 @@ class QDICOM_DLLSPEC RequestorAssociation : public Association {
 		int request(
 			const ConnectionParameters & parameters,
 			const UidList & abstractSyntaxes,
-			const UidList & transferSyntaxes = UidList(),
+			const UidList & transferSyntaxes,
 			bool * timedOut = 0
 		);
 		int request(
 			const ConnectionParameters & parameters,
 			const UidList & abstractSyntaxes,
-			bool * timedOut
+			bool * timedOut = nullptr
+		);
+		int request(
+			const ConnectionParameters & parameters,
+			const QByteArray & abstractSyntax,
+			bool * timedOut = nullptr
 		);
 
 	private :

@@ -725,7 +725,7 @@ bool Dataset::toDicomFile( const QString & FilePath, QString * message ) const {
 void Dataset::setAttribute( const QDicomTag & Tag, const QStringList & Values ) {
 	const std::string Value = Values.join( "\\" ).toStdString();
 
-	const OFCondition Status = dcmDataset().putAndInsertOFStringArray(
+	const OFCondition Status = dcmDataset().putAndInsertString(
 		DcmTag( Tag.group(), Tag.element() ), Value.c_str()
 	);
 	if ( Status.good() ) {

@@ -40,7 +40,7 @@ class QDICOM_DLLSPEC AbstractService {
 		/**
 		 * Returns error string of last error.
 		 */
-		const QString & errorMessage() const;
+		const QString & errorString() const;
 
 		/**
 		 * Returns \c true when error occured during last operation.
@@ -51,6 +51,13 @@ class QDICOM_DLLSPEC AbstractService {
 		 * Sets \a association to be used by DIMSE messages.
 		 */
 		void setAssociation( Association * association );
+
+	protected :
+		/**
+		 * Returns name of a DIMSE \a command. The \a command parameter is 
+		 * DCMTK's enumerator value.
+		 */
+		static const char * commandName( int command );
 
 	protected :
 		AbstractService();
@@ -129,16 +136,18 @@ class QDICOM_DLLSPEC AbstractService {
 			const T_DIMSE_Message & command, const Dataset & dataset, unsigned char ID
 		);
 
+	private :
+
 		/**
-		 * Returns name of a DIMSE \a command. The \a command parameter is 
-		 * DCMTK's enumerator value.
+		 * Callback for the \ref sendCommand(), \ref receiveCommand() and \ref 
+		 * receiveDataset() methods, set to process Qt events if application is
+		 * running.
 		 */
-		static const char * commandName( int command );
+		static void progressCallback( void * data, unsigned long bytes );
 
 	private :
 		Association * association_;
-		bool errorFlag_;
-		QString errorMessage_;
+		QString errorString_;
 };
 
 }; // Namespace DICOM ends here.

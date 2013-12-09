@@ -186,7 +186,7 @@ void QueryScp::ReceiverThread::run() {
 	}
 
 	if ( hasError() ) {
-		emit failedToQuery( errorMessage(), this );
+		emit failedToQuery( errorString(), this );
 	}
 }
 

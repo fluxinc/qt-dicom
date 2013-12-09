@@ -3,8 +3,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="QtDicomTest.cpp" />
+    <ClCompile Include="PrintTester.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <MocSource Include="QtDicomTest.hpp" />
+    <QtMoc Include="QtDicomTest.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PrintTester.hpp" />
   </ItemGroup>
 </Project>

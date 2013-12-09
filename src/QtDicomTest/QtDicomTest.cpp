@@ -5,8 +5,11 @@
 
 #include "QtDicomTest.hpp"
 
-#include <QtDicom/RequestorAssociation.hpp>
 
+
+void QtDicomTest::testQDicomPrinter() {
+
+}
 
 void QtDicomTest::testRequestorAssociation() {
 }
