@@ -5,6 +5,7 @@
 
 #include "QTransferSyntax.hpp"
 #include "QUid.hpp"
+#include "Utilities.hpp"
 
 #include <QtCore/QHash>
 #include <QtCore/QVector>
@@ -52,105 +53,121 @@ bool QTransferSyntax::operator != ( const QTransferSyntax & Ts ) const {
 }*/
 
 
-QTransferSyntax QTransferSyntax::fromName( const QString & String ) {
-	Id id = Unknown;
-	if ( false ) {
+QTransferSyntax QTransferSyntax::fromName( const QString & Name ) {
+	static QHash< QString, QTransferSyntax > * syntaxes = nullptr;
+
+	::qInitializeOnce( syntaxes, []() throw() -> QHash< QString, QTransferSyntax > {
+		QHash< QString, QTransferSyntax > result;
+
+#define SET( LABEL ) { \
+		const QTransferSyntax Ts = QTransferSyntax::LABEL; \
+		result[ Ts.name() ] = Ts; \
 	}
-#define ELSEIF( TS ) \
-	else if ( String.compare( name( TS ), Qt::CaseInsensitive ) == 0 ) \
-		id = TS
 
-	ELSEIF( LittleEndianImplicit );
-	ELSEIF( LittleEndian );
-	ELSEIF( LittleEndianDeflated );
-	ELSEIF( BigEndian );
-	ELSEIF( JpegProcess1 );
-	ELSEIF( JpegProcess2_4 );
-	ELSEIF( JpegProcess3_5 );
-	ELSEIF( JpegProcess6_8 );
-	ELSEIF( JpegProcess7_9 );
-	ELSEIF( JpegProcess10_12 );
-	ELSEIF( JpegProcess11_13 );
-	ELSEIF( JpegProcess14 );
-	ELSEIF( JpegProcess15 );
-	ELSEIF( JpegProcess16_18 );
-	ELSEIF( JpegProcess17_19 );
-	ELSEIF( JpegProcess20_22 );
-	ELSEIF( JpegProcess21_23 );
-	ELSEIF( JpegProcess24_26 );
-	ELSEIF( JpegProcess25_27 );
-	ELSEIF( JpegProcess28 );
-	ELSEIF( JpegProcess29 );
-	ELSEIF( JpegProcess14Sv1 );
-	ELSEIF( JpegLsLossless );
-	ELSEIF( JpegLsLossy );
-	ELSEIF( Jpeg2000Lossless );
-	ELSEIF( Jpeg2000Lossy );
-	ELSEIF( Jpeg2000P2Lossless );
-	ELSEIF( Jpeg2000P2Lossy );
-	ELSEIF( Jpip );
-	ELSEIF( JpipDeflated );
-	ELSEIF( Mpeg2Main );
-	ELSEIF( Mpeg2High );
-	ELSEIF( Mpeg4 );
-	ELSEIF( Mpeg4Bd );
-	ELSEIF( Rle );
-	ELSEIF( Mime );
-	ELSEIF( Xml );
-#undef ELSEIF
+		SET( LittleEndianImplicit );
+		SET( LittleEndian );
+		SET( LittleEndianDeflated );
+		SET( BigEndian );
+		SET( JpegProcess1 );
+		SET( JpegProcess2_4 );
+		SET( JpegProcess3_5 );
+		SET( JpegProcess6_8 );
+		SET( JpegProcess7_9 );
+		SET( JpegProcess10_12 );
+		SET( JpegProcess11_13 );
+		SET( JpegProcess14 );
+		SET( JpegProcess15 );
+		SET( JpegProcess16_18 );
+		SET( JpegProcess17_19 );
+		SET( JpegProcess20_22 );
+		SET( JpegProcess21_23 );
+		SET( JpegProcess24_26 );
+		SET( JpegProcess25_27 );
+		SET( JpegProcess28 );
+		SET( JpegProcess29 );
+		SET( JpegProcess14Sv1 );
+		SET( JpegLsLossless );
+		SET( JpegLsLossy );
+		SET( Jpeg2000Lossless );
+		SET( Jpeg2000Lossy );
+		SET( Jpeg2000P2Lossless );
+		SET( Jpeg2000P2Lossy );
+		SET( Jpip );
+		SET( JpipDeflated );
+		SET( Mpeg2Main );
+		SET( Mpeg2High );
+		SET( Mpeg4 );
+		SET( Mpeg4Bd );
+		SET( Rle );
+		SET( Mime );
+		SET( Xml );
+#undef SET
 
-	return id;
+		return result;
+	} );
+
+	Q_ASSERT( syntaxes != nullptr );
+
+	return syntaxes->value( Name, QTransferSyntax() );
 }
 
 
 QTransferSyntax QTransferSyntax::fromUid( const QByteArray & Uid ) {
-	Id id = Unknown;
-	if ( false ) {
+	static QHash< QByteArray, QTransferSyntax > * syntaxes = nullptr;
+
+	::qInitializeOnce( syntaxes, []() throw() -> QHash< QByteArray, QTransferSyntax > {
+		QHash< QByteArray, QTransferSyntax > result;
+
+#define SET( LABEL ) { \
+		const QTransferSyntax Ts = QTransferSyntax::LABEL; \
+		result[ Ts.uid() ] = Ts; \
 	}
-#define ELSEIF( TS ) \
-	else if ( QByteArray( Uid ).trimmed() == uid( TS ) ) \
-		id = TS
 
-	ELSEIF( LittleEndianImplicit );
-	ELSEIF( LittleEndian );
-	ELSEIF( LittleEndianDeflated );
-	ELSEIF( BigEndian );
-	ELSEIF( JpegProcess1 );
-	ELSEIF( JpegProcess2_4 );
-	ELSEIF( JpegProcess3_5 );
-	ELSEIF( JpegProcess6_8 );
-	ELSEIF( JpegProcess7_9 );
-	ELSEIF( JpegProcess10_12 );
-	ELSEIF( JpegProcess11_13 );
-	ELSEIF( JpegProcess14 );
-	ELSEIF( JpegProcess15 );
-	ELSEIF( JpegProcess16_18 );
-	ELSEIF( JpegProcess17_19 );
-	ELSEIF( JpegProcess20_22 );
-	ELSEIF( JpegProcess21_23 );
-	ELSEIF( JpegProcess24_26 );
-	ELSEIF( JpegProcess25_27 );
-	ELSEIF( JpegProcess28 );
-	ELSEIF( JpegProcess29 );
-	ELSEIF( JpegProcess14Sv1 );
-	ELSEIF( JpegLsLossless );
-	ELSEIF( JpegLsLossy );
-	ELSEIF( Jpeg2000Lossless );
-	ELSEIF( Jpeg2000Lossy );
-	ELSEIF( Jpeg2000P2Lossless );
-	ELSEIF( Jpeg2000P2Lossy );
-	ELSEIF( Jpip );
-	ELSEIF( JpipDeflated );
-	ELSEIF( Mpeg2Main );
-	ELSEIF( Mpeg2High );
-	ELSEIF( Mpeg4 );
-	ELSEIF( Mpeg4Bd );
-	ELSEIF( Rle );
-	ELSEIF( Mime );
-	ELSEIF( Xml );
-#undef ELSEIF
+		SET( LittleEndianImplicit );
+		SET( LittleEndian );
+		SET( LittleEndianDeflated );
+		SET( BigEndian );
+		SET( JpegProcess1 );
+		SET( JpegProcess2_4 );
+		SET( JpegProcess3_5 );
+		SET( JpegProcess6_8 );
+		SET( JpegProcess7_9 );
+		SET( JpegProcess10_12 );
+		SET( JpegProcess11_13 );
+		SET( JpegProcess14 );
+		SET( JpegProcess15 );
+		SET( JpegProcess16_18 );
+		SET( JpegProcess17_19 );
+		SET( JpegProcess20_22 );
+		SET( JpegProcess21_23 );
+		SET( JpegProcess24_26 );
+		SET( JpegProcess25_27 );
+		SET( JpegProcess28 );
+		SET( JpegProcess29 );
+		SET( JpegProcess14Sv1 );
+		SET( JpegLsLossless );
+		SET( JpegLsLossy );
+		SET( Jpeg2000Lossless );
+		SET( Jpeg2000Lossy );
+		SET( Jpeg2000P2Lossless );
+		SET( Jpeg2000P2Lossy );
+		SET( Jpip );
+		SET( JpipDeflated );
+		SET( Mpeg2Main );
+		SET( Mpeg2High );
+		SET( Mpeg4 );
+		SET( Mpeg4Bd );
+		SET( Rle );
+		SET( Mime );
+		SET( Xml );
+#undef SET
 
-	return QTransferSyntax( id );
+		return result;
+	} );
+
+	Q_ASSERT( syntaxes != nullptr );
+
+	return syntaxes->value( Uid, QTransferSyntax() );
 }
 
 
@@ -229,79 +246,79 @@ const QString & QTransferSyntax::name( Id Ts ) {
 
 #define SET( VAL, STR ) \
 	Q_ASSERT( QTransferSyntax::VAL <= Last ); \
-	result[ QTransferSyntax::VAL ] = STR
+	result[ QTransferSyntax::VAL ] = ::WArrayString( STR )
 
-		SET( Unknown, "UNKNOWN TRANSFER SYNTAX" );
+		SET( Unknown, L"UNKNOWN TRANSFER SYNTAX" );
 
-		SET( LittleEndianImplicit, "Implicit VR Little Endian" );
-		SET( LittleEndian,         "Explicit VR Little Endian" );
-		SET( LittleEndianDeflated, "Deflated Explicit VR Little Endian" );
-		SET( BigEndian,            "Explicit VR Big Endian" );
+		SET( LittleEndianImplicit, L"Implicit VR Little Endian" );
+		SET( LittleEndian,         L"Explicit VR Little Endian" );
+		SET( LittleEndianDeflated, L"Deflated Explicit VR Little Endian" );
+		SET( BigEndian,            L"Explicit VR Big Endian" );
 
 		SET( JpegProcess1,
-			"JPEG Baseline (Process 1)" );
+			L"JPEG Baseline (Process 1)" );
 		SET( JpegProcess2_4,
-			"JPEG Extended (Process 2 & 4)" );
+			L"JPEG Extended (Process 2 & 4)" );
 		SET( JpegProcess3_5,
-			"JPEG Extended (Process 3 & 5)" );
+			L"JPEG Extended (Process 3 & 5)" );
 		SET( JpegProcess6_8,
-			"JPEG Spectral Selection, Non-Hierarchical (Process 6 & 8)" );
+			L"JPEG Spectral Selection, Non-Hierarchical (Process 6 & 8)" );
 		SET( JpegProcess7_9,
-			"JPEG Spectral Selection, Non-Hierarchical (Process 7 & 9)" );
+			L"JPEG Spectral Selection, Non-Hierarchical (Process 7 & 9)" );
 		SET( JpegProcess10_12,
-			"JPEG Full Progression, Non-Hierarchical (Process 10 & 12)" );
+			L"JPEG Full Progression, Non-Hierarchical (Process 10 & 12)" );
 		SET( JpegProcess11_13,
-			"JPEG Full Progression, Non-Hierarchical (Process 11 & 13)" );
+			L"JPEG Full Progression, Non-Hierarchical (Process 11 & 13)" );
 		SET( JpegProcess14,
-			"JPEG Lossless, Non-Hierarchical (Process 14)" );
+			L"JPEG Lossless, Non-Hierarchical (Process 14)" );
 		SET( JpegProcess15,
-			"JPEG Lossless, Non-Hierarchical (Process 15)" );
+			L"JPEG Lossless, Non-Hierarchical (Process 15)" );
 		SET( JpegProcess16_18,
-			"JPEG Extended, Hierarchical (Process 16 & 18)" );
+			L"JPEG Extended, Hierarchical (Process 16 & 18)" );
 		SET( JpegProcess17_19,
-			"JPEG Extended, Hierarchical (Process 17 & 19)" );
+			L"JPEG Extended, Hierarchical (Process 17 & 19)" );
 		SET( JpegProcess20_22,
-			"JPEG Spectral Selection, Hierarchical (Process 20 & 22)" );
+			L"JPEG Spectral Selection, Hierarchical (Process 20 & 22)" );
 		SET( JpegProcess21_23,
-			"JPEG Spectral Selection, Hierarchical (Process 21 & 23)" );
+			L"JPEG Spectral Selection, Hierarchical (Process 21 & 23)" );
 		SET( JpegProcess24_26,
-			"JPEG Full Progression, Hierarchical (Process 24 & 26)" );
+			L"JPEG Full Progression, Hierarchical (Process 24 & 26)" );
 		SET( JpegProcess25_27,
-			"JPEG Full Progression, Hierarchical (Process 25 & 27)" );
+			L"JPEG Full Progression, Hierarchical (Process 25 & 27)" );
 		SET( JpegProcess28,
-			"JPEG Lossless, Hierarchical (Process 28)" );
+			L"JPEG Lossless, Hierarchical (Process 28)" );
 		SET( JpegProcess29,
-			"JPEG Lossless, Hierarchical (Process 29)" );
+			L"JPEG Lossless, Hierarchical (Process 29)" );
 		SET( JpegProcess14Sv1,
-			"JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14 "
-			"[Selection Value 1])" );
+			L"JPEG Lossless, Non-Hierarchical, First-Order Prediction (Process 14 "
+			L"[Selection Value 1])" );
 
-		SET( JpegLsLossless, "JPEG-LS Lossless Image Compression" );
-		SET( JpegLsLossy,    "JPEG-LS Lossy (Near-Lossless) Image Compression" );
+		SET( JpegLsLossless, L"JPEG-LS Lossless Image Compression" );
+		SET( JpegLsLossy,    L"JPEG-LS Lossy (Near-Lossless) Image Compression" );
 
 		SET( Jpeg2000Lossless,
-			"JPEG 2000 Image Compression (Lossless Only)" );
+			L"JPEG 2000 Image Compression (Lossless Only)" );
 		SET( Jpeg2000Lossy,
-			"JPEG 2000 Image Compression" );
+			L"JPEG 2000 Image Compression" );
 		SET( Jpeg2000P2Lossless,
-			"JPEG 2000 Part 2 Multi-component Image Compression (Lossless Only)" );
+			L"JPEG 2000 Part 2 Multi-component Image Compression (Lossless Only)" );
 		SET( Jpeg2000P2Lossy,
-			"JPEG 2000 Part 2 Multi-component Image Compression" );
+			L"JPEG 2000 Part 2 Multi-component Image Compression" );
 
-		SET( Jpip,         "JPIP Referenced" );
-		SET( JpipDeflated, "JPIP Referenced Deflate" );
+		SET( Jpip,         L"JPIP Referenced" );
+		SET( JpipDeflated, L"JPIP Referenced Deflate" );
 
-		SET( Mpeg2Main, "MPEG2 Main Profile @ Main Level" );
-		SET( Mpeg2High, "MPEG2 Main Profile @ High Level" );
+		SET( Mpeg2Main, L"MPEG2 Main Profile @ Main Level" );
+		SET( Mpeg2High, L"MPEG2 Main Profile @ High Level" );
 
-		SET( Mpeg4,   "MPEG-4 AVC/H.264 High Profile / Level 4.1" );
-		SET( Mpeg4Bd, "MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1" );
+		SET( Mpeg4,   L"MPEG-4 AVC/H.264 High Profile / Level 4.1" );
+		SET( Mpeg4Bd, L"MPEG-4 AVC/H.264 BD-compatible High Profile / Level 4.1" );
 
-		SET( Rle, "RLE Lossless" );
+		SET( Rle, L"RLE Lossless" );
 
-		SET( Mime, "RFC 2557 MIME encapsulation" );
+		SET( Mime, L"RFC 2557 MIME encapsulation" );
 
-		SET( Xml, "XML Encoding" );
+		SET( Xml, L"XML Encoding" );
 #undef SET
 
 		return result;
@@ -317,11 +334,6 @@ const QString & QTransferSyntax::name( Id Ts ) {
 int QTransferSyntax::toInt() const {
 	return id_;
 }*/
-
-
-QString QTransferSyntax::toString() const {
-	return QString( "%1" ).arg( name() );
-}
 
 
 const QByteArray & QTransferSyntax::uid() const {

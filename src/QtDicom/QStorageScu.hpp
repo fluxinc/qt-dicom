@@ -61,7 +61,7 @@ namespace Dicom {
  * established) and nullify any further requests to store. Only another call to
  * \ref connectToAe() can reset the error flag. Note, that if error is reported
  * when SCU is connected to SCP, the \ref error() signal is immediately
- * followed by \ref disconnected()
+ * followed by \ref disconnected().
  *
  * \author Paweł Żak <pawel.zak@fluxinc.ca>
  */

@@ -84,6 +84,11 @@ QDicomTag QDicomTag::fromString( const QString & Value ) {
 }
 
 
+QDicomTag QDicomTag::fromUInt32( const quint32 & Value ) {
+	return QDicomTag( static_cast< Id >( Value ) );
+}
+
+
 quint16 QDicomTag::group() const {
 	return static_cast< quint16 > ( id_ >> 16 );
 }

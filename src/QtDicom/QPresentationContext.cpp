@@ -50,7 +50,7 @@ void QPresentationContext::accept( const QTransferSyntax & Ts ) {
 	if ( data_->acceptedTransferSyntaxPosition_ == -1 ) {
 		qWarning( __FUNCTION__": "
 			"transfer syntax %s is not a part of this presentation context",
-			qPrintable( Ts.toString() )
+			qPrintable( Ts.name() )
 		);
 	}
 }
@@ -82,7 +82,7 @@ void QPresentationContext::addTransferSyntax( const QTransferSyntax & Ts ) {
 		else {
 			qWarning( __FUNCTION__": "
 				"this presentation context includes %s transfer syntax already",
-				qPrintable( Ts.toString() )
+				qPrintable( Ts.name() )
 			);
 		}
 	}
@@ -168,7 +168,7 @@ void QPresentationContext::setAbstractSyntax( const QUid & Uid ) {
 QString QPresentationContext::toString() const {
 	QStringList tsNames;
 	foreach( const QTransferSyntax & ts, data_->transferSyntaxes_ ) {
-		tsNames.append( ts.toString() );
+		tsNames.append( ts.name() );
 	}
 	
 	return QString(
@@ -178,5 +178,5 @@ QString QPresentationContext::toString() const {
 	)
 	.arg( dcmFindNameOfUID( data_->abstractSyntax_, data_->abstractSyntax_ ) )
 	.arg( tsNames.join( ", " ) )
-	.arg( accepted() ? acceptedTransferSyntax().toString() : QString( "<None>" ) );
+	.arg( accepted() ? acceptedTransferSyntax().name() : QString( "<None>" ) );
 }

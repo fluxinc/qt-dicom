@@ -42,7 +42,7 @@ catch {
     New-Item -ItemType Directory -Force "$Dst\lib" | Out-Null
     ( "QtDicom4", "QtDicomd4" ) | % {
         $BaseName = $_
-        ( "lib", "dll", "pdb" ) | % {
+        ( "lib", "dll", "pdb", "exp" ) | % {
             Copy-Item -force "$Root\lib\$Arch\$BaseName.$_" "$Dst\lib" | Out-Null
         }
     }
@@ -50,7 +50,7 @@ catch {
     New-Item -ItemType Directory -Force "$Dst\bin" | Out-Null
     ( "QtDicom4", "QtDicomd4" ) | % {
         $BaseName = $_
-        ( "lib", "dll", "pdb" ) | % {
+        ( "dll", "pdb" ) | % {
             Copy-Item -Force "$Root\lib\$Arch\$BaseName.$_" "$Dst\bin" | Out-Null
         }
     }

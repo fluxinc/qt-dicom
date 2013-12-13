@@ -87,27 +87,27 @@ QString RequestorAssociation::parametersText() const {
 
 
 bool RequestorAssociation::release() {	
-	if ( ! ( tAscAssociation() && isEstablished() ) ) {
-		qWarning( "Association hasn't been established yet." );
+	if ( tAscAssociation() && isEstablished() ) {
+		const OFCondition Result = ASC_releaseAssociation( tAscAssociation() );
+		setState( Disconnected );
 
-		return false;
-	}
-
-	const OFCondition Result = ASC_releaseAssociation( tAscAssociation() );
-	setState( Disconnected );
-
-	if ( Result.good() ) {
-		return true;
+		if ( Result.good() ) {
+			return true;
+		}
+		else {
+			raiseError(
+				QString( 
+					"Error occured when releasing association. "
+					"Internal error description:\n%1"
+				)
+				.arg( Result.text() )
+			);
+			return false;
+		}
 	}
 	else {
-		raiseError(
-			QString( 
-				"Error occured when releasing association. "
-				"Internal error description:\n%1"
-			)
-			.arg( Result.text() )
-		);
-		return false;
+		qDebug( "Association hasn't been established" );
+		return true;
 	}
 }
 

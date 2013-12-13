@@ -158,40 +158,55 @@ Dataset Dataset::convertedToTransferSyntax( const QTransferSyntax & DstTs, int q
 			QDicomImageCodec codec = 
 				QDicomImageCodec::forTransferSyntax( DstTs )
 			;
-			if ( codec.isValid() ) {
-				if ( codec.hasFeature( QDicomImageCodec::Quality ) && quality > 0 ) {
-					codec.setQuality( quality );
-				}
+			const DcmRepresentationParameter * params = nullptr;
+			if ( DstTs.isCompressed() ) {
+				Q_ASSERT( codec.isValid() );
+				if ( codec.isValid() ) {
+					const bool UpdateQuality = 
+						codec.hasFeature( QDicomImageCodec::Quality ) && 
+						quality > 0
+					;
 
-				const OFCondition Converted = newDset.chooseRepresentation( 
-					DcmXfer( DstTs.uid() ).getXfer(), &codec.dcmParameters()
-				);
+					if ( UpdateQuality ) {
+						codec.setQuality( quality );
+					}
 
-				if ( Converted.good() ) {
-					newDset.removeAllButCurrentRepresentations();
-					result.setDcmDataset( newDset );
-
-					Q_ASSERT( result.syntax() == DstTs );
-					return result;
+					params = &codec.dcmParameters();
 				}
 				else {
 					qCritical( __FUNCTION__": "
-						"failed to convert from %s to %s; %s",
-						SrcTs.name(), DstTs.name(), Converted.text()
+						"no codec for %s transfer syntax",
+						qPrintable( DstTs.name() )
 					);
 				}
 			}
+				
+
+			const OFCondition Converted = newDset.chooseRepresentation( 
+				DcmXfer( DstTs.uid() ).getXfer(), params
+			);
+
+			if ( Converted.good() ) {
+				newDset.removeAllButCurrentRepresentations();
+				result.setDcmDataset( newDset );
+
+				Q_ASSERT( result.syntax() == DstTs );
+				return result;
+			}
 			else {
 				qCritical( __FUNCTION__": "
-					"no codec for %s transfer syntax",
-					DstTs.name()
+					"failed to convert from %s to %s; %s",
+					qPrintable( SrcTs.name() ),
+					qPrintable( DstTs.name() ),
+					Converted.text()
 				);
 			}
 		}
 		else {
 			qCritical( __FUNCTION__": "
 				"conversion from %s to %s is unsupported",
-				SrcTs.name(), DstTs.name()
+				qPrintable( SrcTs.name() ),
+				qPrintable( DstTs.name() )
 			);
 		}
 

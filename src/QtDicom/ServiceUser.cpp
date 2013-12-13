@@ -352,7 +352,7 @@ bool ServiceUser::cStore(
 				"matching SOP Class: %1 and Transfer Syntax: %2"
 			)
 			.arg( SopClass.constData() )
-			.arg( TransferSyntax.toString() )
+			.arg( TransferSyntax.name() )
 		);
 	}
 

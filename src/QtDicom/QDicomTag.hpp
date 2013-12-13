@@ -100,6 +100,7 @@ class QDICOM_DLLSPEC QDicomTag {
 
 	public :
 		static QDicomTag fromString( const QString & );
+		static QDicomTag fromUInt32( const quint32 & );
 
 	public :
 		QDicomTag();

@@ -39,7 +39,11 @@ QStorageScu::QStorageScu( QObject * parent ) :
 
 
 QStorageScu::~QStorageScu() {
-	releaseAssociation();
+	if ( association().isEstablished() ) {
+		qWarning( 
+			"Destroying a Storage SCU client while association is still open"
+		);
+	}
 }
 
 
@@ -128,7 +132,8 @@ void QStorageScu::connectToAe() {
 			__FUNCTION__": called when the previous connection is still open; "
 			"disconnecting"
 		);
-		releaseAssociation();
+		association().release();
+		setState( Disconnected );
 	}
 
 	if ( association().connectionParameters().isValid() ) {
@@ -245,9 +250,7 @@ QList< QPresentationContext > QStorageScu::preparePresentationContexts() const {
 
 
 void QStorageScu::releaseAssociation() {
-	if ( association().isEstablished() ) {
-		association().release();
-	}
+	association().release();
 
 	setState( Disconnected );
 }
@@ -283,8 +286,11 @@ void QStorageScu::requestAssociation() {
 		setError( AssociationError );
 	}
 	else if ( Count == 0 || ! allSopClassesAccepted ) {
-		setError( SopClassNotSupported );
+		// Release the association first
 		association().release();
+
+		// Then signal an error
+		setError( SopClassNotSupported );
 	}
 
 	setState( Disconnected );
@@ -351,9 +357,9 @@ void QStorageScu::store( Dicom::Dataset dataset ) {
 			dataset.sopInstanceUid().constData(),
 			qPrintable( sopClassString( SopClass ) )
 		);
+		association().release();
 		setError( InvalidSopClass );
-
-		releaseAssociation();
+		setState( Disconnected );
 	}
 }
 
@@ -376,9 +382,9 @@ void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
 			qWarning( __FUNCTION__": "
 				"SCP doesn't support preferred Transfer Syntax: %s "
 				"for SOP class: %s; the default: %s will be used instead",
-				transferSyntax_.name(),
+				qPrintable( transferSyntax_.name() ),
 				SopClass.constData(),
-				AcceptedTs.at( 0 ).name()
+				qPrintable( AcceptedTs.at( 0 ).name() )
 			);
 		}
 
@@ -394,7 +400,8 @@ void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
 					if ( ! Tmp.isEmpty() ) {
 						qDebug( __FUNCTION__": "
 							"converted Data Set from %s to negotiated %s transfer syntax",
-							dataset.syntax().name(), i->name()
+							qPrintable( dataset.syntax().name() ),
+							qPrintable( i->name() )
 						);
 
 						dataset = Tmp;
@@ -404,7 +411,8 @@ void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
 					else {
 						qWarning( __FUNCTION__": "
 							"failed to convert Data Set from %s to %s transfer syntax",
-							dataset.syntax().name(), i->name()
+							qPrintable( dataset.syntax().name() ),
+							qPrintable( i->name() )
 						);
 					}
 				}				
@@ -415,11 +423,13 @@ void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
 					"Data Set's: %s Transfer Syntax: %s "
 					"cannot be converted to those accpeted by SCP",
 					dataset.sopInstanceUid().constData(),
-					dataset.syntax().name()
+					qPrintable( dataset.syntax().name() )
 				);
-				setError( InvalidTransferSyntax );
 
-				releaseAssociation();
+				association().release();
+
+				setError( InvalidTransferSyntax );
+				setState( Disconnected );
 				return;
 			}
 		}
@@ -434,9 +444,10 @@ void QStorageScu::storeDataset( Dicom::Dataset dataset ) {
 			setState( Connected );
 		}
 		else {
-			setError( DimseError );
+			association().release();
 
-			releaseAssociation();
+			setError( DimseError );
+			setState( Disconnected );
 		}
 	}
 	else {

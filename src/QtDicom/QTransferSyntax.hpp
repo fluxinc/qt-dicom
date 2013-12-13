@@ -134,7 +134,6 @@ class QDICOM_DLLSPEC QTransferSyntax {
 		bool isValid() const;
 		const QString & name() const;
 		//int toInt() const;
-		QString toString() const;
 		const QByteArray & uid() const;
 
 	private :

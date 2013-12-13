@@ -116,9 +116,11 @@ void AbstractService::ignoreDataset() {
 void AbstractService::progressCallback( void * data, unsigned long count ) {
 	qDebug( __FUNCTION__" : with %ld bytes", count );
 
+	/*
 	if ( qApp != nullptr ) {
 		qApp->processEvents();
 	}
+	*/
 }
 
 
