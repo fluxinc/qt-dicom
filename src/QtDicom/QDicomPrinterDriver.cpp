@@ -21,11 +21,10 @@
 
 /**
  * Returns offset within the Data::PrintableAreas table where printable area for
- * particular film size, orientation and quality is stored.
+ * particular film size and quality is stored.
  */
 static int PrintableAreasTableOffset(
 	const QDicomPrinter::FilmSize &,
-	const QDicomPrinter::Orientation &,
 	const QDicomPrinter::Quality &
 );
 
@@ -65,7 +64,9 @@ QDicomPrinterDriver::availableDirvers()
 					qWarning( "Invalid driver " ## #DEVICE ## "; %s", qPrintable( message ) );\
 			}
 
-			ADD( Generic );
+#ifdef _DEBUG
+			ADD( Debug );
+#endif
 
 			ADD( Agfa_DRYSTAR_5300 );
 			ADD( Agfa_DRYSTAR_5302 );
@@ -143,7 +144,9 @@ const QDicomPrinterDriver::Features & QDicomPrinterDriver::features() const {
 }
 
 
-const QList< quint16 > & QDicomPrinterDriver::filmDestinations() const {
+const QList< QDicomPrinter::FilmDestination > &
+QDicomPrinterDriver::filmDestinations() const
+{
 	return data().FilmDestinations;
 }
 
@@ -153,10 +156,10 @@ const QList< QDicomPrinter::FilmSize > & QDicomPrinterDriver::filmSizes() const 
 }
 
 
-const QDicomPrinterDriver & QDicomPrinterDriver::forDevice(
-	const QDicomPrinter::Device & D  
+QDicomPrinterDriver QDicomPrinterDriver::forDevice(
+	const QDicomPrinter::Device & Device
 ) {
-	return availableDirvers()[ D ];
+	return availableDirvers().value( Device, QDicomPrinterDriver() );
 }
 
 
@@ -213,8 +216,8 @@ bool QDicomPrinterDriver::isNull() const {
 		magnificationTypes().isEmpty() &&
 		mediumTypes().isEmpty() &&
 		modelName().isEmpty() &&
-		resolution( QDicomPrinter::High ) == 0 &&
-		resolution( QDicomPrinter::Normal ) == 0 &&
+		resolution( QDicomPrinter::HighQuality ) == 0 &&
+		resolution( QDicomPrinter::NormalQuality ) == 0 &&
 		vendorName().isEmpty()
 	;
 }
@@ -228,8 +231,8 @@ bool QDicomPrinterDriver::isValid() const {
 		magnificationTypes().size() > 0 &&
 		mediumTypes().size() > 0 &&
 		modelName().size() > 0 &&
-		resolution( QDicomPrinter::High ) != 0 &&
-		resolution( QDicomPrinter::Normal ) != 0 &&
+		resolution( QDicomPrinter::HighQuality ) != 0 &&
+		resolution( QDicomPrinter::NormalQuality ) != 0 &&
 		vendorName().size() > 0
 	;
 }
@@ -258,11 +261,10 @@ const QString & QDicomPrinterDriver::modelName() const {
 
 const QSize & QDicomPrinterDriver::printableArea(
 	const QDicomPrinter::FilmSize & FilmSize,
-	const QDicomPrinter::Orientation & Orientation,
 	const QDicomPrinter::Quality & Quality
 ) const {
 	const int Offset = ::PrintableAreasTableOffset(
-		FilmSize, Orientation, Quality
+		FilmSize, Quality
 	);
 	Q_ASSERT( Offset < Data::MaxAreas );
 
@@ -294,7 +296,9 @@ void QDicomPrinterDriver::setFeatures( const Features & Features ) {
 }
 
 
-void QDicomPrinterDriver::setFilmDestinations( const QList< quint16 > & Value ) {
+void QDicomPrinterDriver::setFilmDestinations(
+	const QList< QDicomPrinter::FilmDestination > & Value
+) {
 	data().FilmDestinations = Value;
 }
 
@@ -331,7 +335,6 @@ void QDicomPrinterDriver::setModelName( const QString & Name ) {
 
 
 void QDicomPrinterDriver::setPrintableAreas(
-	const QDicomPrinter::Orientation & Orientation,
 	const QDicomPrinter::Quality & Quality,
 	const QMap< QDicomPrinter::FilmSize, QSize > & Map 
 ) {
@@ -342,7 +345,7 @@ void QDicomPrinterDriver::setPrintableAreas(
 		i != Map.constEnd(); ++i
 	) {
 		const int Offset = ::PrintableAreasTableOffset(
-			i.key(), Orientation, Quality
+			i.key(), Quality
 		);
 		Areas[ Offset ] = i.value();
 	}
@@ -354,8 +357,8 @@ void QDicomPrinterDriver::setResolutions(
 ) {
 	quint16 ( &Resolutions)[ 2 ] = data().Resolutions;
 
-	Resolutions[ ::ResolutionsTableOffset( QDicomPrinter::Normal ) ] = Normal;
-	Resolutions[ ::ResolutionsTableOffset( QDicomPrinter::High   ) ] = High;
+	Resolutions[ ::ResolutionsTableOffset( QDicomPrinter::NormalQuality ) ] = Normal;
+	Resolutions[ ::ResolutionsTableOffset( QDicomPrinter::HighQuality   ) ] = High;
 }
 
 
@@ -384,23 +387,17 @@ QDicomPrinterDriver::Data::Data() :
 
 inline int PrintableAreasTableOffset(
 	const QDicomPrinter::FilmSize & FilmSize,
-	const QDicomPrinter::Orientation & Orientation,
 	const QDicomPrinter::Quality & Quality
 ) {
 	Q_ASSERT( FilmSize < 0x10 );
 	Q_ASSERT(
-		Orientation == QDicomPrinter::Horizontal ||
-		Orientation == QDicomPrinter::Vertical
-	);
-	Q_ASSERT(
-		Quality == QDicomPrinter::Normal ||
-		Quality == QDicomPrinter::High
+		Quality == QDicomPrinter::NormalQuality ||
+		Quality == QDicomPrinter::HighQuality
 	);
 
 	const int Offset =
 		( FilmSize & 0x0F ) |
-		( Orientation == QDicomPrinter::Vertical ? 0x10 : 0x00 ) |
-		( Quality == QDicomPrinter::High ? 0x20 : 0x00 )
+		( Quality == QDicomPrinter::HighQuality ? 0x10 : 0x00 )
 	;
 
 	return Offset;
@@ -410,5 +407,5 @@ inline int PrintableAreasTableOffset(
 inline int ResolutionsTableOffset(
 	const QDicomPrinter::Quality & Quality
 ) {
-	return Quality == QDicomPrinter::Normal ? 0 : 1;
+	return Quality == QDicomPrinter::NormalQuality ? 0 : 1;
 }

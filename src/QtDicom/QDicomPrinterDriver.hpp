@@ -67,7 +67,7 @@ class QDICOM_DLLSPEC QDicomPrinterDriver {
 			const QString & Path, QString * message = nullptr
 		);
 
-		static const QDicomPrinterDriver & forDevice(
+		static QDicomPrinterDriver forDevice(
 			const QDicomPrinter::Device & device
 		);
 
@@ -77,7 +77,7 @@ class QDICOM_DLLSPEC QDicomPrinterDriver {
 		const QList< quint8 > & depths() const;
 		const Features & features() const;
 
-		const QList< quint16 > & filmDestinations() const;
+		const QList< QDicomPrinter::FilmDestination > & filmDestinations() const;
 		const QList< QDicomPrinter::FilmSize > & filmSizes() const;
 
 
@@ -105,7 +105,6 @@ class QDICOM_DLLSPEC QDicomPrinterDriver {
 
 		const QSize & printableArea(
 			const QDicomPrinter::FilmSize &,
-			const QDicomPrinter::Orientation &,
 			const QDicomPrinter::Quality &
 		) const;
 
@@ -120,14 +119,13 @@ class QDICOM_DLLSPEC QDicomPrinterDriver {
 
 		void setDepths( const QList< quint8 > & depths );
 		void setFeatures( const Features & );
-		void setFilmDestinations( const QList< quint16 > & );
+		void setFilmDestinations( const QList< QDicomPrinter::FilmDestination > & );
 		void setFilmSizes( const QList< QDicomPrinter::FilmSize > & );
 		void setMagnificationTypes( const QList< QDicomPrinter::MagnificationType > & );
 		void setMaxCopyCount( const quint16 & );
 		void setMediumTypes( const QList< QDicomPrinter::MediumType > & );
 		void setModelName( const QString & );
 		void setPrintableAreas(
-			const QDicomPrinter::Orientation &,
 			const QDicomPrinter::Quality &,
 			const QMap< QDicomPrinter::FilmSize, QSize > &
 		);
@@ -143,14 +141,14 @@ class QDICOM_DLLSPEC QDicomPrinterDriver {
 		class XmlParser;
 
 		struct Data : public QSharedData {
-			static const int MaxAreas = 0x40;
+			static const int MaxAreas = 0x20;
 			static const int MaxResolutions = 0x02;
 
 			Data();
 
 			QList< quint8 > Depths;
 			Features Features;
-			QList< quint16 > FilmDestinations;
+			QList< QDicomPrinter::FilmDestination > FilmDestinations;
 			QList< QDicomPrinter::FilmSize > FilmSizes;
 			quint16 MaxCopyCount;
 			QList< QDicomPrinter::MagnificationType > MagnificationTypes;

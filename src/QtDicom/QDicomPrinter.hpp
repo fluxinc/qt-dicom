@@ -22,7 +22,13 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 
 	public :
 		enum Device {
-			Generic = 0x0001,
+			Generic_IHE_254 = 1,
+			Generic_IHE_300,
+			Generic_IHE_320,
+
+#ifdef _DEBUG
+			Debug,
+#endif
 			
 			Agfa_DRYSTAR_5300,
 			Agfa_DRYSTAR_5302,
@@ -71,10 +77,19 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 			User = 0x1000
 		};
 
-		enum FilmDestination : quint16 {
-			Magazine = 0x100,
-			Processor = 0x200,
-			Bin = 0x300
+		enum FilmDestination {
+			Magazine = 1,
+			Processor,
+			Bin_1,
+			Bin_2,
+			Bin_3,
+			Bin_4,
+			Bin_5,
+			Bin_6,
+			Bin_7,
+			Bin_8,
+			Bin_9,
+			Bin_10,
 		};
 
 		enum FilmSize {
@@ -109,13 +124,14 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 		};
 
 		enum Orientation {
-			Vertical = 1,
-			Horizontal,
+			AutomaticOrientation = 1,
+			VerticalOrientation,
+			HorizontalOrientation,
 		};
 
 		enum Quality {
-			Normal = 1,
-			High
+			NormalQuality = 1,
+			HighQuality
 		};
 
 	public :
@@ -154,6 +170,7 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 			const QString & remoteAe = "",
 			const QString & localAe = "FLUX"
 		);
+		~QDicomPrinter();
 
 
 		const quint16 & copyCount() const;
@@ -169,7 +186,7 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 
 		const QString & errorString() const;
 
-		const quint16 & filmDestination() const;
+		const FilmDestination & filmDestination() const;
 
 		const FilmSize & filmSize() const;
 
@@ -219,8 +236,7 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 		void setDriver( const QDicomPrinterDriver & driver );
 		void setEmptyAreaDensity( const qreal & density );
 		void setHostAddres( const QHostAddress & );
-		void setFilmDestination( const quint16 & );
-		void setFilmDestination( const FilmDestination & Destination, const quint8 & bin = 1 );
+		void setFilmDestination( const FilmDestination & );
 		void setFilmSize( const FilmSize & );
 		void setLocalAeTitle( const QString & );
 		void setMagnificationType( const MagnificationType & );
@@ -252,7 +268,7 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 
 		QString errorString_;
 
-		quint16 filmDestination_;
+		FilmDestination filmDestination_;
 		FilmSize filmSize_;
 
 		QHostAddress hostAddress_;

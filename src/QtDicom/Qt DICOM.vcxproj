@@ -429,7 +429,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
     <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_5000.xml" />
     <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_7000.xml" />
     <None Include="Resources\QDicomPrinterDrivers\Fuji_DRYPIX_FMDPL.xml" />
-    <None Include="Resources\QDicomPrinterDrivers\Generic.xml">
+    <None Include="Resources\QDicomPrinterDrivers\Debug.xml">
       <SubType>Designer</SubType>
     </None>
     <None Include="Resources\QDicomPrinterDrivers\Konica_Minolta_Drypro_722.xml" />

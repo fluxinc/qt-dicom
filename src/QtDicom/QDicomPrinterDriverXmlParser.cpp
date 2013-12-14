@@ -6,6 +6,7 @@
 #include "QDicomPrinterDriverXmlParser.hpp"
 #include "Utilities.hpp"
 
+#include <QtCore/QHash>
 #include <QtCore/QMap>
 #include <QtCore/QStringList>
 #include <QtCore/QXmlStreamReader>
@@ -82,11 +83,18 @@ static int MediumTypeFromString( const QString & value );
 static const QString & MediumTypeString( const QDicomPrinter::MediumType & type );
 
 /**
- * Treats \a Value as comma-separated list of items: all white spaces are
- * removed, remaining characters converted to lower-case and the whole string
- * split on a comma.
+ * Removes all white spaces and underscores from \a Value, converting all
+ * its characters to lower case.
  */
-static QStringList ToNormalizedList( QString Value );
+static QString Normalized( const QString & Value );
+
+
+/**
+ * Returns the pattern used to parse printable area specification:
+ *
+ *   <film size>: <width> x <height>
+ */
+static QRegExp PrintableAreaPattern();
 
 
 // Class methods definitions //
@@ -185,13 +193,15 @@ void QDicomPrinterDriver::XmlParser::readDepths() {
 
 	QList< quint8 > tmp;
 
-	const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+	const QStringList Items = stream().readElementText().split( ',' );
 	for (
 		QStringList::const_iterator i = Items.constBegin();
 		i != Items.constEnd(); ++i
 	) {
+		const QString Item = ::Normalized( *i );
+
 		bool ok = false;
-		const int Value = i->toUInt( &ok );
+		const int Value = Item.toUInt( &ok );
 		if ( ok && Value <= 16 ) {
 			tmp.append( static_cast< quint8 >( Value ) );
 		}
@@ -215,12 +225,13 @@ void QDicomPrinterDriver::XmlParser::readFeatures() {
 
 	QDicomPrinterDriver::Features tmp = 0;
 
-	const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+	const QStringList Items = stream().readElementText().split( ',' );
+
 	for (
 		QStringList::const_iterator i = Items.constBegin();
 		i != Items.constEnd(); ++i
 	) {
-		const int Value = ::FeatureFromString( *i );
+		const int Value = ::FeatureFromString( ::Normalized( *i ) );
 		if ( Value >= 0 ) {
 			tmp |= static_cast< QDicomPrinterDriver::Feature >( Value );
 		}
@@ -242,16 +253,16 @@ void QDicomPrinterDriver::XmlParser::readFilmDestinations() {
 	Q_ASSERT( stream().isStartElement() );
 	Q_ASSERT( stream().name() == "FilmDestinations" );
 
-	QList< quint16 > tmp;
+	QList< QDicomPrinter::FilmDestination > tmp;
 
-	const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+	const QStringList Items = stream().readElementText().split( ',' );
 	for (
 		QStringList::const_iterator i = Items.constBegin();
 		i != Items.constEnd(); ++i
 	) {
-		const int Value = ::FilmDestinationFromString( *i );
-		if ( Value >= 0 && Value <= ( QDicomPrinter::Bin | 0xFF ) ) {
-			tmp.append( static_cast< quint16 >( Value ) );
+		const int Value = ::FilmDestinationFromString( ::Normalized( *i ) );
+		if ( Value >= 0 ) {
+			tmp.append( static_cast< QDicomPrinter::FilmDestination >( Value ) );
 		}
 		else {
 			stream().raiseError(
@@ -273,12 +284,12 @@ void QDicomPrinterDriver::XmlParser::readFilmSizes() {
 
 	QList< QDicomPrinter::FilmSize > tmp;
 
-	const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+	const QStringList Items = stream().readElementText().split( ',' );
 	for (
 		QStringList::const_iterator i = Items.constBegin();
 		i != Items.constEnd(); ++i
 	) {
-		const int Value = ::FilmSizeFromString( *i );
+		const int Value = ::FilmSizeFromString( ::Normalized( *i ) );
 		if ( Value >= 0 ) {
 			tmp.append( static_cast< QDicomPrinter::FilmSize >( Value ) );
 		}
@@ -302,13 +313,13 @@ void QDicomPrinterDriver::XmlParser::readMagnificationTypes() {
 
 	QList< QDicomPrinter::MagnificationType > tmp;
 
-	const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+	const QStringList Items = stream().readElementText().split( ',' );
 
 	for (
 		QStringList::const_iterator i = Items.constBegin();
 		i != Items.constEnd(); ++i
 	) {
-		const int Value = ::MagnificationTypeFromString( *i );
+		const int Value = ::MagnificationTypeFromString( ::Normalized( *i ) );
 		if ( Value >= 0 ) {
 			tmp.append( static_cast< QDicomPrinter::MagnificationType >( Value ) );
 		}
@@ -332,13 +343,13 @@ void QDicomPrinterDriver::XmlParser::readMediumTypes() {
 
 	QList< QDicomPrinter::MediumType > tmp;
 
-	const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+	const QStringList Items = stream().readElementText().split( ',' );
 
 	for (
 		QStringList::const_iterator i = Items.constBegin();
 		i != Items.constEnd(); ++i
 	) {
-		const int Value = ::MediumTypeFromString( *i );
+		const int Value = ::MediumTypeFromString( ::Normalized( *i ) );
 		if ( Value >= 0 ) {
 			tmp.append( static_cast< QDicomPrinter::MediumType >( Value ) );
 		}
@@ -361,16 +372,16 @@ void QDicomPrinterDriver::XmlParser::readPrintableAreas() {
 	Q_ASSERT( stream().name() == "PrintableAreas" );
 
 
-	QDicomPrinter::Quality quality = QDicomPrinter::Normal;
+	QDicomPrinter::Quality quality = QDicomPrinter::NormalQuality;
 	while ( stream().readNextStartElement() && ! stream().atEnd() ) {
 		const QStringRef Name = stream().name();
 
 
 		if ( Name == "NormalQuality" ) {
-			quality = QDicomPrinter::Normal;
+			quality = QDicomPrinter::NormalQuality;
 		}
 		else if ( Name == "HighQuality" ) {
-			quality = QDicomPrinter::High;
+			quality = QDicomPrinter::HighQuality;
 		}
 		else {
 			stream().raiseError(
@@ -382,7 +393,7 @@ void QDicomPrinterDriver::XmlParser::readPrintableAreas() {
 
 
 		QString message;
-		const QStringList Items = ::ToNormalizedList( stream().readElementText() );
+		const QStringList Items = stream().readElementText().split( ',' );
 		const bool Status = readPrintableAreas_Items(
 			Items, quality, message
 		);
@@ -400,18 +411,8 @@ void QDicomPrinterDriver::XmlParser::readPrintableAreas() {
 			i != Sizes.constEnd(); ++i
 		) {
 			const bool NotCool = 
-				driver().printableArea(
-					*i, QDicomPrinter::Horizontal, QDicomPrinter::Normal
-				).isEmpty()  &&
-				driver().printableArea(
-					*i, QDicomPrinter::Vertical, QDicomPrinter::Normal
-				).isEmpty()  &&
-				driver().printableArea(
-					*i, QDicomPrinter::Horizontal, QDicomPrinter::High
-				).isEmpty()  &&
-				driver().printableArea(
-					*i, QDicomPrinter::Vertical, QDicomPrinter::High
-				).isEmpty()
+				driver().printableArea( *i, QDicomPrinter::NormalQuality ).isEmpty()  &&
+				driver().printableArea( *i, QDicomPrinter::HighQuality ).isEmpty()
 			;
 
 			if ( NotCool ) {
@@ -426,16 +427,17 @@ void QDicomPrinterDriver::XmlParser::readPrintableAreas() {
 }
 
 
+
 QPair< QDicomPrinter::FilmSize, QSize >
 QDicomPrinterDriver::XmlParser::readPrintableAreas_Item(
 	const QString & Item, QString & errorString
 ) {
-	const QRegExp Pattern( "([0-9a-zx_]+)\\s*:\\s*(\\d+)\\s*x?\\s*(\\d+)" );
+	const QRegExp Pattern = PrintableAreaPattern();
 
 	if ( Pattern.indexIn( Item ) > -1 ) {
 		bool ok = false;
 
-		const int Value = ::FilmSizeFromString( Pattern.cap( 1 ) );
+		const int Value = ::FilmSizeFromString( ::Normalized( Pattern.cap( 1 ) ) );
 		const int Width  = Pattern.cap( 2 ).toUInt( &ok ); Q_ASSERT( ok );
 		const int Height = Pattern.cap( 3 ).toUInt( &ok ); Q_ASSERT( ok );
 
@@ -445,7 +447,23 @@ QDicomPrinterDriver::XmlParser::readPrintableAreas_Item(
 			; 
 
 			if ( driver().filmSizes().contains( FilmSize ) ) {
-				return ::qMakePair( FilmSize, QSize( Width, Height ) );
+				const bool IsVertical =
+					( FilmSize != QDicomPrinter::IN_14x14 ) ?
+					( Width <= Height ) :
+					// For the rectangular film (14" x 14") we allow the width
+					// to be up to 6% larger than the height
+					( Width - ( Width >> 4 ) ) <= Height 
+				;
+
+				if ( IsVertical ) {
+					return ::qMakePair( FilmSize, QSize( Width, Height ) );
+				}
+				else {
+					errorString =
+						"Invalid printable area specification: "
+						"the width must be less or equal to the height"
+					;
+				}
 			}
 			else {
 				errorString =
@@ -477,7 +495,7 @@ bool QDicomPrinterDriver::XmlParser::readPrintableAreas_Items(
 	const QDicomPrinter::Quality & Quality,
 	QString & errorString
 ) {
-	QMap< QDicomPrinter::FilmSize, QSize > areasH, areasV;
+	QMap< QDicomPrinter::FilmSize, QSize > areas;
 
 	for (
 		QStringList::const_iterator i = Items.constBegin();
@@ -488,7 +506,7 @@ bool QDicomPrinterDriver::XmlParser::readPrintableAreas_Items(
 		;
 
 		if ( Pair.second.isValid() ) {
-			areasV[ Pair.first ] = Pair.second;
+			areas[ Pair.first ] = Pair.second;
 		}
 		else {
 			Q_ASSERT( errorString.size() > 0 );
@@ -496,28 +514,11 @@ bool QDicomPrinterDriver::XmlParser::readPrintableAreas_Items(
 		}
 	}
 
-	areasH = areasV;
-	std::for_each( areasH.begin(), areasH.end(), 
-		[]( QSize & size ) {
-			size = QSize( size.height(), size.width() );
-		}
-	);
-
-	driver().setPrintableAreas(
-		QDicomPrinter::Horizontal, Quality, areasH
-	);
-	driver().setPrintableAreas(
-		QDicomPrinter::Vertical, Quality, areasV
-	);
-	if ( Quality == QDicomPrinter::Normal ) {
-		// Init high resolution DPI with value from normal. They'll be
+	driver().setPrintableAreas( Quality, areas );
+	if ( Quality == QDicomPrinter::NormalQuality ) {
+		// Init high resolution DPI with value from normal quality. They'll be
 		// later overwritten if they exist in the XML
-		driver().setPrintableAreas(
-			QDicomPrinter::Horizontal, QDicomPrinter::High, areasH
-		);
-		driver().setPrintableAreas(
-			QDicomPrinter::Vertical, QDicomPrinter::High, areasV
-		);
+		driver().setPrintableAreas( QDicomPrinter::HighQuality, areas );
 	}
 
 	return true;
@@ -741,23 +742,35 @@ const QString & FeatureString( const QDicomPrinterDriver::Feature & Feature ) {
 
 
 int FilmDestinationFromString( const QString & Value ) {
-	int result = -1;
+	static QHash< QString, int > * destinations = nullptr;
 
-	if ( Value == ::FilmDestinationString( QDicomPrinter::Magazine ) ) {
-		result = QDicomPrinter::Magazine;
-	}
-	else if ( Value == ::FilmDestinationString( QDicomPrinter::Processor ) ) {
-		result = QDicomPrinter::Processor;
-	}
-	else if ( Value.startsWith( ::FilmDestinationString( QDicomPrinter::Bin ) ) ) {
-		bool ok = false;
-		const quint32 Number = QString( Value ).remove( QRegExp( "\\D" ) ).toUInt( &ok );
-		if ( Number > 0 && Number < 0x100 ) {
-			result = QDicomPrinter::Bin | ( Number & 0xFF );
-		}
-	}
+	::qInitializeOnce( destinations, ( []() throw() -> QHash< QString, int > {
+		QHash< QString, int > result;
 
-	return result;
+#define SET( LABEL ) \
+	result[ ::FilmDestinationString( QDicomPrinter::LABEL ) ] = QDicomPrinter::LABEL 
+
+		SET( Processor );
+		SET( Magazine );
+		SET( Bin_1 );
+		SET( Bin_2 );
+		SET( Bin_3 );
+		SET( Bin_4 );
+		SET( Bin_5 );
+		SET( Bin_6 );
+		SET( Bin_7 );
+		SET( Bin_8 );
+		SET( Bin_9 );
+		SET( Bin_10 );
+#undef SET
+
+		return result;
+
+	} ) );
+
+	Q_ASSERT( destinations != nullptr );
+
+	return destinations->value( Value, -1 );
 }
 
 
@@ -767,58 +780,72 @@ const QString & FilmDestinationString(
 	static QVector< QString > * names = nullptr;
 
 	::qInitializeOnce( names, ( []() throw() -> QVector< QString > {
-		static const int Last = QDicomPrinter::Bin >> 8;
+		static const int Last = QDicomPrinter::Bin_10;
 
 		QVector< QString > result( Last + 1 );
 
 #define SET( LABEL, VALUE ) { \
-			static const int Index = QDicomPrinter::LABEL >> 8; \
+			static const int Index = QDicomPrinter::LABEL; \
 			Q_ASSERT( Index <= Last ); \
 			result[ Index ] = ::WArrayString( VALUE ); \
 		}
 
 		SET( Magazine,  L"magazine" )
 		SET( Processor, L"processor" )
-		SET( Bin,       L"bin" )
+		SET( Bin_1,     L"bin1" );
+		SET( Bin_2,     L"bin2" );
+		SET( Bin_3,     L"bin3" );
+		SET( Bin_4,     L"bin4" );
+		SET( Bin_5,     L"bin5" );
+		SET( Bin_6,     L"bin6" );
+		SET( Bin_7,     L"bin7" );
+		SET( Bin_8,     L"bin8" );
+		SET( Bin_9,     L"bin9" );
+		SET( Bin_10,    L"bin10" );
 #undef SET
 
 		return result;
 	} ) );
 
-	const int Index = Destination >> 8;
 	Q_ASSERT( names != nullptr );
-	Q_ASSERT( Index < names->size() );
+	Q_ASSERT( Destination < names->size() );
 
-	return names->at( Index );
+	return names->at( Destination );
 }
 
 
 int FilmSizeFromString( const QString & Value ) {
-	int result = -1;
+	static QHash< QString, int > * filmSizes = nullptr;
 
-#define COMPARE( LABEL ) \
-	else if ( Value == ::FilmSizeString( QDicomPrinter::LABEL ) ) { \
-		Q_ASSERT( QDicomPrinter::LABEL > -1 ); \
-		result = QDicomPrinter::LABEL; \
-	}
 
-	if ( false ) {}
-	COMPARE( A3 )
-	COMPARE( A4 )
-	COMPARE( CM_24x24 )
-	COMPARE( CM_24x30 )
-	COMPARE( CM_25_7x36_4 )
-	COMPARE( IN_8x10 )
-	COMPARE( IN_8_5x11 )
-	COMPARE( IN_10x12 )
-	COMPARE( IN_10x14 )
-	COMPARE( IN_11x14 )
-	COMPARE( IN_11x17 )
-	COMPARE( IN_14x14 )
-	COMPARE( IN_14x17 )
-#undef COMPARE
+	::qInitializeOnce( filmSizes, []() throw() -> QHash< QString, int > {
+		QHash< QString, int > result;
 
-	return result;
+#define SET( LABEL ) \
+	result[ ::FilmSizeString( QDicomPrinter::LABEL ) ] = QDicomPrinter::LABEL
+
+		SET( A3 );
+		SET( A4 );
+		SET( CM_24x24 );
+		SET( CM_24x30 );
+		SET( CM_25_7x36_4 );
+		SET( IN_8x10 );
+		SET( IN_8_5x11 );
+		SET( IN_10x12 );
+		SET( IN_10x14 );
+		SET( IN_11x14 );
+		SET( IN_11x17 );
+		SET( IN_14x14 );
+		SET( IN_14x17 );
+#undef SET
+
+		return result;
+	} );
+
+	Q_ASSERT( filmSizes != nullptr );
+
+
+	return filmSizes->value( Value, -1 );
 }
 
 
@@ -838,9 +865,9 @@ const QString & FilmSizeString( const QDicomPrinter::FilmSize & Film ) {
 		SET( A4,           L"a4" );
 		SET( CM_24x24,     L"24cmx24cm" );
 		SET( CM_24x30,     L"24cmx30cm" );
-		SET( CM_25_7x36_4, L"25_7cmx36_4cm" );
+		SET( CM_25_7x36_4, L"257cmx364cm" );
 		SET( IN_8x10,      L"8inx10in" );
-		SET( IN_8_5x11,    L"8_5inx11in" );
+		SET( IN_8_5x11,    L"85inx11in" );
 		SET( IN_10x12,     L"10inx12in" );
 		SET( IN_10x14,     L"10inx14in" );
 		SET( IN_11x14,     L"11inx14in" );
@@ -962,6 +989,22 @@ const QString & MediumTypeString(
 }
 
 
-inline QStringList ToNormalizedList( QString value ) {
-	return value.remove( QRegExp( "\\s" ) ).toLower().split( "," );
+inline QString Normalized( const QString & Value ) {
+	return QString( Value ).remove( QRegExp( "[\\s_]" ) ).toLower();
+}
+
+
+inline static QRegExp PrintableAreaPattern() {
+	static QRegExp * pattern = nullptr;
+	
+	::qInitializeOnce(
+		pattern, "([0-9A-Za-z_]+)\\s*:\\s*(\\d+)\\s*x?\\s*(\\d+)"
+	);
+
+	Q_ASSERT( pattern != nullptr );
+	Q_ASSERT( pattern->indexIn( "8INX10IN: 100 x 100" ) > -1 );
+	Q_ASSERT( pattern->indexIn( "10inx11in:100x100" ) > -1 );
+	Q_ASSERT( pattern->indexIn( "   20cmx15cm   :   100  x  100  " ) > -1 );
+
+	return *pattern;
 }

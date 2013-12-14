@@ -34,7 +34,7 @@ template < int Depth >
 static int ConvertPixel( const QRgb &  );
 template < typename Type >
 static Type * CreatePixelData( const QImage & Image, const quint8 & Depth );
-static QString FilmDestinationString( const quint16 & Destination );
+static const QString & FilmDestinationString( const QDicomPrinter::FilmDestination & );
 static const QString & FilmSizeString( const QDicomPrinter::FilmSize & );
 static const QString & MagnificationTypeString( const QDicomPrinter::MagnificationType & );
 static const QString & MediumTypeString( const QDicomPrinter::MediumType & );
@@ -111,7 +111,7 @@ bool QDicomPrintEngine::Scu::beginSession( const QDicomPrinter * PrinterAddress 
 }
 
 
-bool QDicomPrintEngine::Scu::createFilmBox() {
+bool QDicomPrintEngine::Scu::createFilmBox( const QImage & Image ) {
 	Q_ASSERT( association().isEstablished() );
 
 	const QDicomPrinter & Printer = printer();
@@ -124,7 +124,15 @@ bool QDicomPrintEngine::Scu::createFilmBox() {
 
 	const QString ImageDisplayFormat = "STANDARD\\1,1";
 	// skip Annotation Display Format ID
-	const QString FilmOrientation = ::OrientationString( Printer.orientation() );
+	const QString FilmOrientation = ::OrientationString(
+		( Printer.orientation() != QDicomPrinter::AutomaticOrientation ) ?
+		( Printer.orientation() ) :
+		(
+			( Image.width() <= Image.height() ) ?
+			( QDicomPrinter::VerticalOrientation ) :
+			( QDicomPrinter::HorizontalOrientation )
+		)
+	);
 	const QString FilmSizeId = ::FilmSizeString( Printer.filmSize() );
 	const QString MagnificationType = ::MagnificationTypeString(
 		Driver.magnificationTypes().contains( QDicomPrinter::None ) ?
@@ -155,7 +163,7 @@ bool QDicomPrintEngine::Scu::createFilmBox() {
 	// skip Reflected Ambient Light
 	const bool SetRequestedResolutionId = 
 		Driver.hasFeature( QDicomPrinterDriver::HighQuality ) && 
-		Printer.quality() == QDicomPrinter::High
+		Printer.quality() == QDicomPrinter::HighQuality
 	;
 	const QString RequestedResolutionId = 
 		SetRequestedResolutionId ? "HIGH" : ""
@@ -431,7 +439,7 @@ DcmSequenceOfItems * QDicomPrintEngine::Scu::prepareImageSequence(
 
 bool QDicomPrintEngine::Scu::printImage( const QImage & Image ) {
 	const bool Printed = 
-		createFilmBox() &&
+		createFilmBox( Image ) &&
 		setImageBox( Image ) &&
 		nAction( QSopClass::BasicFilmBox, filmBoxUid(), 1 )
 	;
@@ -591,16 +599,19 @@ struct Mask< 0 > {
 template < int Depth >
 inline int ConvertPixel( const QRgb & Pixel ) {
 	const int Gray = (
-		 ::qRed(   Pixel ) * 109  + // ~0.2126 + 
-		 ::qGreen( Pixel ) * 366  + // ~0.7152 + 
-		 ::qBlue(  Pixel ) *  37    // ~0.0722
-	) >> 9; // ( / 512 )
+		 ::qRed(   Pixel ) * 13932 + // = 0.2126 + 
+		 ::qGreen( Pixel ) * 46872 + // = 0.7152 + 
+		 ::qBlue(  Pixel ) *  4732   // = 0.0722
+	) >> 8; // ( / 256)
+
+	// `Gray' contains a 16-bit gray
 
 	const int Result =
-		( Gray << ( Depth - 8 ) ) +
-		( ( Gray >> ( 16 - Depth ) ) )
+		( Gray >> ( 16 - Depth ) ) |
+		( Gray >> ( 24 - Depth ) )
 	;
 	Q_ASSERT( Result >= 0 && Result < ( 1 << Depth ) );
+
 	return Result;
 }
 
@@ -646,24 +657,43 @@ Type * CreatePixelData( const QImage & Image, const quint8 & Depth ) {
 }
 
 
-QString FilmDestinationString( const quint16 & Destination ) {
-	QString result;
-	switch ( Destination ) {
+const QString & FilmDestinationString(
+	const QDicomPrinter::FilmDestination & Destination
+) {
+	static QVector< QString > * names = nullptr;
 
-	case QDicomPrinter::Processor :
-		result = "PROCESSOR";
-		break;
+	::qInitializeOnce( names, ( []() throw() -> QVector< QString > {
+		static const int Last = QDicomPrinter::Bin_10;
 
-	case QDicomPrinter::Magazine :
-		result = "MAGAZINE";
-		break;
+		QVector< QString > result( Last + 1 );
 
-	default :
-		Q_ASSERT( Destination & QDicomPrinter::Bin );
-		result = QString( "BIN_%1" ).arg( Destination & 0xFF );
-	}
+#define SET( LABEL, VALUE ) { \
+			static const int Index = QDicomPrinter::LABEL; \
+			Q_ASSERT( Index <= Last ); \
+			result[ Index ] = ::WArrayString( VALUE ); \
+		}
 
-	return result;
+		SET( Magazine,  L"MAGAZINE" )
+		SET( Processor, L"PROCESSOR" )
+		SET( Bin_1,     L"BIN_1" );
+		SET( Bin_2,     L"BIN_2" );
+		SET( Bin_3,     L"BIN_3" );
+		SET( Bin_4,     L"BIN_4" );
+		SET( Bin_5,     L"BIN_5" );
+		SET( Bin_6,     L"BIN_6" );
+		SET( Bin_7,     L"BIN_7" );
+		SET( Bin_8,     L"BIN_8" );
+		SET( Bin_9,     L"BIN_9" );
+		SET( Bin_10,    L"BIN_10" );
+#undef SET
+
+		return result;
+	} ) );
+
+	Q_ASSERT( names != nullptr );
+	Q_ASSERT( Destination < names->size() );
+
+	return names->at( Destination );
 }
 
 
@@ -770,17 +800,22 @@ const QString & MediumTypeString(
 const QString & OrientationString(
 	const QDicomPrinter::Orientation & Orientation
 ) {
+	Q_ASSERT(
+		Orientation == QDicomPrinter::VerticalOrientation ||
+		Orientation == QDicomPrinter::HorizontalOrientation
+	);
+
 	static QVector< QString > * values = nullptr;
 
 	::qInitializeOnce( values, ( []() throw() -> QVector< QString > {
-		static const int Last = QDicomPrinter::Horizontal;
+		static const int Last = QDicomPrinter::HorizontalOrientation;
 
 		QVector< QString > result( Last + 1 );
 
 
 #define SET( LABEL, VALUE ) \
-		Q_ASSERT( QDicomPrinter::LABEL <= Last ); \
-		result[ QDicomPrinter::LABEL ] = ::WArrayString( VALUE )
+		Q_ASSERT( QDicomPrinter::LABEL ## Orientation <= Last ); \
+		result[ QDicomPrinter::LABEL ## Orientation ] = ::WArrayString( VALUE )
 
 		SET( Vertical,   L"PORTRAIT" );
 		SET( Horizontal, L"LANDSCAPE" );
@@ -800,31 +835,6 @@ const QString & OrientationString(
 
 // Color conversion methods are static so we have to test them here
 bool TestQDicomPrintEngineScu_ConvertPixel() {
-	static const QRgb Red = QColor( Qt::red ).rgb();
-	Q_ASSERT( ::ConvertPixel<  8 >( Red ) == 0x036 );
-	Q_ASSERT( ::ConvertPixel<  9 >( Red ) == 0x06C );
-	Q_ASSERT( ::ConvertPixel< 10 >( Red ) == 0x0D8 );
-	Q_ASSERT( ::ConvertPixel< 11 >( Red ) == 0x1B1 );
-	Q_ASSERT( ::ConvertPixel< 12 >( Red ) == 0x363 );
-	Q_ASSERT( ::ConvertPixel< 13 >( Red ) == 0x6C6 );
-
-	static const QRgb Green = QColor( Qt::green ).rgb();
-	Q_ASSERT( ::ConvertPixel<  8 >( Green ) == 0x00B6 + 0x00 );
-	Q_ASSERT( ::ConvertPixel<  9 >( Green ) == 0x016C + 0x01 );
-	Q_ASSERT( ::ConvertPixel< 10 >( Green ) == 0x02D8 + 0x02 );
-	Q_ASSERT( ::ConvertPixel< 11 >( Green ) == 0x05B0 + 0x05 );
-	Q_ASSERT( ::ConvertPixel< 12 >( Green ) == 0x0B60 + 0x0B );
-	Q_ASSERT( ::ConvertPixel< 13 >( Green ) == 0x16C0 + 0x16 ); 
-	Q_ASSERT( ::ConvertPixel< 14 >( Green ) == 0x2D80 + 0x2D );
-	Q_ASSERT( ::ConvertPixel< 15 >( Green ) == 0x5B00 + 0x5B );
-	Q_ASSERT( ::ConvertPixel< 16 >( Green ) == 0xB600 + 0xB6 );
-
-	static const QRgb Blue = QColor( Qt::blue ).rgb();
-	Q_ASSERT( ::ConvertPixel<  8 >( Blue ) == 0x12 );
-	Q_ASSERT( ::ConvertPixel<  9 >( Blue ) == 0x24 );
-	Q_ASSERT( ::ConvertPixel< 10 >( Blue ) == 0x48 );
-	Q_ASSERT( ::ConvertPixel< 11 >( Blue ) == 0x90 );
-
 	static const QRgb White = QColor( Qt::white ).rgb();
 	Q_ASSERT( ::ConvertPixel<  8 >( White ) == 0x00FF );
 	Q_ASSERT( ::ConvertPixel<  9 >( White ) == 0x01FF );
@@ -846,6 +856,21 @@ bool TestQDicomPrintEngineScu_ConvertPixel() {
 	Q_ASSERT( ::ConvertPixel< 14 >( Black ) == 0x0 );
 	Q_ASSERT( ::ConvertPixel< 15 >( Black ) == 0x0 );
 	Q_ASSERT( ::ConvertPixel< 16 >( Black ) == 0x0 );
+
+	static const QRgb Red = QColor( Qt::red ).rgb();
+	Q_ASSERT( ::ConvertPixel<  8 >( Red ) == 0x0036 );
+	Q_ASSERT( ::ConvertPixel< 12 >( Red ) == 0x0363 );
+	Q_ASSERT( ::ConvertPixel< 16 >( Red ) == 0x3637 );
+
+	static const QRgb Green = QColor( Qt::green ).rgb();
+	Q_ASSERT( ::ConvertPixel<  8 >( Green ) == 0x00B6 );
+	Q_ASSERT( ::ConvertPixel< 12 >( Green ) == 0x0B6F );
+	Q_ASSERT( ::ConvertPixel< 16 >( Green ) == 0xB6F6 );
+
+	static const QRgb Blue = QColor( Qt::blue ).rgb();
+	Q_ASSERT( ::ConvertPixel<  8 >( Blue ) == 0x0012 );
+	Q_ASSERT( ::ConvertPixel< 12 >( Blue ) == 0x0127 );
+	Q_ASSERT( ::ConvertPixel< 16 >( Blue ) == 0x127B );
 
 	return true;
 }

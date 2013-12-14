@@ -37,8 +37,8 @@ void PrintTester::raiseError( const QString & Message ) {
 
 void PrintTester::run() {
 	QDicomPrinter printer( QDicomPrinter::Agfa_DRYSTAR_AXYS, QHostAddress( "172.16.9.10" ), 104 );
-	printer.setQuality( QDicomPrinter::High );
-	printer.setDepth( 16 );
+	printer.setQuality( QDicomPrinter::HighQuality );
+	printer.setDepth( 12 );
 
 	QPainter painter;
 	if ( painter.begin( &printer ) ) {

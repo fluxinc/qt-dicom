@@ -20,14 +20,14 @@ QDicomPrinter::QDicomPrinter() :
 	depth_( 0 ),
 	driver_( new QDicomPrinterDriver() ),
 	emptyAreaDensity_( 0.0 ),
-	filmDestination_( Processor ),
+	filmDestination_( Bin_1 ),
 	filmSize_( IN_8x10 ),
 	localAeTitle_( "FLUX" ),
 	magnificationType_( None ),
 	mediumType_( ClearFilm ),
-	orientation_( Horizontal ),
+	orientation_( AutomaticOrientation ),
 	portNumber_( 0 ),
-	quality_( Normal )
+	quality_( NormalQuality )
 {
 }
 
@@ -49,19 +49,35 @@ QDicomPrinter::QDicomPrinter(
 	localAeTitle_( LocalAe ),
 	// magnificationType( None ), -- initialize that from driver
 	// mediumType_( ClearFilm ), - initialize that from driver
-	orientation_( Horizontal ),
-	portNumber_( PortNumber ),
+	orientation_( AutomaticOrientation ),
+	portNumber_( PortNumber )
 	// quality_( Normal ), - initialize that from driver
-	remoteAeTitle_( RemoteAe )
+	// remoteAeTitle_( RemoteAe ) - initialize that from driver
 {
-	setDepth( driver().depths().first() );
-	setFilmDestination( driver().filmDestinations().first() );
-	setFilmSize( driver().filmSizes().first() );
-	setMagnificationType( driver().magnificationTypes().first() );
-	setMediumType( driver().mediumTypes().first() );
-	setQuality(
-		driver().hasFeature( QDicomPrinterDriver::HighQuality ) ? High : Normal
-	);
+	if ( driver().isValid() ) {
+		setDepth( driver().depths().first() );
+		setFilmDestination( driver().filmDestinations().first() );
+		setFilmSize( driver().filmSizes().first() );
+		setMagnificationType( driver().magnificationTypes().first() );
+		setMediumType( driver().mediumTypes().first() );
+		setQuality(
+			driver().hasFeature( QDicomPrinterDriver::HighQuality ) ?
+			HighQuality : NormalQuality
+		);
+		if ( RemoteAe.size() > 0 ) {
+			setRemoteAeTitle( RemoteAe );
+		}
+		else {
+			setRemoteAeTitle( driver().modelName().toUpper().remove( ' ' ) );
+		}
+	}
+}
+
+
+QDicomPrinter::~QDicomPrinter() {
+	Q_ASSERT( driver_ != nullptr );
+	delete driver_;
+	driver_ = nullptr;
 }
 
 
@@ -94,7 +110,7 @@ const QString & QDicomPrinter::errorString() const {
 }
 
 
-const quint16 & QDicomPrinter::filmDestination() const {
+const QDicomPrinter::FilmDestination & QDicomPrinter::filmDestination() const {
 	return filmDestination_;
 }
 
@@ -155,13 +171,13 @@ int QDicomPrinter::metric( QPaintDevice::PaintDeviceMetric metric ) const {
 		
 		case QPaintDevice::PdmWidth :
 			result = driver().printableArea(
-				filmSize_, orientation_, quality_
+				filmSize_, quality_
 			).width();
 			break;
 
 		case QPaintDevice::PdmHeight :
 			result = driver().printableArea(
-				filmSize_, orientation_, quality_
+				filmSize_, quality_
 			).height();
 			break;
 
@@ -290,22 +306,7 @@ void QDicomPrinter::setEmptyAreaDensity( const qreal & Value ) {
 }
 
 
-void QDicomPrinter::setFilmDestination(
-	const FilmDestination & Destination, const quint8 & BinNumber
-) {
-
-	quint16 value = Destination;
-
-	if ( Destination == Bin ) {
-		Q_ASSERT( BinNumber > 0 );
-		value |= BinNumber;
-	}
-
-	setFilmDestination( value );
-}
-
-
-void QDicomPrinter::setFilmDestination( const quint16 & Value ) {
+void QDicomPrinter::setFilmDestination( const FilmDestination & Value ) {
 	filmDestination_ = Value;
 }
 

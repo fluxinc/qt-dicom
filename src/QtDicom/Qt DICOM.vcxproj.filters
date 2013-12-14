@@ -288,9 +288,6 @@
     <None Include="Resources\Texts\Build Number.txt">
       <Filter>Resources\Texts</Filter>
     </None>
-    <None Include="Resources\QDicomPrinterDrivers\Generic.xml">
-      <Filter>Resources\QDicomPrinterDrivers</Filter>
-    </None>
     <None Include="Resources\QDicomPrinterDrivers\Agfa_DRYSTAR_5302.xml">
       <Filter>Resources\QDicomPrinterDrivers</Filter>
     </None>
@@ -403,6 +400,9 @@
       <Filter>Resources\QDicomPrinterDrivers</Filter>
     </None>
     <None Include="Resources\QDicomPrinterDrivers\Sony_UP_DF750.xml">
+      <Filter>Resources\QDicomPrinterDrivers</Filter>
+    </None>
+    <None Include="Resources\QDicomPrinterDrivers\Debug.xml">
       <Filter>Resources\QDicomPrinterDrivers</Filter>
     </None>
   </ItemGroup>

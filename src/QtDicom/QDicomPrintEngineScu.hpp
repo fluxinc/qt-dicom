@@ -26,7 +26,7 @@ class QDicomPrintEngine::Scu : public Dicom::ServiceUser {
 		bool isOpen() const;
 
 	private :
-		bool createFilmBox();
+		bool createFilmBox( const QImage & );
 		bool createSession();
 		bool setImageBox( const QImage & );
 

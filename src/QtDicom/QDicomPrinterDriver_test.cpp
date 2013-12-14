@@ -51,9 +51,9 @@ void TestProperties() {
 	Q_ASSERT( driver.features() == 0 );
 	Q_ASSERT( driver.filmSizes().isEmpty() );
 	Q_ASSERT( driver.modelName().isEmpty() );
-	Q_ASSERT( driver.printableArea( QDicomPrinter::A3, QDicomPrinter::Vertical, QDicomPrinter::Normal ).isEmpty() );
-	Q_ASSERT( driver.resolution( QDicomPrinter::Normal ) == 0 );
-	Q_ASSERT( driver.resolution( QDicomPrinter::High ) == 0 );
+	Q_ASSERT( driver.printableArea( QDicomPrinter::A3, QDicomPrinter::NormalQuality ).isEmpty() );
+	Q_ASSERT( driver.resolution( QDicomPrinter::NormalQuality ) == 0 );
+	Q_ASSERT( driver.resolution( QDicomPrinter::HighQuality ) == 0 );
 	Q_ASSERT( driver.vendorName().isEmpty() );
 
 	driver.setDepths( QList< quint8 >() << 8 );
@@ -68,7 +68,7 @@ void TestProperties() {
 	Q_ASSERT( driver.hasFeature( QDicomPrinterDriver::RequestedImageSize ) );
 
 	driver.setFilmDestinations(
-		QList< quint16 >() << QDicomPrinter::Magazine
+		QList< QDicomPrinter::FilmDestination >() << QDicomPrinter::Magazine
 	);
 	Q_ASSERT( ! driver.isNull() );
 	Q_ASSERT( ! driver.isValid() );
@@ -104,17 +104,17 @@ void TestProperties() {
 	QMap< QDicomPrinter::FilmSize, QSize > areas;
 	areas[ QDicomPrinter::A3 ] = QSize( 100, 100 );
 	areas[ QDicomPrinter::A4 ] = QSize( 200, 200 );
-	driver.setPrintableAreas( QDicomPrinter::Vertical, QDicomPrinter::High, areas );
+	driver.setPrintableAreas( QDicomPrinter::HighQuality, areas );
 	Q_ASSERT( ! driver.isNull() );
 	Q_ASSERT( ! driver.isValid() );
-	Q_ASSERT( driver.printableArea( QDicomPrinter::A3, QDicomPrinter::Vertical, QDicomPrinter::High).isValid() );
-	Q_ASSERT( driver.printableArea( QDicomPrinter::A4, QDicomPrinter::Vertical, QDicomPrinter::High).isValid() );
+	Q_ASSERT( driver.printableArea( QDicomPrinter::A3, QDicomPrinter::HighQuality).isValid() );
+	Q_ASSERT( driver.printableArea( QDicomPrinter::A4, QDicomPrinter::HighQuality).isValid() );
 
 	driver.setResolutions( 100, 200 );
 	Q_ASSERT( ! driver.isNull() );
 	Q_ASSERT( ! driver.isValid() );
-	Q_ASSERT( driver.resolution( QDicomPrinter::Normal ) == 100 );
-	Q_ASSERT( driver.resolution( QDicomPrinter::High ) == 200 );
+	Q_ASSERT( driver.resolution( QDicomPrinter::NormalQuality ) == 100 );
+	Q_ASSERT( driver.resolution( QDicomPrinter::HighQuality ) == 200 );
 
 	driver.setVendorName( "TEST VENDOR" );
 	Q_ASSERT( ! driver.isNull() );
@@ -280,7 +280,7 @@ void TestXmlLoading() {
 	);
 	drv = QDicomPrinterDriver::fromXml( stream, &msg );
 	Q_ASSERT( drv.isNull() );
-	Q_ASSERT( msg.contains( "feature" ) && msg.contains( "invalidfeature" ) );
+	Q_ASSERT( msg.contains( "feature" ) && msg.contains( "InvalidFeature" ) );
 
 
 	stream.clear(); msg.clear();
@@ -295,8 +295,8 @@ void TestXmlLoading() {
 	drv = QDicomPrinterDriver::fromXml( stream, &msg );
 	Q_ASSERT( ! ( drv.isValid() || drv.isNull() ) );
 	Q_ASSERT( msg.isEmpty() );
-	Q_ASSERT( drv.resolution( QDicomPrinter::Normal ) == 100 );
-	Q_ASSERT( drv.resolution( QDicomPrinter::High   ) == 200 );
+	Q_ASSERT( drv.resolution( QDicomPrinter::NormalQuality ) == 100 );
+	Q_ASSERT( drv.resolution( QDicomPrinter::HighQuality   ) == 200 );
 
 
 	stream.clear(); msg.clear();
@@ -339,20 +339,12 @@ void TestXmlLoading() {
 	Q_ASSERT( ! ( drv.isValid() || drv.isNull() ) );
 	Q_ASSERT( msg.isEmpty() );
 	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Vertical, QDicomPrinter::Normal ) == 
+		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::NormalQuality ) == 
 		QSize( 100, 200 )
 	);
 	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Horizontal, QDicomPrinter::Normal ) ==
-		QSize( 200, 100 )
-	);
-	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Vertical, QDicomPrinter::High ) == 
+		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::HighQuality ) == 
 		QSize( 300, 400 )
-	);
-	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Horizontal, QDicomPrinter::High ) ==
-		QSize( 400, 300 )
 	);
 
 
@@ -369,20 +361,12 @@ void TestXmlLoading() {
 	Q_ASSERT( ! ( drv.isValid() || drv.isNull() ) );
 	Q_ASSERT( msg.isEmpty() );
 	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Vertical, QDicomPrinter::Normal ) == 
+		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::NormalQuality ) == 
 		QSize( 100, 200 )
 	);
 	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Horizontal, QDicomPrinter::Normal ) ==
-		QSize( 200, 100 )
-	);
-	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Vertical, QDicomPrinter::High ) == 
+		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::HighQuality ) == 
 		QSize( 100, 200 )
-	);
-	Q_ASSERT(
-		drv.printableArea( QDicomPrinter::A4, QDicomPrinter::Horizontal, QDicomPrinter::High ) ==
-		QSize( 200, 100 )
 	);
 
 
@@ -409,7 +393,7 @@ void TestXmlLoading() {
 	);
 	drv = QDicomPrinterDriver::fromXml( stream, &msg );
 	Q_ASSERT( drv.isNull() );
-	Q_ASSERT( msg.contains( "area" ) && msg.contains( "invalidarea" ) );
+	Q_ASSERT( msg.contains( "area" ) && msg.contains( "InvalidArea" ) );
 
 
 	stream.clear(); msg.clear();

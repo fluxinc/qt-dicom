@@ -2,7 +2,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
   <qresource prefix="/QtDicom">
-    <file>QDicomPrinterDrivers/Generic.xml</file>
+    <file>QDicomPrinterDrivers/Debug.xml</file>
 
     <file>QDicomPrinterDrivers/Agfa_DRYSTAR_5300.xml</file>
     <file>QDicomPrinterDrivers/Agfa_DRYSTAR_5302.xml</file>
