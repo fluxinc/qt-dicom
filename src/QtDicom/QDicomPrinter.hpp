@@ -124,8 +124,7 @@ class QDICOM_DLLSPEC QDicomPrinter : public QPaintDevice {
 		};
 
 		enum Orientation {
-			AutomaticOrientation = 1,
-			VerticalOrientation,
+			VerticalOrientation = 1,
 			HorizontalOrientation,
 		};
 

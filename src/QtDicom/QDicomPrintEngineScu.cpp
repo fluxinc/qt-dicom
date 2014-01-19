@@ -125,13 +125,7 @@ bool QDicomPrintEngine::Scu::createFilmBox( const QImage & Image ) {
 	const QString ImageDisplayFormat = "STANDARD\\1,1";
 	// skip Annotation Display Format ID
 	const QString FilmOrientation = ::OrientationString(
-		( Printer.orientation() != QDicomPrinter::AutomaticOrientation ) ?
-		( Printer.orientation() ) :
-		(
-			( Image.width() <= Image.height() ) ?
-			( QDicomPrinter::VerticalOrientation ) :
-			( QDicomPrinter::HorizontalOrientation )
-		)
+		Printer.orientation()
 	);
 	const QString FilmSizeId = ::FilmSizeString( Printer.filmSize() );
 	const QString MagnificationType = ::MagnificationTypeString(

@@ -96,12 +96,6 @@ class QDICOM_DLLSPEC QDicomPrinterDriver {
 		 */
 		const QString & modelName() const;
 
-		/**
-		 * Returns printer's name. If not set otherwise with the \ref setName(),
-		 * the name is generated from printer vendor name, model and IP address.
-		 */
-		QString name() const;
-
 
 		const QSize & printableArea(
 			const QDicomPrinter::FilmSize &,

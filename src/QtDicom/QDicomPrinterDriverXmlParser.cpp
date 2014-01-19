@@ -844,7 +844,6 @@ int FilmSizeFromString( const QString & Value ) {
 
 	Q_ASSERT( filmSizes != nullptr );
 
-
 	return filmSizes->value( Value, -1 );
 }
 
@@ -875,7 +874,6 @@ const QString & FilmSizeString( const QDicomPrinter::FilmSize & Film ) {
 		SET( IN_14x14,     L"14inx14in" );
 		SET( IN_14x17,     L"14inx17in" ); 
 #undef SET
-
 
 		return result;
 	} ) );

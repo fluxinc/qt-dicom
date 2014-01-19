@@ -25,7 +25,7 @@ QDicomPrinter::QDicomPrinter() :
 	localAeTitle_( "FLUX" ),
 	magnificationType_( None ),
 	mediumType_( ClearFilm ),
-	orientation_( AutomaticOrientation ),
+	orientation_( VerticalOrientation ),
 	portNumber_( 0 ),
 	quality_( NormalQuality )
 {
@@ -49,7 +49,7 @@ QDicomPrinter::QDicomPrinter(
 	localAeTitle_( LocalAe ),
 	// magnificationType( None ), -- initialize that from driver
 	// mediumType_( ClearFilm ), - initialize that from driver
-	orientation_( AutomaticOrientation ),
+	orientation_( VerticalOrientation ),
 	portNumber_( PortNumber )
 	// quality_( Normal ), - initialize that from driver
 	// remoteAeTitle_( RemoteAe ) - initialize that from driver
@@ -170,15 +170,18 @@ int QDicomPrinter::metric( QPaintDevice::PaintDeviceMetric metric ) const {
 		switch ( metric ) {
 		
 		case QPaintDevice::PdmWidth :
-			result = driver().printableArea(
-				filmSize_, quality_
-			).width();
-			break;
-
+			result *= -1;
 		case QPaintDevice::PdmHeight :
-			result = driver().printableArea(
-				filmSize_, quality_
-			).height();
+			result *= -1;
+			if ( orientation_ == QDicomPrinter::HorizontalOrientation ) {
+				result *= -1;
+			}
+			if ( result < 0 ) {
+				result = driver().printableArea( filmSize_, quality_ ).width();
+			}
+			else {
+				result = driver().printableArea( filmSize_, quality_ ).height();
+			}
 			break;
 
 		case QPaintDevice::PdmWidthMM :
