@@ -8,6 +8,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
 
 #include "QtDicom/AssociationServer.hpp"
 #include "QtDicom/ConnectionParameters.hpp"
@@ -71,7 +72,7 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 * Returns the directory where Storage SCP will attempt to save incoming
 		 * dataset.
 		 */
-		Destination destination() const;
+		const Destination & destination() const;
 
 		/**
 		 * Returns human-readable description of the last occured error.
@@ -82,7 +83,7 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 * Returns the amount of time the SCP waits before receiving the Data 
 		 * Set (after the association has been accepted).
 		 */
-		const int & holdTime() const;
+		int holdTime() const;
 
 		/**
 		 * Returns AE title of last-connected node.
@@ -97,7 +98,7 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		/**
 		 * Sets the \a directory where Storage SCP will drop received datasets.
 		 */
-		void setDestination( Destination destination );
+		void setDestination( const Destination & destination );
 
 		/**
 		 * Sets the amount of \a milliseconds the SCP waits before attempting to
@@ -118,9 +119,6 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		void stop();
 
 	private :
-		/**
-		 * Forward definition of the Receiver thread.
-		 */
 		class ReceiverThread;
 
 	private :
@@ -148,9 +146,6 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 */
 		AssociationServer associationServer_;
 
-		/**
-		 * The destination.
-		 */
 		Destination destination_;
 
 		/**
@@ -158,7 +153,7 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 */
 		QString errorString_;
 
-		int holdTime_;
+		QSharedPointer< QAtomicInt > holdTimePtr_;
 
 		QString lastAe_;
 		QString lastCalledAe_;

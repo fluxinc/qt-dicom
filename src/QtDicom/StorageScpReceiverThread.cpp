@@ -16,14 +16,14 @@ namespace Dicom {
 
 StorageScp::ReceiverThread::ReceiverThread( 
 	AcceptorAssociation * association,
-	const StorageScp::Destination & Destination,
-	const int & HoldTime,
+	const Destination & Destination,
+	const QSharedPointer< QAtomicInt > & HoldTimePtr,
 	QObject * parent
 ) :
 	QThread( parent ),
 	ServiceProvider( association ),
 	Destination_( Destination ),
-	HoldTime_( HoldTime )
+	HoldTimePtr_( HoldTimePtr )
 {
 }
 
@@ -57,15 +57,15 @@ QString StorageScp::ReceiverThread::createUniquePath( const QDir & Dir ) {
 }
 
 
-inline const StorageScp::Destination & 
+inline const StorageScp::Destination &
 	StorageScp::ReceiverThread::destination()
 const {
 	return Destination_;
 }
 
 
-inline const int & StorageScp::ReceiverThread::holdTime() const {
-	return HoldTime_;
+inline int StorageScp::ReceiverThread::holdTime() const {
+	return *HoldTimePtr_;
 }
 
 
@@ -88,6 +88,8 @@ void StorageScp::ReceiverThread::run() {
 		}
 
 		if ( holdTime() > 0 ) {
+			qDebug( __FUNCTION__": sleeping for %d miliseconds", holdTime() );
+
 			msleep( holdTime() );
 		}
 

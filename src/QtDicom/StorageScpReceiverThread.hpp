@@ -28,8 +28,8 @@ class QDICOM_DLLSPEC StorageScp::ReceiverThread : public QThread, public Service
 		 */
 		ReceiverThread( 
 			AcceptorAssociation * association,
-			const StorageScp::Destination & destination,
-			const int & holdTime,
+			const Destination & destination,
+			const QSharedPointer< QAtomicInt > & holdTimePtr,
 			QObject * parent = 0
 		);
 
@@ -67,8 +67,8 @@ class QDICOM_DLLSPEC StorageScp::ReceiverThread : public QThread, public Service
 		const Destination & destination() const;
 		const Destination Destination_;
 
-		const int & holdTime() const;
-		const int HoldTime_;
+		int holdTime() const;
+		const QSharedPointer< QAtomicInt > HoldTimePtr_;
 
 	signals :
 		/**
