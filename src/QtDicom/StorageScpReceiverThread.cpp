@@ -16,11 +16,14 @@ namespace Dicom {
 
 StorageScp::ReceiverThread::ReceiverThread( 
 	AcceptorAssociation * association,
-	StorageScp::Destination destination, QObject * parent
+	const StorageScp::Destination & Destination,
+	const int & HoldTime,
+	QObject * parent
 ) :
 	QThread( parent ),
 	ServiceProvider( association ),
-	destination_( destination )
+	Destination_( Destination ),
+	HoldTime_( HoldTime )
 {
 }
 
@@ -54,8 +57,15 @@ QString StorageScp::ReceiverThread::createUniquePath( const QDir & Dir ) {
 }
 
 
-StorageScp::Destination StorageScp::ReceiverThread::destination() const {
-	return destination_;
+inline const StorageScp::Destination & 
+	StorageScp::ReceiverThread::destination()
+const {
+	return Destination_;
+}
+
+
+inline const int & StorageScp::ReceiverThread::holdTime() const {
+	return HoldTime_;
 }
 
 
@@ -75,6 +85,10 @@ void StorageScp::ReceiverThread::run() {
 		if ( releaseRequested ) {
 			association()->confirmRelease();
 			break;
+		}
+
+		if ( holdTime() > 0 ) {
+			sleep( holdTime() );
 		}
 
 		if ( Message.CommandField == DIMSE_C_STORE_RQ ) {

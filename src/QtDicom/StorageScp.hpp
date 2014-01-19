@@ -79,6 +79,12 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		QString errorString() const;
 
 		/**
+		 * Returns the amount of time the SCP waits before receiving the Data 
+		 * Set (after the association has been accepted).
+		 */
+		const int & holdTime() const;
+
+		/**
 		 * Returns AE title of last-connected node.
 		 */
 		const QString & lastAe() const;
@@ -92,6 +98,12 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 * Sets the \a directory where Storage SCP will drop received datasets.
 		 */
 		void setDestination( Destination destination );
+
+		/**
+		 * Sets the amount of \a milliseconds the SCP waits before attempting to
+		 * receive the Data Set. The default is \c 0.
+		 */
+		void setHoldTime( const int & milliseconds = 0 );
 
 		/**
 		 * Starts the Storage SCP and binds it to the TCP port number
@@ -145,6 +157,8 @@ class QDICOM_DLLSPEC StorageScp : public QObject {
 		 * The error string.
 		 */
 		QString errorString_;
+
+		int holdTime_;
 
 		QString lastAe_;
 		QString lastCalledAe_;

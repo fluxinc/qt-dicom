@@ -28,7 +28,8 @@ class QDICOM_DLLSPEC StorageScp::ReceiverThread : public QThread, public Service
 		 */
 		ReceiverThread( 
 			AcceptorAssociation * association,
-			StorageScp::Destination destination,
+			const StorageScp::Destination & destination,
+			const int & holdTime,
 			QObject * parent = 0
 		);
 
@@ -61,13 +62,13 @@ class QDICOM_DLLSPEC StorageScp::ReceiverThread : public QThread, public Service
 		/**
 		 * Returns the destination.
 		 */
-		StorageScp::Destination destination() const;
 
 	private :
-		/**
-		 * The destination.
-		 */
-		StorageScp::Destination destination_;
+		const Destination & destination() const;
+		const Destination Destination_;
+
+		const int & holdTime() const;
+		const int HoldTime_;
 
 	signals :
 		/**

@@ -12,13 +12,15 @@ namespace Dicom {
 
 StorageScp::StorageScp( QObject * parent ) :
 	QObject( parent ),
-	destination_( Disk )
+	destination_( Disk ),
+	holdTime_( 0 )
 {
 }
 
 StorageScp::StorageScp( Destination dst, QObject * parent ) :
 	QObject( parent ),
-	destination_( dst )
+	destination_( dst ),
+	holdTime_( 0 )
 {
 	Q_ASSERT( dst != Unknown );
 }
@@ -47,8 +49,9 @@ void StorageScp::createReceiverThread() {
 	lastAe_ = association->callingAeTitle();
 	lastCalledAe_ = association->calledAeTitle();
 
-	ReceiverThread * thread = new ReceiverThread( association, destination(), this );
-	thread->start();
+	ReceiverThread * thread = new ReceiverThread( 
+		association, destination(), holdTime(), this
+	);
 	connect( 
 		thread, SIGNAL( stored( QString ) ),
 		SIGNAL( stored( QString ) )
@@ -70,6 +73,8 @@ void StorageScp::createReceiverThread() {
 		thread, SIGNAL( finished() ),
 		thread, SLOT( deleteLater() )
 	);
+
+	thread->start();
 }
 
 
@@ -117,6 +122,11 @@ QString StorageScp::errorString() const {
 }
 
 
+const int & StorageScp::holdTime() const {
+	return holdTime_;
+}
+
+
 const QString & StorageScp::lastAe() const {
 	return lastAe_;
 }
@@ -129,6 +139,11 @@ const QString & StorageScp::lastCalledAe() const {
 
 void StorageScp::setDestination( Destination destination ) {
 	destination_ = destination;
+}
+
+
+void StorageScp::setHoldTime( const int & Miliseconds ) {
+	holdTime_ = Miliseconds;
 }
 
 
