@@ -15,9 +15,9 @@
 #	define ORIGINAL_FILENAME_STRING   "QtDicomd4.dll"
 #endif
 #define FILE_DESCRIPITION_STIRNG   PRODUCT_NAME_STRING " module"
-#define FILE_VERSION               4,8,5,67
-#define FILE_VERSION_STRING        "4.8.5.67"
-#define PRODUCT_VERSION            4,8,5,67
-#define PRODUCT_VERSION_STRING     "4.8.5.67"
+#define FILE_VERSION               4,8,5,68
+#define FILE_VERSION_STRING        "4.8.5.68"
+#define PRODUCT_VERSION            4,8,5,68
+#define PRODUCT_VERSION_STRING     "4.8.5.68"
 
 #endif

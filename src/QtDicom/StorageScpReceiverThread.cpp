@@ -88,7 +88,7 @@ void StorageScp::ReceiverThread::run() {
 		}
 
 		if ( holdTime() > 0 ) {
-			sleep( holdTime() );
+			msleep( holdTime() );
 		}
 
 		if ( Message.CommandField == DIMSE_C_STORE_RQ ) {
