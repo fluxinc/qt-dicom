@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+  This file is imported by the main C++ project file. It defines and overwrites 
+  paths used by the Visual Studio during the build process.
+  
+  Please make appropriate changes (if necessary) and remove the ".template"
+  suffix from its name.
+  
+  Author: Paweł Żak <pawel.zak@fluxinc.ca>
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Platform)' == 'Win32'">
+    <QtDir>E:\Qt\4.8.5\msvc10\x86</QtDir>
+    <DcmtkDir>E:\Dcmtk\3.6.1-20121102\x86</DcmtkDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'x64'">
+    <QtDir>E:\Qt\4.8.5\msvc10\amd64</QtDir>
+    <DcmtkDir>E:\Dcmtk\3.6.1-20121102\amd64</DcmtkDir>
+  </PropertyGroup>
+</Project>

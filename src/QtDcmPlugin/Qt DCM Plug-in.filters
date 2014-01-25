@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="QDcmHandler.cpp" />
+    <ClCompile Include="QDcmPlugin.cpp" />
+    <ClCompile Include="Exceptions.cpp" />
+    <ClCompile Include="Version.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QDcmHandler.hpp" />
+    <ClInclude Include="QDcmPlugin.hpp" />
+    <ClInclude Include="Version.hpp" />
+    <ClInclude Include="Exceptions.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{f405ef2a-b705-4abb-bf20-ee7b2e3929a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources\Texts">
+      <UniqueIdentifier>{bbda7215-9c56-4359-ab45-c5f1134dc608}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Version.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Texts\Build Number.txt">
+      <Filter>Resources\Texts</Filter>
+    </None>
+  </ItemGroup>
+</Project>

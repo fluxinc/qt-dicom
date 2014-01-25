@@ -1,0 +1,47 @@
+/***************************************************************************
+ *   Copyright © 2009-2012 by Flux Inc.                                    *
+ *   Author: Paweł Żak <pawel.zak@fluxinc.ca>                              *
+ **************************************************************************/
+
+#ifndef VERSION_RC
+#define VERSION_RC
+
+#include "..\Version.hpp"
+
+#include <WinVer.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     FILE_VERSION
+PRODUCTVERSION  PRODUCT_VERSION
+FILEFLAGSMASK  	VS_FFI_FILEFLAGSMASK
+#ifdef _DEBUG
+	FILEFLAGS   VS_FF_DEBUG
+#else
+	FILEFLAGS   0
+#endif
+FILEOS          VOS__WINDOWS32
+FILETYPE        VFT_DLL
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904E4"
+		BEGIN
+			VALUE "CompanyName",      COMPANY_NAME_STRING
+			VALUE "FileDescription",  FILE_DESCRIPITION_STIRNG
+			VALUE "FileVersion",      FILE_VERSION_STRING
+			VALUE "LegalCopyright",   LEGAL_COPYRIGHT_STRING
+			VALUE "OriginalFilename", ORIGINAL_FILENAME_STRING
+			VALUE "ProductName",      PRODUCT_NAME_STRING
+			VALUE "ProductVersion",   PRODUCT_VERSION_STRING
+		END
+	END
+
+	BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 0x04E4
+    END
+END
+
+
+#endif

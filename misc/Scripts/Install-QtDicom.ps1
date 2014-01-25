@@ -54,6 +54,13 @@ catch {
             Copy-Item -Force "$Root\lib\$Arch\$BaseName.$_" "$Dst\bin" | Out-Null
         }
     }
+	
+	New-Item -ItemType Directory -Force "$Dst\plugins" | Out-Null
+	New-Item -ItemType Directory -Force "$Dst\plugins\imageformats" | Out-Null
+	
+	( "qdcm4", "qdcmd4" ) | % {
+        Copy-Item -Force "$Root\lib\$Arch\$_.dll" "$Dst\plugins\imageformats" | Out-Null
+    }
     
     New-Item -ItemType Directory -Force "$Dst\include" | Out-Null
     New-Item -ItemType Directory -Force "$Dst\include\QtDicom" | Out-Null

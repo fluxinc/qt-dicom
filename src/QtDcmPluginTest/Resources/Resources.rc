@@ -1,0 +1,24 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file>Samples/Explicit_Big-US-RGB_Plane-8-640x480.dcm</file>
+		<file>Samples/Explicit_Little-CT-MONOCHROME_2-16-512x512.dcm</file>
+		<file>Samples/Explicit_Little-MR-MONOCHROME_2-8-256x256x16.dcm</file>
+		<file>Samples/Explicit_Little-NM-MONOCHROME_2-16-64x64x13.dcm</file>
+		<file>Samples/Explicit_Little-US-MONOCHROME_2-8-128x120x8.dcm</file>
+		<file>Samples/Explicit_Little-US-RGB-8-256x120.dcm</file>
+		<file>Samples/Implicit_Little-CR-MONOCHROME_1-10-440x440-RAW.dcm</file>
+		<file>Samples/Implicit_Little-CT-MONOCHROME_2-8-512x512.dcm</file>
+		<file>Samples/Implicit_Little-CT-MONOCHROME_2-12-512x512-AN2.dcm</file>
+		<file>Samples/Implicit_Little-CT-MONOCHROME_2-16-512x512.dcm</file>
+		<file>Samples/Implicit_Little-MR-MONOCHROME_2-12-256x256-AN1.dcm</file>
+		<file>Samples/Implicit_Little-MR-MONOCHROME_2-12-256x256-AN2.dcm</file>
+		<file>Samples/Implicit_Little-MR-MONOCHROME_2-16-256x256.dcm</file>
+		<file>Samples/Implicit_Little-OT-MONOCHROME_2-8-512x512-RAW.dcm</file>
+		<file>Samples/Implicit_Little-OT-RGB_Palette-8-640x480-RAW.dcm</file>
+		<file>Samples/JPEG_57-MR-MONOCHROME_2-12-1024x1024.dcm</file>
+		<file>Samples/JPEG_70-CT-MONOCHROME_2-16-512x400.dcm</file>
+		<file>Samples/JPEG_70-XA-MONOCHROME_2-8-512x512x12.dcm</file>
+		<file>Samples/RLE_Lossless-US-RGB_Palette-8-600x430x10.dcm</file>
+	</qresource>
+</RCC>

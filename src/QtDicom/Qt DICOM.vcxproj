@@ -125,7 +125,7 @@
       <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
 copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"
 copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
-      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Outputs>$(SolutionDir)bin\$(PlatformShortName)\$(TargetFileName)</Outputs>
       <Message>Copying DLL to bin directory</Message>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
@@ -161,7 +161,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
 copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"
 copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
-      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Outputs>$(SolutionDir)bin\$(PlatformShortName)\$(TargetFileName)</Outputs>
       <Message>Copying DLL to bin directory</Message>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
@@ -201,7 +201,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
 copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"
 copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <Message>Copying DLL to bin directory</Message>
-      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Outputs>$(SolutionDir)bin\$(PlatformShortName)\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
@@ -235,7 +235,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
 copy /B /Y "$(TargetPath)" "$(SolutionDir)bin\$(PlatformShortName)"
 copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortName)"</Command>
       <Message>Copying DLL to bin directory</Message>
-      <Outputs>$(SolutionDir)bin\$(TargetFileName)</Outputs>
+      <Outputs>$(SolutionDir)bin\$(PlatformShortName)\$(TargetFileName)</Outputs>
       <Inputs>$(TargetPath)</Inputs>
     </CustomBuildStep>
     <PreBuildEvent>

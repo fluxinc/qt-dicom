@@ -60,12 +60,8 @@
 	@EXIT /B 1
 )
 
-@ECHO ABA
-
 :: Call SetEnv.cmd. That should prepare our environment for the build process.
 @CALL %SETENV% /%ARCH% /%CONF% 2>&1
-
-@ECHO ABB
 
 :: While SetEnv.cmd requires /x86 switch to use 32-bit platform, Visual Studio
 :: uses Platform = Win32. Talk about conventions...
@@ -73,8 +69,6 @@
 	SET ARCH=Win32
 )
 
-@ECHO ABC
-
 :: Execute MSBUILD tool and return from this script with its exit code
-@MSBUILD /t:Clean,Build "/p:Configuration=%CONF%;Platform=%ARCH%;QtDir=%QTDIR%" %SOLUTION%
+@MSBUILD /m /t:Clean,Build "/p:Configuration=%CONF%;Platform=%ARCH%;QtDir=%QTDIR%" %SOLUTION%
 @EXIT /B %ERRORLEVEL%
