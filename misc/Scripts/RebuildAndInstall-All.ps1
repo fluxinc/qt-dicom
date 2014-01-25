@@ -19,9 +19,15 @@ Param(
 $ErrorActionPreference = "Stop"
 
 $CurrentDir = Split-Path $MyInvocation.MyCommand.Path
-$VersionFilePath = Join-Path $CurrentDir "..\..\src\QtDicom\Version.hpp"
+$VersionFilePaths = @(
+	( Join-Path $CurrentDir "..\..\src\QtDicom\Version.hpp" ),
+	( Join-Path $CurrentDir "..\..\src\QtDcmPlugin\Version.hpp" )
+)
+	
 try {
-    $VersionFilePath = Resolve-Path $VersionFilePath
+	for ( $i = 0; $i -lt $VersionFilePaths.Count; ++$i ) {
+		$VersionFilePaths[ $i ] = Resolve-Path $VersionFilePaths[ $i ]
+	}
 }
 catch {
     Write-Error "Failed to resolve version file path"
@@ -83,7 +89,9 @@ foreach ( $Version in $Versions ) {
     }
 
     # Stamp the Qt version first...
-    stampQtVersion $Version $VersionFilePath
+	foreach ( $VersionFilePath in $VersionFilePaths ) {
+		stampQtVersion $Version $VersionFilePath
+	}
 
 
     # ...then rebuild...    

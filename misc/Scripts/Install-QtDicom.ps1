@@ -59,7 +59,10 @@ catch {
 	New-Item -ItemType Directory -Force "$Dst\plugins\imageformats" | Out-Null
 	
 	( "qdcm4", "qdcmd4" ) | % {
-        Copy-Item -Force "$Root\lib\$Arch\$_.dll" "$Dst\plugins\imageformats" | Out-Null
+		$BaseName = $_
+		( "dll", "pdb" ) | % {
+			Copy-Item -Force "$Root\lib\$Arch\$BaseName.$_" "$Dst\plugins\imageformats" | Out-Null
+		}
     }
     
     New-Item -ItemType Directory -Force "$Dst\include" | Out-Null
