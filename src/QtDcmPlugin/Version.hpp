@@ -15,9 +15,9 @@
 #	define ORIGINAL_FILENAME_STRING   "qdcmd4.dll"
 #endif
 #define FILE_DESCRIPITION_STIRNG   PRODUCT_NAME_STRING " module"
-#define FILE_VERSION               4,8,5,73
-#define FILE_VERSION_STRING        "4.8.5.73"
-#define PRODUCT_VERSION            4,8,5,73
-#define PRODUCT_VERSION_STRING     "4.8.5.73"
+#define FILE_VERSION               4,8,5,74
+#define FILE_VERSION_STRING        "4.8.5.74"
+#define PRODUCT_VERSION            4,8,5,74
+#define PRODUCT_VERSION_STRING     "4.8.5.74"
 
 #endif // ! QDCMPLUGINVERSION_HPP

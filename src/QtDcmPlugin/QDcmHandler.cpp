@@ -8,7 +8,6 @@
 
 #include <sstream>
 
-#include <QtCore/QDebug>
 #include <QtCore/QtEndian>
 #include <QtCore/QList>
 #include <QtCore/QMutex>
@@ -79,25 +78,22 @@ bool QDcmHandler::canRead( QIODevice * device ) {
 		if ( device->seek( 128 ) ) {
 			prefix = device->peek( 4 );
 			if ( ! device->seek( 0 ) ) {
-				qCritical( 
-					__FUNCTION__": failed to seek back to 0 offset"
-				);
+				qCritical( __FUNCTION__": failed to seek back to 0 offset" );
+
 				return false;
 			}
 		}
 		else {
-			qDebug(
-				__FUNCTION__": failed to seek the 128 byte"
-			);
+			qDebug( __FUNCTION__": failed to seek the 128 byte" );
+
 			return false;
 		}
 	}
 	else {
 		preamble = device->peek( 128 );
 		if ( preamble.size() != 128 ) {
-			qDebug(
-				__FUNCTION__": failed to peek 128 bytes"
-			);
+			qDebug( __FUNCTION__": failed to peek 128 bytes" );
+
 			return false;
 		}
 		prefix = device->peek( 4 );
@@ -173,13 +169,11 @@ int QDcmHandler::imageCount() const {
 		bool ok;
 		theCount = Value.toInt( &ok );
 		if ( ! ok ) {
-			qWarning() <<
-				QString( 
-					__FUNCTION__": "
-					"failed to extract integer value from the: `%1' string"
-				)
-				.arg( Value )
-			;
+			qWarning(
+				__FUNCTION__": "
+				"failed to extract integer value from the: `%s' string",
+				::qPrintable( Value )
+			);
 			theCount = ErrorValue;
 		}
 	}
@@ -237,13 +231,11 @@ QSize QDcmHandler::imageResolution() const {
 				Q_ASSERT( ok );
 			}
 			else {
-				qWarning() <<
-					QString( 
-						__FUNCTION__": "
-						"unable to parse pixel spacing value from the: `%1' string" 
-					)
-					.arg( Value )
-				;
+				qWarning(
+					__FUNCTION__": "
+					"unable to parse pixel spacing value from the: `%s' string" ,
+					::qPrintable( Value )
+				);
 			}
 		}
 	}
@@ -276,13 +268,11 @@ QSize QDcmHandler::imageSize() const {
 	if ( ! value.isEmpty() ) {
 		size.setHeight( value.toInt( &ok ) );
 		if ( ! ok ) {
-			qWarning() <<
-				QString( 
-					__FUNCTION__": "
-					"failed to extract integer value from the: `%1'"
-				)
-				.arg( value )
-			;
+			qWarning(
+				__FUNCTION__": "
+				"failed to extract integer value from the: `%s'",
+				::qPrintable( value )
+			);
 			size = Default;
 		}
 	}
@@ -295,13 +285,11 @@ QSize QDcmHandler::imageSize() const {
 		bool ok;
 		size.setWidth( value.toInt( &ok ) );
 		if ( ! ok ) {
-			qWarning() <<
-				QString( 
-					__FUNCTION__": "
-					"failed to extract integer value from the: `%1'"
-				)
-				.arg( value )
-			;
+			qWarning(
+				__FUNCTION__": "
+				"failed to extract integer value from the: `%s'",
+				::qPrintable( value )
+			);
 			size = Default;
 		}
 	}
@@ -396,12 +384,12 @@ void QDcmHandler::loadDicomFile() {
 	// End of try block.
 	} 
 	catch ( OperationFailedException & e ) {
-		qCritical() << e.what();
+		qCritical( e.what() );
 	}
 	catch ( std::exception & e ) {
 		// Although we throw only OperationFailedException, we can catch also 
 		// the others, originated by the DCMTK.
-		qCritical() << "Unknown exception caught in "__FUNCTION__": " << e.what();
+		qCritical( "Unknown exception caught in "__FUNCTION__": %s", e.what() );
 	}
 
 	if ( dicomFile_ ) {
@@ -452,13 +440,11 @@ int QDcmHandler::nextImageDelay() const {
 		bool ok;
 		theDelay = Value.toInt( &ok );
 		if ( ! ok ) {
-			qWarning() <<
-				QString( 
-					__FUNCTION__": "
-					"Failed to extract integer value from the: `%1'"
-				)
-				.arg( Value )
-			;
+			qWarning(
+				__FUNCTION__": "
+				"Failed to extract integer value from the: `%s'",
+				::qPrintable( Value )
+			);
 			theDelay = ErrorValue;
 		}
 	}
@@ -666,9 +652,7 @@ QImage QDcmHandler::readFrame( int FrameNumber ) {
 		qCritical( e.what() );
 	}
 	catch ( std::exception & e ) {
-		qCritical()
-			<< "Unknown exception caught in "__FUNCTION__": " << e.what()
-		;
+		qCritical( "Unknown exception caught in "__FUNCTION__": %s", e.what() );
 	}
 
 	if ( dicomImage ) {
@@ -714,7 +698,7 @@ QString QDcmHandler::tagValue(
 			DcmTag t( Tag );
 			
 			if ( ! Suppress ) {
-				qDebug() <<
+				qDebug( ::qPrintable(
 					QString(
 						__FUNCTION__": "
 						"failed to read %1 (%2,%3) tag value. Reason: `%4'"
@@ -723,7 +707,7 @@ QString QDcmHandler::tagValue(
 					.arg( t.getGroup(), 4, 16, QChar( '0' ) )
 					.arg( t.getElement(), 4, 16, QChar( '0' ) )
 					.arg( result.text() )
-				;
+				) );
 			}
 		}
 	}
@@ -776,13 +760,13 @@ QHash< QString, QVariant > QDcmHandler::tagsValues() const {
 			OFString value;
 			OFCondition result = currentElement->getOFStringArray( value );
 			if ( result.bad() ) {
-				qCritical() <<
-					QString( 
-						__FUNCTION__": "
-						"failed to read tag: `%1' %2 value. Reason: `%3'"
-					)
-					.arg( TagName ).arg( TagDescriptor ).arg( result.text() )
-				;
+				qCritical(
+					__FUNCTION__": "
+					"failed to read tag: `%s' %s value. Reason: `%s'",
+					::qPrintable( TagName ),
+					::qPrintable( TagDescriptor ),
+					result.text()
+				);
 
 				status = dicomFile().nextObject( stack, OFTrue );
 				continue;
@@ -822,16 +806,14 @@ QHash< QString, QVariant > QDcmHandler::tagsValues() const {
 				tagsRead.insert( ImageTextKey, QVariant( TagValues ) );
 			}
 			else {
-				qWarning() <<
-					QString(
-						__FUNCTION__": "
-						"tag: `%1' %2 was read already. "
-						"Value(s) read already: `%3'. New value(s): `%4'"
-					)
-					.arg( TagName ).arg( TagDescriptor )
-					.arg( tagsRead.value( ImageTextKey ).toStringList().join( "', " ) )
-					.arg( TagValues.join( ", " ) )
-				;
+				qDebug(
+					__FUNCTION__": "
+					"tag: `%s' %s was read already. "
+					"Value(s) read already: `%s'. New value(s): `%s'",
+					::qPrintable( TagName ), ::qPrintable( TagDescriptor ),
+					::qPrintable( tagsRead.value( ImageTextKey ).toStringList().join( "', " ) ),
+					::qPrintable( TagValues.join( ", " ) )
+				);
 			}
 		}
 
