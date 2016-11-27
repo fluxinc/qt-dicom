@@ -48,8 +48,8 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -184,7 +184,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\DCMTK\include;C:\Qt\4.8.5\include;C:\gw\qt-flux\src;C:\gw\3rd-party\QtService\2.6\src;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
@@ -193,7 +193,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\DCMTK\lib;C:\Qt\4.8.5\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtGui4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>

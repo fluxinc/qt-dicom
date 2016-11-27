@@ -107,7 +107,7 @@ QDicomPrinterDriver::availableDirvers()
 			ADD( Sony_UP_D72XR );
 			ADD( Sony_UP_D74XRD );
 			ADD( Sony_UP_D77MD );
-			ADD( Sony_UP_D897 );
+			//ADD( Sony_UP_D897 );
 			ADD( Sony_UP_DF500 );
 			ADD( Sony_UP_DF550 );
 			ADD( Sony_UP_DF750 );

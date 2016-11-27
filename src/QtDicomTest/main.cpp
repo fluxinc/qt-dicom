@@ -7,8 +7,8 @@
 
 #include <QtTest/QTest>
 
-#include "PrintTester.hpp"
 #include "QtDicomTest.hpp"
+#include "PrintTester.hpp"
 
 
 static int RunPrinterTest( int argc, char * argv[] ) {
@@ -17,9 +17,10 @@ static int RunPrinterTest( int argc, char * argv[] ) {
 	const int Status = app.exec();
 
 	if ( Status != 0 ) {
+		qWarning("Bam");
 		qWarning( qPrintable( app.errorString() ) );
 	}
-
+	else qWarning("Qlorp");
 	return Status;
 }
 
@@ -33,6 +34,6 @@ static int RunQDicomTest( int argc, char * argv[] ) {
 
 int main( int argc, char *argv[] ) {
 
-	::RunPrinterTest( argc, argv );
+    ::RunPrinterTest( argc, argv );
 	return ::RunQDicomTest( argc, argv );
 }
