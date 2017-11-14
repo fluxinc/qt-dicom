@@ -35,9 +35,9 @@ QDicomTag::QDicomTag( const Id & Id ) :
 }
 
 
-QDicomTag::QDicomTag( const quint16 & Group, const quint16 & Element ) {
+QDicomTag::QDicomTag( const quint16 & Group, const quint16 & Element) {
 	setGroup( Group );
-	setElement( Element );
+	setElement(Element);
 }
 
 
@@ -107,7 +107,6 @@ bool QDicomTag::isValid() const {
 const QString & QDicomTag::keyword() const {
 	return ::cachedKeyword( toUInt32() );
 }
-
 
 void QDicomTag::setElement( quint16 e ) {
 	quint32 value = id_;

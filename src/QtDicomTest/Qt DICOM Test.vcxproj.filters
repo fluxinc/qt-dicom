@@ -7,8 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="QtDicomTest.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="PrintTester.hpp" />
+    <QtMoc Include="PrintTester.hpp" />
   </ItemGroup>
 </Project>

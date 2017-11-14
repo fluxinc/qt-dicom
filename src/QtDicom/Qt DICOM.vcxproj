@@ -30,33 +30,34 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>QDicom</RootNamespace>
     <ProjectName>Qt DICOM</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -110,7 +111,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\dcmtk-3.6.1\include;C:\dev\qt-4.8.5\include;C:\dev\qt-flux\src;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -118,8 +119,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstdd.lib;oflogd.lib;dcmdatad.lib;dcmnetd.lib;dcmimgled.lib;dcmimaged.lib;dcmjpegd.lib;dcmjplsd.lib;charlsd.lib;ijg8d.lib;ijg12d.lib;ijg16d.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\dcmtk-3.6.1\lib;C:\dev\qt-4.8.5\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
@@ -145,8 +146,8 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;QDICOM_EXPORTS;ENABLE_BUILTIN_DICTIONARY;ENABLE_PRIVATE_TAGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\dev\dcmtk-3.6.1\include;C:\dev\qt-4.8.5\include;C:\dev\qt-flux\src;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
@@ -154,8 +155,8 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstdd.lib;oflogd.lib;dcmdatad.lib;dcmnetd.lib;dcmimgled.lib;dcmimaged.lib;dcmjpegd.lib;dcmjplsd.lib;charlsd.lib;ijg8d.lib;ijg12d.lib;ijg16d.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\dev\dcmtk-3.6.1\lib;C:\dev\qt-4.8.5\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>QtCored4.lib;QtGuid4.lib;QtNetworkd4.lib;QtSqld4.lib;QtXmld4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>mkdir $(SolutionDir)bin\$(PlatformShortName)
@@ -184,7 +185,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\dev\dcmtk-3.6.1\include;C:\dev\qt-4.8.5\include;C:\dev\qt-flux\src;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
@@ -193,7 +194,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\dev\dcmtk-3.6.1\lib;C:\dev\qt-4.8.5\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtGui4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
@@ -217,8 +218,8 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(DcmtkDir)\include;$(QtDir)\include;$(QtFluxDir)\include;$(SolutionDir)src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;_USRDLL;NDEBUG;QDICOM_EXPORTS;QT_NO_DEBUG;QT_NO_DEBUG_OUTPUT;WIN32;ENABLE_BUILTIN_DICTIONARY;ENABLE_PRIVATE_TAGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\dev\dcmtk-3.6.1\include;C:\dev\qt-4.8.5\include;C:\dev\qt-flux\src;$(SolutionDir)src</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
@@ -227,7 +228,7 @@ copy /B /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)bin\$(PlatformShortNam
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(DcmtkDir)\lib;$(QtDir)\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\dev\dcmtk-3.6.1\lib;C:\dev\qt-4.8.5\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>QtCore4.lib;QtGui4.lib;QtNetwork4.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmnet.lib;dcmimgle.lib;dcmimage.lib;dcmjpeg.lib;dcmjpls.lib;charls.lib;ijg8.lib;ijg12.lib;ijg16.lib;wsock32.lib;netapi32.lib;iphlpapi.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>

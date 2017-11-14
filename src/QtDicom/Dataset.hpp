@@ -58,7 +58,11 @@ class QDICOM_DLLSPEC Dataset {
 		DcmDataset & dcmDataset();
 
 		bool isEmpty() const;
-		void setAttribute( const QDicomTag &, const QStringList & );
+
+		void setPrivateAttribute(const QString & privateCreator, quint16 group, quint16 element, const QStringList &);
+		void setPrivateAttribute(const QString & privateCreator, quint16 group, quint16 element, const QString &);
+
+		void setAttribute(const QDicomTag &, const QStringList &);
 		void setAttribute( const QDicomTag &, const QString & );
 		void setAttribute( const QDicomAttribute & );
 		void setSopInstanceUid( const QByteArray & );

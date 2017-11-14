@@ -105,7 +105,7 @@ class QDICOM_DLLSPEC QDicomTag {
 	public :
 		QDicomTag();
 		QDicomTag( const Id & );
-		QDicomTag( const quint16 & group, const quint16 & element );
+		QDicomTag(const quint16 & group, const quint16 & element);
 		~QDicomTag();
 		operator DcmTag() const;
 		operator Id() const;

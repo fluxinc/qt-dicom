@@ -19,6 +19,8 @@
 #include <QtDicom/QTransferSyntax>
 #include <QtDicom/QUid>
 
+#include <dcmtk/dcmdata/dcdict.h>
+#include <dcmtk/dcmdata/dcdicent.h>
 #include <dcmtk/dcmdata/dcsequen.h>
 #include <dcmtk/dcmdata/dcelem.h>
 #include <dcmtk/dcmdata/dcfilefo.h>
@@ -736,9 +738,36 @@ bool Dataset::toDicomFile( const QString & FilePath, QString * message ) const {
 	return false;
 }
 
+void Dataset::setPrivateAttribute(const QString & privateCreator, quint16 group, quint16 element, const QStringList & Values) {
+	const std::string Value = Values.join("\\").toStdString();
+
+	const OFCondition Status = dcmDataset().putAndInsertString(
+		DcmTag(group, element, privateCreator.toStdString().c_str()), Value.c_str()
+	);
+	if (Status.good()) {
+		return;
+	}
+	else {
+		qWarning(__FUNCTION__": "
+			"failed to set %s %s attribute to `%s'; %s",
+			QString::number(group), QString::number(element), Value.c_str(),
+			Status.text()
+		);
+	}
+}
 
 void Dataset::setAttribute( const QDicomTag & Tag, const QStringList & Values ) {
 	const std::string Value = Values.join( "\\" ).toStdString();
+	
+	//qWarning() << (dcmDataDict.rdlock().findEntry("SendingIpAddress"))->getPrivateCreator();
+	//qWarning() << (dcmDataDict.rdlock().findEntry("SendingIpAddress"))->getEVR();
+	//qWarning() << EVR_UT;
+	//qWarning() << QString::number(dcmDataDict.rdlock().findEntry("SendingIpAddress")->getGroup());
+	//qWarning() << QString::number(dcmDataDict.rdlock().findEntry("SendingIpAddress")->getElement());
+	//qWarning() << QString::number(Tag.group());
+	//qWarning() << QString::number(Tag.element());
+	//DcmTag t = DcmTag(Tag.group(), Tag.element());
+	//qWarning() << t.getEVR();
 
 	const OFCondition Status = dcmDataset().putAndInsertString(
 		DcmTag( Tag.group(), Tag.element() ), Value.c_str()
@@ -755,9 +784,13 @@ void Dataset::setAttribute( const QDicomTag & Tag, const QStringList & Values ) 
 	}
 }
 
+void Dataset::setPrivateAttribute(const QString & privateCreator, quint16 group, quint16 element, const QString & Value) {
+	setPrivateAttribute(privateCreator, group, element, Value.split('\\'));
+}
 
-void Dataset::setAttribute( const QDicomTag & Tag, const QString & Value ) {
-	setAttribute( QDicomAttribute( Tag, Value ) );
+
+void Dataset::setAttribute(const QDicomTag & Tag, const QString & Value) {
+	setAttribute(QDicomAttribute(Tag, Value));
 }
 
 
