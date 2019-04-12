@@ -25,7 +25,7 @@ QUid::QUid( const QByteArray & Uid ) :
 
 
 QUid::QUid( const QString & Uid ) :
-	QByteArray( Uid.toAscii().trimmed() )
+	QByteArray( Uid.toLatin1().trimmed() )
 {
 }
 

@@ -31,7 +31,7 @@ UidList::UidList( const QStringList & List ) {
 		QStringList::const_iterator i = List.constBegin();
 		i != List.constEnd(); ++i
 	) {
-		append( i->toAscii() );
+		append( i->toLatin1() );
 	}
 }
 
@@ -74,7 +74,7 @@ UidList UidList::storageSopClasses() {
 		return theList;
 	}
 	else {
-		for ( int i = 0; i < numberOfAllDcmStorageSOPClassUIDs; ++i ) {
+		for ( int i = 0; i < numberOfDcmAllStorageSOPClassUIDs; ++i ) {
 			theList.append( dcmAllStorageSOPClassUIDs[ i ] );
 		}
 		return theList;

@@ -216,7 +216,7 @@ int ServiceUser::cMove(
 	strcpy( requestParameters.AffectedSOPClassUID, SopClass );
 	requestParameters.DataSetType = DIMSE_DATASET_PRESENT;
 	requestParameters.MessageID = association()->nextMessageId();
-	strcpy( requestParameters.MoveDestination, DestinationAe.toAscii() );
+	strcpy( requestParameters.MoveDestination, DestinationAe.toLatin1() );
 	requestParameters.Priority = DIMSE_PRIORITY_HIGH;
 
 	sendCommand( request, Attributes, presentationContextId );
@@ -366,7 +366,7 @@ bool ServiceUser::cStore(
 	requestParameters.DataSetType = DIMSE_DATASET_PRESENT;
 	requestParameters.MessageID = association()->nextMessageId();
 	if ( ! MoveAe.isEmpty() ) {
-		const QByteArray Ae = MoveAe.toAscii();
+		const QByteArray Ae = MoveAe.toLatin1();
 		strcpy( 
 			requestParameters.MoveOriginatorApplicationEntityTitle,
 			Ae.constData()
@@ -1224,22 +1224,21 @@ void ServiceUser::validateNActionResponse(
 
 	QString message;
 	switch ( Status ) {
-#define CASE( VALUE, MSG ) \
-		case VALUE : message = "Response error status: `"MSG"'."; break
+#define CASE(VALUE, MSG) case VALUE : message = "Response error status: `"MSG"'."; break
 
 		// Statuses defined for the N-ACTION in PS3.7 10.1.4.1.10
-		CASE( STATUS_N_ClassInstanceConflict, "Class interface conflict" ); //  1
-		CASE( STATUS_N_DuplicateInvocation,   "Duplicate invokation" );     //  2
-		CASE( STATUS_N_InvalidArgumentValue,  "Invalid argument value" );   //  3
-		CASE( STATUS_N_InvalidObjectInstance, "Invalid SOP Instance" );     //  4
-		CASE( STATUS_N_MistypedArgument,      "Mistyped argument" );        //  5
-		CASE( STATUS_N_NoSuchAction,          "No such action" );           //  6
-		CASE( STATUS_N_NoSuchArgument,        "No such argument" );         //  7
-		CASE( STATUS_N_NoSuchSOPClass,        "No such SOP Class" );        //  8
-		CASE( STATUS_N_NoSuchObjectInstance,  "No such SOP Instance" );     //  9
-		CASE( STATUS_N_ProcessingFailure,     "Processing failure" );       // 10
-		CASE( STATUS_N_ResourceLimitation,    "Resource limitation" );      // 11
-		CASE( STATUS_N_UnrecognizedOperation, "Unrecognized operation" );   // 12
+		CASE(STATUS_N_ClassInstanceConflict, "Class interface conflict"); //  1
+		CASE(STATUS_N_DuplicateInvocation,   "Duplicate invokation");     //  2
+		CASE(STATUS_N_InvalidArgumentValue,  "Invalid argument value");   //  3
+		CASE(STATUS_N_InvalidObjectInstance, "Invalid SOP Instance");     //  4
+		CASE(STATUS_N_MistypedArgument,      "Mistyped argument");        //  5
+		CASE(STATUS_N_NoSuchAction,          "No such action");           //  6
+		CASE(STATUS_N_NoSuchArgument,        "No such argument");         //  7
+		CASE(STATUS_N_NoSuchSOPClass,        "No such SOP Class");        //  8
+		CASE(STATUS_N_NoSuchObjectInstance,  "No such SOP Instance");     //  9
+		CASE(STATUS_N_ProcessingFailure,     "Processing failure");       // 10
+		CASE(STATUS_N_ResourceLimitation,    "Resource limitation");      // 11
+		CASE(STATUS_N_UnrecognizedOperation, "Unrecognized operation");   // 12
 
 		// Statuses specific for the N-ACTION with Basic Film Box SOP Class
 		// from PS3.4 4.2.2.4.2

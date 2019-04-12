@@ -660,7 +660,7 @@ void Dataset::readTag( QXmlStreamReader & input, DcmItem & item ) const {
 
 		const QString Text = Raw ?
 			input.readElementText() :
-			QByteArray::fromBase64( input.readElementText().toAscii() )
+			QByteArray::fromBase64( input.readElementText().toLatin1() )
 		;
 		const OFString Bytes = Text.toStdString().c_str();
 		const OFCondition Result = item.putAndInsertOFStringArray(
@@ -813,7 +813,7 @@ QByteArray Dataset::sopClassUid() const {
 	DIC_UI sopClass, sopInstance;
 
 	const bool SopClassPresent = DU_findSOPClassAndInstanceInDataSet( 
-		&unconstDcmDataSet(), sopClass, sopInstance
+		&unconstDcmDataSet(), sopClass, 64, sopInstance, 64
 	);
 	if ( SopClassPresent ) {
 		return sopClass;
@@ -828,7 +828,7 @@ QByteArray Dataset::sopInstanceUid() const {
 	DIC_UI sopClass, sopInstance;
 
 	const bool SopClassPresent = DU_findSOPClassAndInstanceInDataSet( 
-		&unconstDcmDataSet(), sopClass, sopInstance
+		&unconstDcmDataSet(), sopClass, 64, sopInstance, 64
 	);
 	if ( SopClassPresent ) {
 		return sopInstance;
@@ -986,7 +986,7 @@ void Dataset::writeTag(
 		}
 		else {
 			output.writeAttribute( "encoding", "Base64" );
-			output.writeCharacters( Value.toAscii().toBase64() );
+			output.writeCharacters( Value.toLatin1().toBase64() );
 		}
 	}
 	else {

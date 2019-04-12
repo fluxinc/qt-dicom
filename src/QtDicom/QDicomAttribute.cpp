@@ -30,7 +30,7 @@ QDicomAttribute::QDicomAttribute(
 QDicomAttribute::QDicomAttribute(
 	const QDicomTag & Tag, const QSopClass & SopClass 
 ) :
-	data_( new Data( Tag, QStringList() << QString::fromAscii( SopClass.uid() ) ) )
+	data_( new Data( Tag, QStringList() << QString::fromLatin1( SopClass.uid() ) ) )
 {
 }
 

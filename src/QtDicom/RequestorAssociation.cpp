@@ -290,8 +290,8 @@ void RequestorAssociation::setAeTitles(
 	const QString & MyAeTitle,
 	const QString & HostAeTitle
 ) const {
-	const QByteArray My = MyAeTitle.toAscii();
-	const QByteArray Host = HostAeTitle.toAscii();
+	const QByteArray My = MyAeTitle.toLatin1();
+	const QByteArray Host = HostAeTitle.toLatin1();
 
 	const OFCondition Result = ASC_setAPTitles( parameters, My, Host, 0 );
 
@@ -312,9 +312,9 @@ void RequestorAssociation::setConnectionSettings(
 	const QHostAddress & HostAddress,
 	quint16 port
 ) const {
-	const QByteArray LocalHostName = QHostInfo::localHostName().toAscii();
+	const QByteArray LocalHostName = QHostInfo::localHostName().toLatin1();
 	const QByteArray RemoteHostAddress = 
-		QString( "%1:%2" ).arg( HostAddress.toString() ).arg( port ).toAscii()
+		QString( "%1:%2" ).arg( HostAddress.toString() ).arg( port ).toLatin1()
 	;
 
 	OFCondition result = ASC_setPresentationAddresses(

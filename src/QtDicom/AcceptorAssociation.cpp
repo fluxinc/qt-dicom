@@ -6,6 +6,8 @@
 #include "AcceptorAssociation.hpp"
 
 #include <dcmtk/dcmnet/assoc.h>
+#include <dcmtk/dcmdata/dcuid.h>
+
 
 
 namespace Dicom {
@@ -81,7 +83,7 @@ bool AcceptorAssociation::accept(
 	}
 
 	result = ASC_setAPTitles(
-		tAscAssociation()->params, NULL, NULL, myAeTitle().toAscii()
+		tAscAssociation()->params, NULL, NULL, myAeTitle().toLatin1()
 	);
 	if ( result.bad() ) {
 		raiseError(
@@ -96,7 +98,7 @@ bool AcceptorAssociation::accept(
 
 	QByteArray buffer( 129, '\0' );
 	result = ASC_getApplicationContextName( 
-		tAscAssociation()->params, buffer.data()
+		tAscAssociation()->params, buffer.data(), buffer.length()
 	);
 	if ( 
 		result.bad() || 
@@ -152,7 +154,7 @@ bool AcceptorAssociation::accept(
 QString AcceptorAssociation::calledAeTitle() const {
 	if ( tAscAssociation() ) {
 		QByteArray ae( 32, '\0' );
-		ASC_getAPTitles( tAscAssociation()->params, 0, ae.data(), 0 );
+		ASC_getAPTitles( tAscAssociation()->params, 0, 0, ae.data(), ae.length(), 0, 0 );
 
 		return QString( ae.simplified() );
 	}
@@ -165,7 +167,7 @@ QString AcceptorAssociation::calledAeTitle() const {
 QString AcceptorAssociation::callingAeTitle() const {
 	if ( tAscAssociation() ) {
 		QByteArray ae( 32, '\0' );
-		ASC_getAPTitles( tAscAssociation()->params, ae.data(), 0, 0 );
+		ASC_getAPTitles( tAscAssociation()->params, ae.data(), ae.length(), 0, 0, 0, 0 );
 
 		return QString( ae.simplified() );
 	}

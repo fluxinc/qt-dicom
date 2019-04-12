@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <!-- 
   This file is imported by the main C++ project file. It defines and overwrites 
@@ -29,12 +29,12 @@
   -->
   <PropertyGroup Condition="'$(Platform)' == 'Win32'">
     <IntDir>$(RootDir)tmp\x86\$(Configuration)\$(MSBuildProjectName)\</IntDir>
-    <QtDir>E:\Qt\4.8.5\msvc10\x86</QtDir>
+    <QtDir>C:\QT\5.12.1\msvc2017</QtDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <IntDir>$(RootDir)tmp\x64\$(Configuration)\$(MSBuildProjectName)\</IntDir>
-    <QtDir>E:\Qt\4.8.5\msvc10\amd64</QtDir>
+    <QtDir>C:\QT\5.12.1\msvc2017</QtDir>
   </PropertyGroup>
 
 

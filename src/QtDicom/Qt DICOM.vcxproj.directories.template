@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <!-- 
   This file is imported by the main C++ project file. It defines and overwrites 
@@ -29,16 +29,16 @@
   -->
   <PropertyGroup Condition="'$(Platform)' == 'Win32'">
     <IntDir>$(RootDir)tmp\x86\$(Configuration)\$(MSBuildProjectName)\</IntDir>
-    <QtDir>E:\Qt\4.8.5\msvc10\x86</QtDir>
-    <QtFluxDir>E:\QtFlux\4.8.5\msvc10\x86</QtFluxDir>
-    <DcmtkDir>E:\Dcmtk\3.6.1-20121102\x86</DcmtkDir>
+    <QtDir>C:\QT\5.12.1\msvc2017</QtDir>
+    <QtFluxDir>C:\dev\qt-flux</QtFluxDir>
+    <DcmtkDir>C:\dev\libs\dcmtk\3.6.4</DcmtkDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'x64'">
     <IntDir>$(RootDir)tmp\x64\$(Configuration)\$(MSBuildProjectName)\</IntDir>
-    <QtDir>E:\Qt\4.8.5\msvc10\amd64</QtDir>
-    <QtFluxDir>E:\QtFlux\4.8.5\msvc10\amd64</QtFluxDir>
-    <DcmtkDir>E:\Dcmtk\3.6.1-20121102\amd64</DcmtkDir>
+    <QtDir>C:\QT\5.12.1\msvc2017</QtDir>
+    <QtFluxDir>C:\dev\qt-flux</QtFluxDir>
+    <DcmtkDir>C:\dev\libs\dcmtk\3.6.4</DcmtkDir>
   </PropertyGroup>
 
   <PropertyGroup>

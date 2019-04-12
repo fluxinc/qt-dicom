@@ -9,7 +9,7 @@
 #include "QtDicom/Association.hpp"
 #include "QtDicom/Dataset.hpp"
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 #include <dcmtk/dcmnet/assoc.h>
 #include <dcmtk/dcmnet/dimse.h>
